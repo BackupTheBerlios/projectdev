@@ -1,0 +1,23 @@
+# $Id: PKGBUILD,v 1.1 2005/01/19 11:49:33 dpb Exp $
+# Maintainer: Daniel Bainton <dpb@backarrow.org>
+ppkgname=terminus-font
+pkgver=4.11
+pkgrel=1
+pkgdesc="the great terminal font"
+url="http://www.is-vn.bg/hamster/jimmy-en.html"
+depends=()
+makedepends=()
+conflicts=()
+replaces=()
+backup=()
+source=(http://www.is-vn.bg/hamster/$pkgname-$pkgver.tar.gz)
+md5sums=()
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=$startdir/pkg/usr
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  mkdir $startdir/pkg/usr/share/kbd
+  mv $startdir/pkg/usr/share/consolefonts $startdir/pkg/usr/share/kbd/
+}
