@@ -1,4 +1,4 @@
-# $Id: PKGBUILD,v 1.1 2004/11/04 20:50:28 blokkie Exp $
+# $Id: PKGBUILD,v 1.2 2004/11/04 22:35:56 blokkie Exp $
 # Arch Maintainer: judd <jvinet@zeroflux.org>
 # Maintainer: blokkie <t.fernagut@burningfrog.be>
 pkgname=xorg
@@ -19,7 +19,7 @@ md5sums=('e352319d423391ff2c03bb7f81fe8d2b' '6ba36becf1133c61a88c92e1d60c19ed'\
          '8578e566e909e7c40300f44b6f0e88d3' '2316b7c7f6fd28f2d579d84205f5ea1b'\
          'd96a6ea1fc46f5ba22ee801dc68967ca' 'dcf6aa4d28f5c52acf2bb57f49f53089'\
          '419d6289ba6f851135f5c70c0e3cbec4' '6b4052cf6d50cbd2854ebd3409f02695'\
-         '8990eac16981daf7037abcc0eef31db7')
+         '4e052c5e16a17a99b02c6b64d10b1636')
 
 build() {
   cd $startdir/src
