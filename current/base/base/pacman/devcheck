@@ -1,9 +1,41 @@
 #!/bin/sh
-sleep 1;
-echo "Checking Project-dEv cvs";
-mkdir -p /var/projectdev && cd /var/projectdev;
-sleep 1;
-cvs -d:pserver:anonymous@cvs.berlios.de:/cvsroot/projectdev login;
-cvs -d:pserver:anonymous@cvs.berlios.de:/cvsroot/projectdev co current;
-sleep 1;
-echo "You will find  the cvs repo of Project-dEv in /var/projectdev/current . Have fun!"
+# Based on abs by Judd Vinet.
+
+[ -f /etc/devcheck.conf ] && source /etc/devcheck.conf
+
+usage() {
+	echo "Project dEv cvs synchronization utility"
+	echo
+	echo "devcheck will synchronize PKGBUILD scripts from the CVS repository"
+	echo "into $DEVROOT.  You can follow different package trees by"
+	echo "editing /etc/devcheck.conf"
+}
+
+update() {
+	cd $DEVROOT
+	cvs -d:pserver:anonymous:@cvs.berlios.de:/cvsroot/projectdev co $DEVREPOS
+}
+
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+	usage
+	exit 0
+fi
+
+if [ ! -w $DEVROOT ]; then
+	echo "devcheck: no write permissions in $DEVROOT"
+	exit 1
+fi
+
+if [ ! `type -p cvs` ]; then
+	echo "devcheck: cvs was not found in PATH.  Install cvs"
+	exit 1
+fi
+
+if [ ! -d "$DEVROOT" ]; then
+	echo "devcheck: directory $DEVROOT does not exist"
+	exit 1
+fi
+
+update
+
+exit 0
