@@ -1,4 +1,4 @@
-# $Id: PKGBUILD,v 1.1 2004/11/04 19:59:35 blokkie Exp $
+# $Id: PKGBUILD,v 1.2 2004/11/04 20:25:42 blokkie Exp $
 # Arch Maintainer: judd <jvinet@zeroflux.org>
 # Maintainer: blokkie <t.fernagut@burningfrog.be>
 # Committer: Judd Vinet <jvinet@zeroflux.org>
@@ -8,6 +8,8 @@ pkgrel=1
 pkgdesc="TrueType font rendering library"
 depends=('glibc')
 source=(ftp://ftp.freetype.org/freetype/freetype1/freetype-$pkgver.tar.gz freetype-$pkgver.patch.bz2)
+md5sums=('9a9e7ad00c1ef6dfbf8f8e19ceefb300' '88869069c40298f7806cc7fa982007a6')
+
 
 build() {
   bzip2 -d freetype-$pkgver.patch.bz2
