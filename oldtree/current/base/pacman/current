@@ -1,5 +1,5 @@
 #
-# CURRENT: Arch Linux core repository
+# CURRENT: Project dEv core repository
 #
 [current]
-Server = ftp://saule.mintis.lt/pub/linux/current/os/i686
+Server = ftp://ftp.berlios.de/pub/projectdev/current

@@ -1,4 +1,4 @@
-# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:41 dpb Exp $
+# $Id: PKGBUILD,v 1.2 2004/11/03 13:56:11 dpb Exp $
 # Maintainer: judd <jvinet@zeroflux.org>
 pkgname=pacman
 pkgver=2.9.2
@@ -11,7 +11,7 @@ makedepends=('libtar')
 install=pacman.install
 source=(ftp://ftp.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz \
   http://www.archlinux.org/pacman/sortmirrors.pl \
-  supfile.arch supfile.extra supfile.unstable abs abs.conf \
+  supfile.current supfile.extra supfile.unstable abs abs.conf \
   current release extra unstable)
 md5sums=('f73ed0d84573dfc8fdab541ce55447bd' '005d82a4832b5273450e556f30010414'\
          '2c564a8760ec0dac96082f1855d153d1' 'f83885f6c431e4e7f8b131fe444ac0d2'\
@@ -29,7 +29,7 @@ build() {
   install -D -m755 ../sortmirrors.pl $startdir/pkg/usr/bin/sortmirrors.pl
   install -D -m755 ../abs $startdir/pkg/usr/bin/abs
   install -D -m644 ../abs.conf $startdir/pkg/etc/abs/abs.conf
-  for fn in supfile.{arch,extra,unstable}; do
+  for fn in supfile.{current,extra,unstable}; do
     install -D -m644 ../$fn $startdir/pkg/etc/abs/$fn
   done
   for fn in current release extra unstable; do

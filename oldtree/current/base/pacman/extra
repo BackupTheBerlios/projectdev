@@ -1,5 +1,5 @@
 #
 # The Extra Repository
 #
-[extra]
-Server = ftp://saule.mintis.lt/pub/linux/extra/os/i686
+#[extra]
+#Server = ftp://saule.mintis.lt/pub/linux/extra/os/i686
