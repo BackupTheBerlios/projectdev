@@ -1,0 +1,16 @@
+# $Id: PKGBUILD,v 1.1 2004/11/16 21:17:16 blokkie Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=libidl
+pkgver=0.6.8
+pkgrel=1
+pkgdesc="A front-end for CORBA 2.2 IDL and Netscape's XPIDL"
+depends=('glib')
+source=(ftp://sunsite.ualberta.ca/pub/Mirror/mozilla/mozilla/libraries/source/libIDL-$pkgver.tar.gz)
+
+build() {
+  cd $startdir/src/libIDL-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}
