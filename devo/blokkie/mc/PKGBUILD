@@ -1,0 +1,18 @@
+# $Id: PKGBUILD,v 1.1 2005/01/24 09:34:11 blokkie Exp $
+# Maintainer: blokkie <blokkie@burningfrog.be>
+
+pkgname=mc
+pkgver=4.6.0
+pkgrel=1
+pkgdesc="A filemanager/shell that emulates Norton Commander"
+depends=('e2fsprogs' 'glib2' 'gpm')
+pkgurl="http://www.ibiblio.org/pub/Linux/utils/file/managers/mc"
+source=($pkgurl/${pkgname}-${pkgver}.tar.gz)
+
+build() {
+  cd $startdir/src/${pkgname}-${pkgver}
+  ./configure --prefix=/usr --without-x
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}
+
