@@ -1,0 +1,22 @@
+# $Id: PKGBUILD,v 1.1 2005/01/17 00:14:18 blokkie Exp $
+# Maintainer: damir <damir@archlinux.org>
+# TUR: Ben <ben@benmazer.net>
+# Contributor: Markku <rasat@bliss-solutions.org>
+
+pkgname=hwd
+pkgver=4.1.2
+pkgrel=1
+pkgdesc="Hardware detect for Arch Linux (devfs and udev)."
+url="http://amlug.net/new-projects/hwd/hwd.html"
+
+depends=('hotplug' 'usbutils' 'pciutils')
+install=hwd.install
+
+source=(http://amlug.net/new-projects/hwd/sources/$pkgname-$pkgver.bin.tar.gz)
+md5sums=('2d32c0bee894df124d6ee315fc600a17')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  cp -R $startdir/src/$pkgname-$pkgver/{etc,sbin,usr} $startdir/pkg/ || return 1
+}
+
