@@ -1,6 +1,6 @@
 #!/bin/sh
 sleep 1;
-echo "GONNA CHECKOUT cvs NOW !!!";
+echo "Checking Project-dEv cvs";
 mkdir -p /var/projectdev && cd /var/projectdev;
 sleep 1;
 cvs -d:pserver:anonymous@cvs.berlios.de:/cvsroot/projectdev login;
