@@ -11,19 +11,6 @@ post_upgrade() {
     mkdir -p var/lib/pacman/local && usr/bin/convertdb var/lib/pacman/local
     echo "==> Done." >&2
   fi
-  verchk=`vercmp ${2%-*} 2.8`
-  if [ $verchk -lt 0 ]; then
-    echo "---------------------------------------------------------------------"
-    echo "NOTE: The Server URIs have changed in the default /etc/pacman.conf."
-    echo "      Please look at /etc/pacman.conf.pacnew (if it exists) and "
-    echo "      adjust your Server lines accordingly."
-    echo
-    echo "For example:"
-    echo "    Server = ftp://ftp.archlinux.org/current"
-    echo "will become:"
-    echo "    Server = ftp://ftp.archlinux.org/current/os/i686"
-    echo "---------------------------------------------------------------------"
-  fi
 }
 
 # arg 1:  the old package version
