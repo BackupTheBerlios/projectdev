@@ -24,7 +24,7 @@
 # general configuration:
 timeout   5
 default   0
-color light-blue/black light-cyan/blue
+color light-gray/blue black/light-gray
 
 # boot sections follow
 # each is implicitly numbered from 0 in the order of appearance below
@@ -35,13 +35,16 @@ color light-blue/black light-cyan/blue
 #
 #-*
 
-# (0) Arch Linux
-title  Arch Linux  [/boot/vmlinuz]
-root   (hd0,0)
-kernel /vmlinuz root=/dev/discs/disc0/part3 ro
+# (0) Project dEv
+title  Project dEv    v0.1 (Alpha)
+root   (hd0,2)
+kernel (hd0,0)/vmlinuz26 root=/dev/discs/disc0/part3 ro vga=0x314
 
-# (1) Windows
-#title Windows
-#root  (hd0,0)
-#makeactive
-#chainloader +1
+title Alternate menu colors to Light-gray/Cyan Black/Light-Gray
+color light-gray/cyan black/light-gray
+
+title Alternate menu colors to Black/Cyan Yellow/Cyan
+color black/cyan yellow/cyan
+
+title Alternate men back to Default
+color light-gray/blue black/light-gray 
