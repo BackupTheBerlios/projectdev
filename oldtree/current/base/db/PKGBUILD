@@ -1,13 +1,14 @@
-# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:40 dpb Exp $
-# Maintainer: judd <jvinet@zeroflux.org>
+# $Id: PKGBUILD,v 1.2 2004/12/02 17:26:39 blokkie Exp $
+# Arch Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
 pkgname=db
-pkgver=4.2.52
-pkgrel=1
+pkgver=4.3.21
+pkgrel=2
 pkgdesc="The Berkeley DB embedded database system"
 url="http://www.sleepycat.com"
 depends=('glibc')
 source=(http://www.sleepycat.com/update/snapshot/$pkgname-$pkgver.tar.gz)
-md5sums=('cbc77517c9278cdb47613ce8cb55779f')
+md5sums=('014950aaadd531f6f9064c81a2018423')
 
 build() {
   cd $startdir/src/$pkgname-$pkgver/build_unix

@@ -1,7 +1,9 @@
-# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:41 dpb Exp $
+# $Id: PKGBUILD,v 1.2 2004/12/02 17:27:12 blokkie Exp $
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+
 pkgname=udev
-pkgver=036
-pkgrel=1
+pkgver=046
+pkgrel=2
 pkgdesc="The userspace dev tools (udev)"
 url="http://www.kernel.org/pub/linux/utils/kernel/hotplug/udev.html"
 depends=('coreutils')
@@ -9,8 +11,10 @@ backup=(etc/udev/udev.conf etc/udev/permissions.d/udev.permissions \
         etc/udev/rules.d/udev.rules etc/scsi_id.config)
 source=(http://www.kernel.org/pub/linux/utils/kernel/hotplug/$pkgname-$pkgver.tar.gz migrate-udev udev.rules udev.permissions)
 install=udev.install
-md5sums=('303a238a935b7cff90decc5247da8dbb' '49434a593918c822077bc3af765f1aff'\
+md5sums=('82660ff5d3b456179cf12d471d76d5e5' '49434a593918c822077bc3af765f1aff'\
          '2fce912065a17fbf2679aae55e5e3e6f' '5bfd306807ac09256c090f501f5c17f7')
+
+
 
 build() {
   cd $startdir/src/$pkgname-$pkgver
