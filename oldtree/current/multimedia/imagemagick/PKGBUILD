@@ -1,0 +1,21 @@
+# $Id: PKGBUILD,v 1.1 2004/11/16 11:26:45 blokkie Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=imagemagick
+pkgver=6.1.4
+pkgrel=1
+pkgdesc="A image viewing/manipulation program"
+depends=('x-server' 'bzip2'  'libjpeg' 'libpng' 'libtiff' 'libxml2' 'libtool')
+source=(ftp://ftp.imagemagick.org/pub/ImageMagick/ImageMagick-$pkgver-3.tar.bz2)
+url="http://www.imagemagick.org/"
+md5sums=('56190cb95567c689ea930fdaa6aa1ecc')
+
+build() {
+  cd $startdir/src/ImageMagick-$pkgver
+  ./configure --prefix=/usr --without-dps --with-perl
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  rm -r $startdir/pkg/usr/lib/perl5/?.?.?
+  rm -r $startdir/pkg/usr/lib/libltdl*
+  mv $startdir/pkg/usr/lib/perl5/site_perl/?.?.? $startdir/pkg/usr/lib/perl5/site_perl/current
+}
