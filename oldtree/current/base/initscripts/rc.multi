@@ -13,6 +13,19 @@ for daemon in "${DAEMONS[@]}"; do
 	fi
 done
 
+if [ "$SPLASHMULTI" = "yes" -o "$SPLASHMULTI" = "YES" ]; then
+	splash_util --vc=1 --theme=$SPLASHTHEME --cmd=setcfg
+	splash_util --vc=1 --cmd=on
+	splash_util --vc=2 --theme=$SPLASHTHEME --cmd=setcfg
+	splash_util --vc=2 --cmd=on
+	splash_util --vc=3 --theme=$SPLASHTHEME --cmd=setcfg
+	splash_util --vc=3 --cmd=on
+	splash_util --vc=4 --theme=$SPLASHTHEME --cmd=setcfg
+	splash_util --vc=4 --cmd=on
+	splash_util --vc=5 --theme=$SPLASHTHEME --cmd=setcfg
+	splash_util --vc=5 --cmd=on
+fi
+
 if [ -x /etc/rc.local ]; then
 	/etc/rc.local
 fi
