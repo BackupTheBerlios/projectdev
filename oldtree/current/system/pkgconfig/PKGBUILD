@@ -1,0 +1,18 @@
+# $Id: PKGBUILD,v 1.1 2004/11/04 23:58:12 blokkie Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+# Committer: Judd Vinet <jvinet@zeroflux.org>
+
+pkgname=pkgconfig
+pkgver=0.15.0
+pkgrel=1
+pkgdesc="A system for managing library compile/link flags"
+depends=('glibc')
+source=(http://www.freedesktop.org/software/pkgconfig/releases/pkgconfig-$pkgver.tar.gz)
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}
