@@ -1,0 +1,19 @@
+# $Id: PKGBUILD,v 1.1 2004/11/04 20:20:06 blokkie Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+# Committer: Judd Vinet <jvinet@zeroflux.org>
+pkgname=expat
+pkgver=1.95.8
+pkgrel=1
+pkgdesc="An XML Parser library written in C"
+depends=('glibc')
+source=(http://dl.sourceforge.net/sourceforge/expat/$pkgname-$pkgver.tar.gz)
+url="http://expat.sourceforge.net/"
+md5sums=('aff487543845a82fe262e6e2922b4c8e')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make prefix=$startdir/pkg/usr install
+}
