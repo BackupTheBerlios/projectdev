@@ -1,9 +1,9 @@
-# $Id: PKGBUILD,v 1.7 2004/11/16 11:59:08 dpb Exp $
+# $Id: PKGBUILD,v 1.8 2004/11/16 14:36:15 blokkie Exp $
 # Arch Maintainer: judd <jvinet@zeroflux.org>
 # Maintainer: blokkie <t.fernagut@burningfrog.be>
 pkgname=kernel26
 pkgver=2.6.9
-pkgrel=1
+pkgrel=2
 pkgdesc="The Linux Kernel and modules (IDE support)"
 url="http://www.kernel.org"
 backup=('boot/kconfig26')
