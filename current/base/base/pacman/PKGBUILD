@@ -1,4 +1,4 @@
-# $Id: PKGBUILD,v 1.5 2005/01/07 12:11:06 dpb Exp $
+# $Id: PKGBUILD,v 1.6 2005/01/07 14:08:05 dpb Exp $
 # Arch Maintainer: judd <jvinet@zeroflux.org>
 # Maintainer: Daniel Bainton <dpb@backarrow.org>
 
@@ -7,7 +7,7 @@ pkgver=2.9.4
 pkgrel=1
 pkgdesc="A .tar.gz based package manager with dependency support"
 url="http://www.archlinux.org/pacman"
-backup=('etc/pacman.conf' 'etc/makepkg.conf' \
+backup=('etc/pacman.conf' 'etc/makepkg.conf' 'etc/devcheck.conf' \
         etc/pacman.d/{current,release,extra,unstable})
 makedepends=('libtar')
 install=pacman.install
