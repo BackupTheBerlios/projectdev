@@ -7,7 +7,7 @@ pkgdesc="Enlightened Core Functions (mainly X based)"
 groups=('efl')
 url="http://www.enlightenment.org"
 depends=('imlib2-cvs' 'evas-cvs' 'openssl')
-makedepends=('cvs' 'evas')
+makedepends=('cvs' 'evas-cvs')
 provides=('ecore')
 source=()
 

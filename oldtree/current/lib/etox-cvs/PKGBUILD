@@ -6,10 +6,9 @@ pkgrel=1
 pkgdesc="An Enlightened Layout Library"
 url="http://www.enlightenment.org"
 groups=('efl')
-depends=('openssl' 'evas' 'ecore' 'eet')
+depends=('openssl' 'evas-cvs' 'ecore-cvs' 'eet-cvs')
 makedepends=('cvs')
 provides=('etox')
-replaces=('estyle-cvs')
 source=()
 
 build() {

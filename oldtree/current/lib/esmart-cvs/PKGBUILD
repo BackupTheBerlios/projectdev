@@ -6,8 +6,8 @@ pkgrel=1
 pkgdesc="A Collection of Evas Smart Objects in a Library"
 groups=('efl')
 url="http://www.enlightenment.org"
-depends=('evas' 'ecore' 'epsilon' 'edje')
-makedepends=('cvs' 'evas' 'ecore')
+depends=('evas-cvs' 'ecore-cvs' 'epsilon-cvs' 'edje-cvs')
+makedepends=('cvs' 'evas-cvs' 'ecore-cvs')
 provides=('esmart')
 source=()
 
