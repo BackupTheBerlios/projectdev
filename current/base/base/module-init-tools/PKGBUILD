@@ -1,7 +1,8 @@
-# $Id: PKGBUILD,v 1.1 2004/12/03 16:32:17 rensel Exp $
-# Maintainer: judd <jvinet@zeroflux.org>
+# $Id: PKGBUILD,v 1.2 2005/01/17 01:25:25 blokkie Exp $
+# arch Maintainer: judd <jvinet@zeroflux.org>
+# maintainer: blokkie
 pkgname=module-init-tools
-pkgver=3.0
+pkgver=3.1
 pkgver24=2.4.27
 pkgrel=2
 pkgdesc="Utilities for inserting and removing modules from the Linux kernel"
@@ -11,8 +12,10 @@ conflicts=('modutils')
 replaces=('modutils')
 backup=('etc/modprobe.conf' 'etc/modules.conf' 'etc/modprobe.devfs')
 source=(http://www.kernel.org/pub/linux/utils/kernel/module-init-tools/module-init-tools-$pkgver.tar.bz2 \
-  http://www.kernel.org/pub/linux/utils/kernel/modutils/v2.4/modutils-${pkgver24}.tar.bz2)
-md5sums=('f8bfc480c4168978eca7037cd341da07' 'bac989c74ed10f3bf86177fc5b4b89b6')
+  http://www.kernel.org/pub/linux/utils/kernel/modutils/v2.4/modutils-${pkgver24}.tar.bz2 makefile.patch \
+  modprobe.conf)
+md5sums=('8ddecbcf0e56aef8617f67a3906faf3e' 'bac989c74ed10f3bf86177fc5b4b89b6'\
+         '47e14fda7a46668290d11d0444d81826' '52b46ce871db3e028936814cb1f6231a')
 
 # NOTE: This package actually contains both the modutils and the
 #       module-init-tools utilities.  The old (modutils) utilities have
@@ -41,21 +44,17 @@ build() {
   rm -f $startdir/pkg/sbin/lsmod.old
 
   cd $startdir/src/$pkgname-$pkgver
+  patch -Np1 -i ../makefile.patch || return 1
   sed -i 's|/usr/bin/install|/bin/install|g' install-with-care
   ./configure --prefix=/usr --exec-prefix=/
   make || return 1
   INSTALL=/bin/install make DESTDIR=$startdir/pkg install
   install -D -m644 modprobe.devfs $startdir/pkg/etc/modprobe.devfs
+  install -D -m644 ../modprobe.conf $startdir/pkg/etc/modprobe.conf
 
   cat >$startdir/pkg/etc/modules.conf <<_EOF
 #
 # /etc/modules.conf (for v2.4 kernels)
-#
-
-_EOF
-  cat >$startdir/pkg/etc/modprobe.conf <<_EOF
-#
-# /etc/modprobe.conf (for v2.6 kernels)
 #
 
 _EOF
