@@ -1,21 +1,20 @@
-# $Id: PKGBUILD,v 1.1 2004/12/03 17:27:14 rensel Exp $
-# Arch Maintainer: Dale Blount <dale@archlinux.org>
+# $Id: PKGBUILD,v 1.2 2005/01/17 15:47:46 blokkie Exp $
+# Artch Maintainer: Dale Blount <dale@archlinux.org>
 # Contributer: Nick Penwarden <toth64@yahoo.com>
-# Maintainer: Blokkie <t.fernagut@burningfrog.be>
+# Maintainer: blokkie <blokkie@burningfrog.be>
 pkgname=mozilla-firefox
-pkgver=0.10.1
-pkgrel=2
+pkgver=1.0
+pkgrel=1
 pkgdesc="Standalone web browser from mozilla.org"
 makedepends=('zip')
 depends=('gtk' 'libidl2' 'gcc' 'mozilla-common')
-replaces=('mozilla-firebird' 'phoenix')
+#depends=('gtk' 'gcc')
+replaces=('mozilla-firebird')
 url="http://www.mozilla.org/projects/firefox"
-source=(ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$pkgver/firefox-1.0PR-source.tar.bz2 \
+source=(ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$pkgver/source/firefox-$pkgver-source.tar.bz2 \
         mozilla-firefox.run \
 	mozilla-firefox-nonroot.tar.gz \
 	mozconfig)
-md5sums=('ff9eae3b90b8573bf44293ea44bf3c50' 'aea53b054e38b177043474670b4472ef'\
-         'c28385288eb9a9cefba21d62d7870cfd' 'f88a2d7dfd08dfeb3b7db89eb0642794')
 
 build() {
 	cd $startdir/src/mozilla
