@@ -1,5 +1,6 @@
-# $Id: PKGBUILD,v 1.7 2004/11/04 15:43:47 dpb Exp $
-# Maintainer: judd <jvinet@zeroflux.org>
+# $Id: PKGBUILD,v 1.8 2004/11/04 15:45:18 dpb Exp $
+# Arch Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: Daniel Bainton <dpb@backarrow.org>
 pkgname=pacman
 pkgver=2.9.2
 pkgrel=1
