@@ -1,10 +1,10 @@
-# $Id: PKGBUILD,v 1.3 2004/11/04 20:26:56 rensel Exp $
+# $Id: PKGBUILD,v 1.4 2004/11/13 12:42:39 rensel Exp $
 # Based on the Arch Linux filesystem 0.7-3 by Judd Vinet
 # Edited for Project dEv: Daniel Bainton <dpb [at] backarrow.org>
 
 pkgname=filesystem
 pkgver=0.1
-pkgrel=2
+pkgrel=3
 pkgdesc="Base filesystem"
 url="http://www.projectdev.org"
 install=filesystem.install
@@ -32,7 +32,7 @@ build() {
   mkdir -p usr/man/man{1,2,3,4,5,6,7,8}
   # fhs compliancy
   mkdir -p usr/local/{bin,games,include,lib,man,sbin,share,src}
-  mkdir -p var/{cache/man,lib/pacman,abs,local,lock,opt,run,spool/mail,tmp}
+  mkdir -p var/{cache/man,lib/pacman,projectdev,local,lock,opt,run,spool/mail,tmp}
   mkdir -p var/log/old
   mkdir -p etc/profile.d
   mkdir -p home/ftp lib/modules
