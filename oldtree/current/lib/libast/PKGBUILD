@@ -1,0 +1,20 @@
+# Arch Maintainer: arjan <arjan@archlinux.org>
+# Maintainer: Amar Hadzihasanovic <rensel[at]email.it>
+
+pkgname=libast
+pkgver=0.6
+pkgrel=1
+pkgdesc="The Library of Assorted Spiffy Things."
+url="http://eterm.sourceforge.net/libast/html/"
+license="BSD"
+depends=('x-server' 'pcre' 'imlib2-cvs')
+makedepends=()
+source=(http://www.eterm.org/download/$pkgname-$pkgver.tar.gz)
+md5sums=('05f71db3fbda2f3d2f45c793e085f0a7')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr --with-x
+  make || return 1
+  make prefix=$startdir/pkg/usr install
+}
