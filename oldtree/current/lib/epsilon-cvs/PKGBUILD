@@ -1,7 +1,7 @@
 # Maintainer: Amar Hadzihasanovic <rensel[at]email.it>
 
 pkgname=epsilon-cvs
-pkgver=20041109
+pkgver=20041128
 pkgrel=1
 pkgdesc="An Enlightened Thumbnailing Library"
 groups=('efl')
@@ -12,7 +12,7 @@ provides=('epsilon')
 source=()
 
 build() {
-  cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/enlightenment co -D "2004-11-09" e17/libs/epsilon
+  cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/enlightenment co -D "2004-11-28" e17/libs/epsilon
   cd $startdir/src/e17/libs/epsilon
   ./autogen.sh --prefix=/opt/efl --with-epeg=/opt/efl
   make || return 1

@@ -1,18 +1,18 @@
 # Maintainer: Amar Hadzihasanovic <rensel[at]email.it>
 
 pkgname=edje-cvs
-pkgver=20041109
+pkgver=20041128
 pkgrel=1
 pkgdesc="The Powerful Enlightened Interface Library"
 groups=('efl')
 url="http://www.enlightenment.org"
 depends=('imlib2-cvs' 'evas-cvs' 'ecore-cvs' 'embryo-cvs' 'eet-cvs')
-makedepends=('cvs-cvs' 'eet-cvs' 'embryo-cvs')
+makedepends=('cvs' 'eet-cvs' 'embryo-cvs')
 provides=('edje')
 source=()
 
 build() {
-  cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/enlightenment co -D "2004-11-09" e17/libs/edje
+  cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/enlightenment co -D "2004-11-28" e17/libs/edje
   cd $startdir/src/e17/libs/edje
   ./autogen.sh --prefix=/opt/efl --with-eet=/opt/efl
   make || return 1
