@@ -1,0 +1,25 @@
+# $Id: PKGBUILD,v 1.1 2005/01/19 11:47:31 dpb Exp $
+# Maintainer: Daniel Bainton <dpb@backarrow.org>
+pkgname=shfs
+pkgver=0.35
+pkgrel=1
+pkgdesc="Kernel module for mounting remote filesystems using ssh"
+url="http://shfs.sf.net"
+depends=('openssh' 'glibc')
+source=(http://dl.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.gz \
+	http://atrey.karlin.mff.cuni.cz/~qiq/src/shfs/shfs-0.35/df.diff \
+	http://atrey.karlin.mff.cuni.cz/~qiq/src/shfs/shfs-0.35/space_chars.diff \
+	http://atrey.karlin.mff.cuni.cz/~qiq/src/shfs/shfs-0.35/uidgid32.diff \
+)
+md5sums=('016f49d71bc32eee2b5d11fc1600cfbe' '29b3f063e5feb8c259abc86d07f92f85'\
+         'e5f37f793e95acdfd8e89affe9949160' '29e5b080a1744f8283b8f55d5b904a60')
+
+
+build() {
+    cd $startdir/src/$pkgname-$pkgver
+    patch -p0 -i ../df.diff
+    patch -p0 -i ../space_chars.diff
+    patch -p0 -i ../uidgid32.diff
+    make || return 1
+    make ROOT=$startdir/pkg MAN_PAGE_DIR=/usr/man install
+}
