@@ -5,9 +5,7 @@
 #
 # Executed by startx (run your window manager from here)
 #
+# For background setting you can use Esetroot -s 
 
-exec wmaker
-# exec startkde
-# exec icewm
-# exec blackbox
-# exec fluxbox
+exec enlightenment
+
