@@ -1,0 +1,21 @@
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: Amar Hadzihasanovic <rensel[at]email.it>
+
+pkgname=pango
+pkgver=1.6.0
+pkgrel=1
+pkgdesc="A library for layout and rendering of text"
+url="http://www.gtk.org/"
+license="LGPL"
+depends=('glib2' 'x-server')
+makedepends=()
+install=pango.install
+source=(ftp://ftp.gtk.org/pub/gtk/v2.6/$pkgname-$pkgver.tar.bz2)
+md5sums=('6c732bbc5fba5a0f1f8086e8aa4f490d')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}

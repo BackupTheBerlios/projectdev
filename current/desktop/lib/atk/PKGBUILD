@@ -1,0 +1,20 @@
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: Amar Hadzihasanovic <rensel[at]email.it>
+
+pkgname=atk
+pkgver=1.8.0
+pkgrel=1
+pkgdesc="A library providing a set of interfaces for accessibility"
+url="http://www.gtk.org/"
+license="LGPL"
+depends=('glib2')
+makedepends=()
+source=(ftp://ftp.gnome.org/pub/gnome/sources/$pkgname/1.8/$pkgname-$pkgver.tar.bz2)
+md5sums=('fc46940febb0e91427b77457e6356f3d')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}

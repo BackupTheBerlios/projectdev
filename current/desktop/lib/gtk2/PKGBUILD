@@ -1,0 +1,21 @@
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: Amar Hadzihasanovic <rensel[at]email.it>
+
+pkgname=gtk2
+pkgver=2.4.14
+pkgrel=1
+pkgdesc="A multi-platform toolkit for creating GUIs, v2"
+url="http://www.gtk.org/"
+license="LGPL"
+depends=('atk' 'glib2>=2.4.0' 'pango' 'libpng' 'libtiff' 'libjpeg')
+makedepends=()
+install=gtk2.install
+source=(ftp://ftp.gtk.org/pub/gtk/v2.4/gtk+-$pkgver.tar.bz2)
+md5sums=('10470d574933460809e4ac488e579e26')
+    
+build() {
+  cd $startdir/src/gtk+-$pkgver
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --with-xinput=yes
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}
