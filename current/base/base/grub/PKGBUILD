@@ -1,9 +1,9 @@
-# $Id: PKGBUILD,v 1.1 2004/12/03 16:27:18 rensel Exp $
+# $Id: PKGBUILD,v 1.2 2005/01/13 19:28:03 blokkie Exp $
 # Arch  Maintainer: judd <jvinet@zeroflux.org>
 # Maintainer: blokkie <t.fernagut@burningfrog.be>
 pkgname=grub
 pkgver=0.95
-pkgrel=5
+pkgrel=6
 pkgdesc="A GNU multiboot boot loader"
 url="http://www.gnu.org/software/grub/"
 depends=('ncurses')

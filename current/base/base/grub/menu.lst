@@ -31,14 +31,12 @@ color light-gray/blue black/light-gray
 #
 # TIP: If you want a 1024x768 framebuffer, add "vga=773" to your kernel line.
 #
-# TIP: To use udev, add "devfs=nomount" to your kernel line.
-#
 #-*
 
 # (0) Project dEv
 title  Project dEv    v0.1 (Alpha)
-root   (hd0,2)
-kernel (hd0,0)/vmlinuz26 root=/dev/discs/disc0/part3 ro vga=0x314
+root   (hd0,0)
+kernel (hd0,0)/vmlinuz26 root=/dev/hda3 ro vga=0x314
 
 title Alternate menu colors to Light-gray/Cyan Black/Light-Gray
 color light-gray/cyan black/light-gray
