@@ -1,7 +1,7 @@
 # Maintainer: Amar Hadzihasanovic <rensel[at]email.it>
 
 pkgname=evas-cvs
-pkgver=20041109
+pkgver=20041128
 pkgrel=1
 pkgdesc="The Powerful Enlightened Canvas Library"
 groups=('efl')
@@ -12,7 +12,7 @@ provides=('evas')
 source=()
 
 build() {
-  cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/enlightenment co -D "2004-11-09" e17/libs/evas
+  cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/enlightenment co -D "2004-11-28" e17/libs/evas
   cd $startdir/src/e17/libs/evas
   ./autogen.sh CFLAGS="$CFLAGS -I/opt/efl/include" --prefix=/opt/efl
   make || return 1
