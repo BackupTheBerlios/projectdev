@@ -1,0 +1,26 @@
+# $Id: PKGBUILD,v 1.1 2004/11/16 18:28:00 blokkie Exp $
+# Arch Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=iptables
+pkgver=1.2.11
+pkgrel=3
+pkgdesc="A Linux kernel packet control tool"
+url="http://www.netfilter.org/"
+depends=('glibc')
+source=(http://www.iptables.org/files/$pkgname-$pkgver.tar.bz2 \
+        iptables empty.rules simple_firewall.rules iptables.conf.d)
+md5sums=('0a5f5f226e41ce408a895bec995e8c05' '12039e2e2eed04768f0094725b65cf1d'\
+         '14186bbafe21bb0638c0cb8e0903c829' '188083c58ed74bcbe70012c9f8867c44'\
+         '8ddc5fbbb5b064eb5e709e92a21b8ac2')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  sed -i "s:/usr/local:/usr:" Makefile
+  make || return 1
+  make PREFIX=$startdir/pkg/usr install
+  make PREFIX=$startdir/pkg/usr install-devel 
+  install -D -m755 ../iptables $startdir/pkg/etc/rc.d/iptables
+  install -D -m644 ../empty.rules $startdir/pkg/etc/iptables/empty.rules
+  install -D -m644 ../simple_firewall.rules $startdir/pkg/etc/iptables/simple_firewall.rules
+  install -D -m644 ../iptables.conf.d $startdir/pkg/etc/conf.d/iptables
+}

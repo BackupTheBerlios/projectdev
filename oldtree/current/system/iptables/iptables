@@ -1,0 +1,69 @@
+#!/bin/bash
+
+# source application-specific settings
+[ -f /etc/conf.d/iptables ] && . /etc/conf.d/iptables
+
+. /etc/rc.conf
+. /etc/rc.d/functions
+
+case "$1" in
+	start)
+		if [ ! -f $IPTABLES_CONF ]; then
+			echo "Cannot load iptables rules: $IPTABLES_CONF is missing!" >&2
+			exit 1
+		fi
+		stat_busy "Starting IP Tables"
+		if [ "$IPTABLES_FORWARD" = "1" ]; then
+			echo 1 >/proc/sys/net/ipv4/ip_forward
+		fi
+		if ck_daemon iptables; then
+			/usr/sbin/iptables-restore < $IPTABLES_CONF
+			if [ $? -gt 0 ]; then
+				stat_fail
+			else
+				add_daemon iptables
+				stat_done
+			fi
+		else
+			stat_fail
+		fi
+		;;
+	stop)
+		stat_busy "Stopping IP Tables"
+		echo 0 >/proc/sys/net/ipv4/ip_forward
+		if ! ck_daemon iptables; then
+			$IPTABLES -F &>/dev/null && \
+				$IPTABLES -X &>/dev/null && \
+				$IPTABLES -Z &>/dev/null
+			if [ $? -gt 0 ]; then
+				stat_fail
+			else
+				rm_daemon iptables
+				# reset policies
+				$IPTABLES -P OUTPUT ACCEPT
+				$IPTABLES -P INPUT ACCEPT
+				$IPTABLES -P FORWARD ACCEPT
+				stat_done
+			fi
+		else
+			stat_fail
+		fi
+		;;
+	restart)
+		$0 stop
+		sleep 2
+		$0 start
+		;;
+	save)
+		stat_busy "Saving IP Tables"
+		/usr/sbin/iptables-save >$IPTABLES_CONF
+		if [ $? -gt 0 ]; then
+			stat_fail
+		else
+			stat_done
+		fi
+		;;
+	*)
+		echo "usage: $0 {start|stop|restart|save}"
+esac
+exit 0
