@@ -1,4 +1,4 @@
-# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:41 dpb Exp $
+# $Id: PKGBUILD,v 1.2 2004/11/04 20:18:45 rensel Exp $
 # Based on the Arch Linux filesystem 0.7-3 by Judd Vinet
 # Edited for Project dEv: Daniel Bainton <dpb [at] backarrow.org>
 pkgname=filesystem
@@ -17,7 +17,7 @@ source=(group issue nsswitch.conf securetty host.conf ld.so.conf \
         xinitrc)
 md5sums=('d18e87fb8764a89d1817b45ab49cdef4' '1a5a6be7f8fcc55f249bb31df6f78665'\
          '775464ba7588b4976e0c2a02b83123f4' '655071da46d2ac03e0fb8a071bf193ea'\
-         'f28150d4c0b22a017be51b9f7f9977ed' 'f9e1d9fbf084dcc29a82a74b9ed4be65'\
+         'f28150d4c0b22a017be51b9f7f9977ed' 'c9133a049c9058a16d7782e40f5960d1'\
          '66092badcb03e407809a3e12a2392fb0' 'c163cae617cbae36d1eb5546bdb59bcb'\
          '382eadb1197f570c005b25aece97e3a5' '81b3cb42a6ddabc2ed2310511ee9c859'\
          'd41d8cd98f00b204e9800998ecf8427e' '6f48288b6fcaf0065fcb7b0e525413e0'\
