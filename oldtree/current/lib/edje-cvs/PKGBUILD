@@ -7,7 +7,7 @@ pkgdesc="The Powerful Enlightened Interface Library"
 groups=('efl')
 url="http://www.enlightenment.org"
 depends=('imlib2-cvs' 'evas-cvs' 'ecore-cvs' 'embryo-cvs' 'eet-cvs')
-makedepends=('cvs' 'eet' 'embryo')
+makedepends=('cvs-cvs' 'eet-cvs' 'embryo-cvs')
 provides=('edje')
 source=()
 
