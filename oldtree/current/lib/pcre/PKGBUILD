@@ -1,0 +1,19 @@
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: Amar Hadzihasanovic <rensel[at]email.it>
+
+pkgname=pcre
+pkgver=5.0
+pkgrel=1
+pkgdesc="A library that implements Perl 5-style regular expressions"
+url="http://pcre.sourceforge.net"
+depends=('bash')
+makedepends=()
+source=(ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/$pkgname-$pkgver.tar.gz)
+md5sums=('53976b62032fd5c76678274e5fd196b4')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr --enable-utf8
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}
