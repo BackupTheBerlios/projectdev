@@ -6,10 +6,7 @@ post_install() {
 }
 
 post_upgrade() {
-  splash_geninitramfs -v -g /boot/fbsplash-devsplash-800x600 -r 800x600 devsplash >/dev/null
-  splash_geninitramfs -v -g /boot/fbsplash-devsplash-1024x768 -r 1024x768 devsplash >/dev/null
-  splash_geninitramfs -v -g /boot/fbsplash-devsplash-1280x1024 -r 1280x1024 devsplash >/dev/null
-  splash_geninitramfs -v -g /boot/fbsplash-devsplash-1600x1200 -r 1600x1200 devsplash >/dev/null
+  post_install $1
 }
 
 pre_remove() {
