@@ -1,9 +1,9 @@
 # Maintainer: Amar Hadzihasanovic <rensel[at]email.it>
 
 pkgname=imlib2_loaders-cvs
-pkgver=20041128
+pkgver=current
 pkgrel=1
-pkgdesc="Image Loaders for Imlib2"
+pkgdesc="Image Loaders for Imlib2 - CVS build `date +%Y-%m-%d`"
 groups=('efl')
 url="http://www.enlightenment.org"
 depends=('imlib2-cvs' 'edb-cvs' 'eet-cvs')
@@ -13,7 +13,7 @@ conflicts=('imlib2_loaders')
 source=()
 
 build() {
-  cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/enlightenment co -D "2004-11-28" e17/libs/imlib2_loaders
+  cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/enlightenment co e17/libs/imlib2_loaders
   cd $startdir/src/e17/libs/imlib2_loaders
   ./autogen.sh --prefix=/opt/efl
   # the in-source libtool is an old version and doesn't work
