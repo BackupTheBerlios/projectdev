@@ -1,0 +1,9 @@
+#!/bin/sh
+sleep 1;
+echo "GONNA CHECKOUT cvs NOW !!!";
+mkdir -p /var/projectdev && cd /var/projectdev;
+sleep 1;
+cvs -d:pserver:anonymous@cvs.berlios.de:/cvsroot/projectdev login;
+cvs -d:pserver:anonymous@cvs.berlios.de:/cvsroot/projectdev co current;
+sleep 1;
+echo "You will find  the cvs repo of Project-dEv in /var/projectdev/current . Have fun!"
