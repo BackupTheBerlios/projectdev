@@ -45,37 +45,38 @@ null:root:root:0666
 zero:root:root:0666
 
 # misc devices
-nvram:root:root:0660
-rtc:root:root:0660
+misc/psaux:root:root:0660
+misc/nvram:root:root:0660
+misc/rtc:root:root:0660
 
 # floppy devices
 fd[01]*:root:root:0660
 
 # audio devices
-dsp*:root:root:0660
-audio*:root:root:0660
-midi*:root:root:0660
-mixer*:root:root:0660
-sequencer*:root:root:0660
-sound/*:root:root:0660
-snd/*:root:root:0660
-beep:root:root:0660
-admm*:root:root:0660
-adsp*:root:root:0660
-aload*:root:root:0660
-amidi*:root:root:0660
-dmfm*:root:root:0660
-dmmidi*:root:root:0660
-sndstat:root:root:0660
+dsp*:root:audio:0660
+audio*:root:audio:0660
+midi*:root:audio:0660
+mixer*:root:audio:0660
+sequencer*:root:audio:0660
+sound/*:root:audio:0660
+snd/*:root:audio:0660
+beep:root:audio:0660
+admm*:root:audio:0660
+adsp*:root:audio:0660
+aload*:root:audio:0660
+amidi*:root:audio:0660
+dmfm*:root:audio:0660
+dmmidi*:root:audio:0660
+sndstat:root:audio:0660
 
 # optical devices
-sr*:root:root:660
-scd*:root:root:660
-pcd*:root:root:0660
-cdrom*:root:root:0660
-dvd:root:root:0660
-rdvd:root:root:0660
-cdroms/*:root:root:0660
+sr*:root:optical:660
+scd*:root:optical:660
+pcd*:root:optical:0660
+cdrom*:root:optical:0660
+dvd:root:optical:0660
+rdvd:root:optical:0660
+cdroms/*:root:optical:0660
 
 # pilot/palm devices
 pilot:root:root:0660
@@ -175,6 +176,14 @@ input/*:root:root:644
 gpmctl:root:root:0700
 
 # dri devices
+radeon*:root:users:0660
+i810*:root:users:0660
+i830*:root:users:0660
+i915*:root:users:0660
+mga*:root:users:0660
+r128*:root:users:0660
+sis*:root:users:0660
+tdfx*:root:users:0660
 nvidia*:root:users:0660
 3dfx*:root:users:0660
 dri/*:root:users:0660
