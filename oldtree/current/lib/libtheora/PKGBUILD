@@ -1,0 +1,18 @@
+# $Id: PKGBUILD,v 1.1 2004/11/10 20:42:56 blokkie Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Committer: dorphell <dorphell@archlinux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=libtheora
+pkgver=1.0alpha3
+pkgrel=1
+pkgdesc="An open video codec developed by the Xiph.org"
+depends=('libogg')
+source=(http://downloads.xiph.org/releases/theora/$pkgname-$pkgver.tar.gz)
+md5sums=('eab566a0c7fdc21da1ce503edfa43bb4')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr --enable-shared
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}
