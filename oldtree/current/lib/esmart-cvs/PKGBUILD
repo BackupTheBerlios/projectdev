@@ -1,0 +1,20 @@
+# Maintainer: Amar Hadzihasanovic <rensel[at]email.it>
+
+pkgname=esmart-cvs
+pkgver=20041109
+pkgrel=1
+pkgdesc="A Collection of Evas Smart Objects in a Library"
+groups=('efl')
+url="http://www.enlightenment.org"
+depends=('evas' 'ecore' 'epsilon' 'edje')
+makedepends=('cvs' 'evas' 'ecore')
+provides=('esmart')
+source=()
+
+build() {
+  cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/enlightenment co -D "2004-11-09" e17/libs/esmart
+  cd $startdir/src/e17/libs/esmart
+  ./autogen.sh --prefix=/opt/efl --with-evas=/opt/efl --with-ecore=/opt/efl
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}
