@@ -1,4 +1,4 @@
-# $Id: PKGBUILD,v 1.2 2004/11/03 13:56:11 dpb Exp $
+# $Id: PKGBUILD,v 1.3 2004/11/03 13:57:21 dpb Exp $
 # Maintainer: judd <jvinet@zeroflux.org>
 pkgname=pacman
 pkgver=2.9.2
@@ -14,11 +14,11 @@ source=(ftp://ftp.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz \
   supfile.current supfile.extra supfile.unstable abs abs.conf \
   current release extra unstable)
 md5sums=('f73ed0d84573dfc8fdab541ce55447bd' '005d82a4832b5273450e556f30010414'\
-         '2c564a8760ec0dac96082f1855d153d1' 'f83885f6c431e4e7f8b131fe444ac0d2'\
+         '60a48a96b40cec638d52b09c0d014351' 'f83885f6c431e4e7f8b131fe444ac0d2'\
          '9a44663da93a07c8df42741ea0e41930' '0025f9f786d50201951fc7444207a089'\
-         '5dfcce0aa5e121936c002e555d6fb55e' '3d6287d2892d541168ec288bdeb66d81'\
-         '82a317a88a041729ca3887e1b3dcfa8c' '0fa3c4c249ff1f97c90977f86687bb40'\
-         '082c25bc59de91a366de4768babc01ad')
+         '0e858d0d4f366b055a21e9ad8a88be51' '318b31c1611f4a89172e6bf84691b7c2'\
+         '729f595e06cda73d1c0218ca0bad7c7a' 'a6d98e7679f4d2de6aedc9862cc940ca'\
+         '16e9a835e75abc8d8a65987881e16ab2')
 
 build() {
   cd $startdir/src/$pkgname-$pkgver
