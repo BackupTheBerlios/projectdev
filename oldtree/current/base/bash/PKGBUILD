@@ -1,0 +1,27 @@
+# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:40 dpb Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=bash
+pkgver=3.0
+pkgrel=2
+pkgdesc="The GNU Bourne Again shell"
+url="http://www.gnu.org/software/bash/bash.html"
+backup=(etc/profile)
+depends=('glibc' 'readline')
+source=(ftp://ftp.cwru.edu/pub/bash/bash-$pkgver.tar.gz profile \
+        bash-history.patch)
+md5sums=('26c4d642e29b3533d8d754995bc277b3' '0393aa99b789f3bf967f6b647b548a10'\
+         '7108b64d6b21b74764a602e142ca6b2c')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  patch -Np1 -i ../bash-history.patch || return 1
+  ./configure --prefix=/usr --with-curses --enable-readline
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  mv $startdir/pkg/usr/bin $startdir/pkg/bin
+  # we don't want bashbug
+  rm -f $startdir/pkg/bin/bashbug
+  rm -f $startdir/pkg/usr/man/man1/bashbug.1
+  install -D -m644 ../profile $startdir/pkg/etc/profile
+  ln -sf $pkgname $startdir/pkg/bin/sh
+}

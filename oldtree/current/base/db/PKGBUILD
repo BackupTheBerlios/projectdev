@@ -1,0 +1,21 @@
+# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:40 dpb Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=db
+pkgver=4.2.52
+pkgrel=1
+pkgdesc="The Berkeley DB embedded database system"
+url="http://www.sleepycat.com"
+depends=('glibc')
+source=(http://www.sleepycat.com/update/snapshot/$pkgname-$pkgver.tar.gz)
+md5sums=('cbc77517c9278cdb47613ce8cb55779f')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver/build_unix
+  ../dist/configure --prefix=/usr --enable-compat185 \
+    --enable-shared --enable-static --enable-cxx
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  rm -rf $startdir/pkg/usr/docs
+  # for backwards compatibility
+  #ln -sf libdb-4.1.so $startdir/pkg/usr/lib/libdb-4.0.so
+}

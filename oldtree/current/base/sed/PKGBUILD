@@ -1,0 +1,18 @@
+# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:41 dpb Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=sed
+pkgver=4.1.2
+pkgrel=2
+pkgdesc="GNU stream editor"
+url="http://www.gnu.org/software/sed"
+depends=('glibc')
+source=(ftp://ftp.gnu.org/pub/gnu/sed/$pkgname-$pkgver.tar.gz)
+md5sums=('928f0e06422f414091917401f1a834d0')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=
+  make || return 1
+  make prefix=$startdir/pkg/usr install
+  mv $startdir/pkg/usr/bin $startdir/pkg/
+}

@@ -1,0 +1,16 @@
+# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:41 dpb Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=patch
+pkgver=2.5.4
+pkgrel=2
+pkgdesc="A utility to apply patch files to original sources"
+url="http://www.gnu.org/software/patch/patch.html"
+depends=('glibc' 'ed')
+source=(ftp://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.gz)
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make prefix=$startdir/pkg/usr install
+}

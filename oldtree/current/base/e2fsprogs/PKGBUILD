@@ -1,0 +1,19 @@
+# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:40 dpb Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=e2fsprogs
+pkgver=1.35
+pkgrel=1
+pkgdesc="Ext2 filesystem utilities"
+url="http://e2fsprogs.sourceforge.net"
+depends=('glibc' 'bash')
+source=(http://telia.dl.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.gz)
+md5sums=('8d25ffd60d405ef32d341704a2323807')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+#  patch -Np1 -i ../$pkgname.patch
+  ./configure --prefix=/usr --with-root-prefix="" \
+     --enable-elf-shlibs
+  make || return 1
+  make DESTDIR=$startdir/pkg install install-libs
+}

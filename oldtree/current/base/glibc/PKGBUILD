@@ -1,0 +1,59 @@
+# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:41 dpb Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=glibc
+pkgver=2.3.3
+pkgrel=2
+pkgdesc="GNU C Library with NPTL and linuxthreads"
+url="http://www.gnu.org/software/libc"
+depends=()
+source=(ftp://ftp.gnu.org/pub/gnu/glibc/glibc-$pkgver.tar.gz \
+  ftp://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-linuxthreads-$pkgver.tar.gz \
+  http://ep09.pld-linux.org/~mmazur/linux-libc-headers/linux-libc-headers-2.6.8.1.tar.bz2 \
+  glibc-2.3.3.patch nscd fixup.patch)
+md5sums=('b45c4cfa714a4688c319149c15a1e060' '9006b8bff18beb864f6053857f25b410'\
+	 'a75c264f90b07b4f3ba05febc7386f4b' 'b05461d1f5da21cc7771de03d25abf62'\
+	 'de1f2c044716f61d094568cf09f48f50' 'e9ac70903065526222320b0a4482478a')
+
+build() {
+  # Kernel Headers
+  mkdir -p $startdir/pkg/usr/include
+  cp -r linux-libc-headers-2.6.8.1/include/linux $startdir/pkg/usr/include/linux
+  cp -r linux-libc-headers-2.6.8.1/include/asm-i386 $startdir/pkg/usr/include/asm
+  find $startdir/pkg -type d -exec chmod 755 {} \;
+  find $startdir/pkg -type f -exec chmod 644 {} \;
+  echo "" > $startdir/pkg/usr/include/linux/config.h
+  chown -R root.root $startdir/pkg/usr/include
+
+  cd $startdir/src/$pkgname-$pkgver
+  patch -Np1 -i ../glibc-2.3.3.patch || return 1
+  patch -Np1 -i ../fixup.patch || return 1
+  mv ../linuxthreads_db ./
+  mv ../linuxthreads ./ 
+
+  mkdir ../glibc-build 
+  cd ../glibc-build
+  ../$pkgname-$pkgver/configure --prefix=/usr \
+    --enable-add-ons=linuxthreads --libexecdir=/usr/lib \
+    --with-headers=$startdir/pkg/usr/include --enable-kernel=2.4.0 \
+    --disable-profile --without-gd --with-tls --with-__thread
+  make CFLAGS+="-fno-unit-at-a-time" || return 1
+  make check 
+  make install_root=$startdir/pkg install
+  make install_root=$startdir/pkg localedata/install-locales  
+
+  mkdir ../glibc-nptl
+  cd ../glibc-nptl
+  ../$pkgname-$pkgver/configure --prefix=/usr \
+     --enable-add-ons=nptl --libexecdir=/usr/lib \
+     --with-headers=$startdir/pkg/usr/include --enable-kernel=2.6.0 \
+     --disable-profile --without-gd --with-tls --with-__thread
+  make CFLAGS+="-fno-unit-at-a-time" || return 1
+  make check
+  make install_root=$startdir/pkg/nptl install
+  mv $startdir/pkg/nptl/lib $startdir/pkg/lib/tls
+  rm -rf $startdir/pkg/nptl
+
+  rm -rf $startdir/pkg/etc/ld.so.cache $startdir/pkg/etc/localtime
+  install -D -m644 $startdir/src/$pkgname-$pkgver/nscd/nscd.conf $startdir/pkg/etc/nscd.conf
+  install -D -m755 $startdir/src/nscd $startdir/pkg/etc/rc.d/nscd
+}

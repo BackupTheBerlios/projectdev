@@ -1,0 +1,20 @@
+# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:41 dpb Exp $
+# Maintainer: Judd Vinet <jvinet@zeroflux.org>
+# Contributor: Curtis Campbell <curtisjamescampbell@hotmail.com>
+pkgname=usbutils
+pkgver=0.11
+pkgrel=4
+pkgdesc="USB Device Utilities"
+depends=('glibc')
+url="http://usb.cs.tum.edu/"
+source=(http://usb.cs.tum.edu/download/usbutils/$pkgname-$pkgver.tar.gz)
+md5sums=('05157bed61af65749f02713c10b8ef26')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make prefix=$startdir/pkg/usr install
+  # Remove the files supplied by libusb
+  rm -r $startdir/pkg/usr/lib $startdir/pkg/usr/include
+}

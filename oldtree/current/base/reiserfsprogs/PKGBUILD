@@ -1,0 +1,19 @@
+# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:41 dpb Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=reiserfsprogs
+pkgver=3.6.19
+pkgrel=1
+pkgdesc="Reiserfs utilities"
+url="http://www.namesys.com"
+depends=('e2fsprogs')
+source=(ftp://ftp.namesys.com/pub/$pkgname/$pkgname-$pkgver.tar.gz)
+md5sums=('b42cf15f6651c3ceff5cb84996c0d539')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  mv $startdir/pkg/usr/sbin $startdir/pkg
+  ln -s reiserfsck $startdir/pkg/sbin/fsck.reiserfs
+}

@@ -1,0 +1,21 @@
+# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:40 dpb Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=cpio
+pkgver=2.5
+pkgrel=4
+pkgdesc="A tool to copy files into or out of a cpio or tar archive"
+url="http://www.gnu.org/software/cpio"
+depends=('bash')
+source=(ftp://ftp.gnu.org/gnu/cpio/cpio-$pkgver.tar.gz)
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/
+  make || return 1
+  make prefix=$startdir/pkg install
+  mkdir $startdir/pkg/usr
+  mv $startdir/pkg/man $startdir/pkg/usr
+	rm -f $startdir/pkg/bin/mt $startdir/pkg/usr/man/man1/mt.1
+  rm -rf $startdir/pkg/libexec
+  rm -rf $startdir/pkg/info
+}

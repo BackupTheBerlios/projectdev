@@ -1,0 +1,18 @@
+# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:41 dpb Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+# Committer: Dale Blount <archlinux@dale.us>
+pkgname=pciutils
+pkgver=2.1.11
+pkgrel=2
+pkgdesc="PCI bus configuration space access library and tools"
+url="http://atrey.karlin.mff.cuni.cz/~mj/pciutils.html"
+depends=('glibc')
+source=(ftp://ftp.kernel.org/pub/software/utils/$pkgname/$pkgname-$pkgver.tar.bz2)
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  make PREFIX=/usr all || return 1
+  make PREFIX=$startdir/pkg/usr install
+  install -d $startdir/pkg/usr/lib
+  install -m644 lib/libpci.a $startdir/pkg/usr/lib
+}

@@ -1,0 +1,28 @@
+# arg 1:  the new package version
+post_install() {
+  /bin/true
+}
+
+# arg 1:  the new package version
+# arg 2:  the old package version
+post_upgrade() {
+  echo ">>> grep has moved from /usr/bin to /bin."
+  echo ">>> Your current bash shell may have hashed the old location of grep,"
+  echo ">>> leaving you with a 'command not found' error."
+  echo ">>>"
+  echo ">>> Run 'hash -d grep' to fix this, or logout/login"
+}
+
+# arg 1:  the old package version
+pre_remove() {
+  /bin/true
+}
+
+# arg 1:  the old package version
+post_remove() {
+  /bin/true
+}
+
+op=$1
+shift
+$op $*

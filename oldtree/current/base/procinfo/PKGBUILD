@@ -1,0 +1,15 @@
+# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:41 dpb Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+# Committer: Judd Vinet <jvinet@zeroflux.org>
+pkgname=procinfo
+pkgver=18
+pkgrel=2
+pkgdesc="Displays useful information from /proc"
+depends=('glibc' 'ncurses')
+source=(ftp://ftp.cistron.nl/pub/people/svm/$pkgname-$pkgver.tar.gz)
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  make LDLIBS=-lncurses || return 1
+  make prefix=$startdir/pkg/usr install
+}

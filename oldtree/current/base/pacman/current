@@ -1,0 +1,5 @@
+#
+# CURRENT: Arch Linux core repository
+#
+[current]
+Server = ftp://saule.mintis.lt/pub/linux/current/os/i686

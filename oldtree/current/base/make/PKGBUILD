@@ -1,0 +1,16 @@
+# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:41 dpb Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=make
+pkgver=3.80
+pkgrel=1
+pkgdesc="GNU make utility to maintain groups of programs"
+url="http://www.gnu.org/software/make"
+depends=('glibc' 'bash')
+source=(ftp://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.gz)
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}

@@ -1,0 +1,27 @@
+# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:41 dpb Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+# Committer: Judd Vinet <jvinet@zeroflux.org>
+pkgname=raidtools
+pkgver=1.00.3
+pkgrel=3
+pkgdesc="Utilities for managing RAID devices"
+depends=('popt')
+backup=('etc/raidtab')
+source=(http://people.redhat.com/mingo/raidtools/raidtools-$pkgver.tar.gz raidtools-gcc3.patch)
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  patch -Np1 -i ../raidtools-gcc3.patch
+  ./configure --prefix=/usr
+  make || return 1
+  make ROOTDIR=$startdir/pkg install
+
+  mkdir -p $startdir/pkg/usr/man
+  rm -rf $startdir/pkg/dev
+  mv $startdir/pkg/man? $startdir/pkg/usr/man
+  cat raidtab.sample | sed 's|^|#|g' >raidtab.new
+  install -D -m0644 raidtab.new $startdir/pkg/etc/raidtab
+  sed -i 's|sda|discs/disc0/part|g' $startdir/pkg/etc/raidtab
+  sed -i 's|sdb|discs/disc1/part|g' $startdir/pkg/etc/raidtab
+  sed -i 's|sdc|discs/disc2/part|g' $startdir/pkg/etc/raidtab
+}

@@ -1,0 +1,21 @@
+# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:41 dpb Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=readline
+pkgver=5.0
+pkgrel=1
+pkgdesc="GNU readline library"
+depends=('glibc' 'ncurses')
+backup=("etc/inputrc")
+source=(ftp://ftp.cwru.edu/pub/bash/readline-$pkgver.tar.gz \
+        inputrc)
+md5sums=('9a39d15f1ed592883f8c6671e8c13120' 'a24d57f6173c325b28adc1e36ea5ba40')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make SHLIB_LIBS=-lncurses || return 1
+  make DESTDIR=$startdir/pkg install
+  install -D -m644 ../inputrc $startdir/pkg/etc/inputrc
+  cd $startdir/pkg/usr/lib
+  chmod 755 libreadline.so.$pkgver libhistory.so.$pkgver
+}

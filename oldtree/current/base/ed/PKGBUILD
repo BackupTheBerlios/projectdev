@@ -1,0 +1,16 @@
+# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:40 dpb Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=ed
+pkgver=0.2
+pkgrel=2
+pkgdesc="A POSIX-compliant line editor"
+url="http://www.gnu.org/software/ed/ed.html"
+depends=('glibc')
+source=(ftp://ftp.gnu.org/gnu/ed/$pkgname-$pkgver.tar.gz)
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make prefix=$startdir/pkg/usr install
+}

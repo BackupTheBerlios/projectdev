@@ -1,0 +1,40 @@
+# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:40 dpb Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=coreutils
+pkgver=5.2.1
+pkgrel=4
+pkgdesc="The basic file, shell and text manipulation utilities of the GNU operating system"
+url="http://www.gnu.org/software/coreutils"
+depends=('bash' 'glibc' 'shadow>=4.0.4.1-3')
+replaces=('sh-utils' 'fileutils' 'textutils')
+backup=('etc/pam.d/su')
+source=(ftp://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.gz \
+  coreutils-pam.patch coreutils-uname.patch su)
+md5sums=('83a485c9fa9e18903351d7b51bdc5719' '2768a535f3e86cee1a091b6553a9cfe4'\
+         '1945b60632ca54733c3bfa5456387eee' 'fa85e5cce5d723275b14365ba71a8aad')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  patch -Np1 -i $startdir/src/coreutils-pam.patch || return 1
+  patch -Np1 -i $startdir/src/coreutils-uname.patch || return 1
+  # fix for automake 1.9
+  sed -i 's|am__api_version="1.8"|am__api_version="1.9"|g' configure
+  # make head and tail recognize the old syntax (eg, tail -10)
+  export DEFAULT_POSIX2_VERSION=199209
+  ./configure --prefix=/usr --enable-pam
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+
+  rm -f $startdir/pkg/usr/bin/hostname $startdir/pkg/usr/man/man1/hostname.1
+  rm -f $startdir/pkg/usr/bin/uptime $startdir/pkg/usr/man/man1/uptime.1
+  rm -f $startdir/pkg/usr/bin/groups $startdir/pkg/usr/man/man1/groups.1
+  rm -f $startdir/pkg/usr/bin/kill $startdir/pkg/usr/man/man1/kill.1
+  cd $startdir/pkg/usr/bin
+  mkdir -p $startdir/pkg/bin $startdir/pkg/sbin $startdir/pkg/usr/sbin
+  mv su date echo false pwd stty true uname cat tr cut readlink ../../bin
+  mv dd cp df du ln ls mv rm dir sync vdir chgrp chmod chown ../../bin
+  mv mkdir mknod rmdir shred touch mkfifo dircolors install ../../bin
+  mv chroot ../sbin
+  ln -sf test [
+  install -D -m644 $startdir/src/su $startdir/pkg/etc/pam.d/su
+}

@@ -1,0 +1,19 @@
+# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:41 dpb Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+# Committer: Judd Vinet <jvinet@zeroflux.org>
+pkgname=mailx
+pkgver=8.1.1
+pkgrel=2
+pkgdesc="A commandline utility for sending email"
+url="http://www.opengroup.org/onlinepubs/007908799/xcu/mailx.html"
+depends=('glibc')
+source=(ftp://ftp.archlinux.org/other/mailx/$pkgname-$pkgver-fixed.tar.gz \
+        $pkgname-$pkgver.patch)
+md5sums=('63cad526ac64b57bcba2c0daaa1f3048' '905cfa35b5131524bfec0c677d456bd3')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver-fixed
+  patch -Np1 -i ../$pkgname-$pkgver.patch
+  make all || return 1
+  make DESTDIR=$startdir/pkg install
+}

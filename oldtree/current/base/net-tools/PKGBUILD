@@ -1,0 +1,22 @@
+# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:41 dpb Exp $
+# Based on the 1.60-8 Arch Linux PKGBUILD by Judd Vinet
+# Changed to dEv by dpb <dpb [at] backarrow.org>
+pkgname=net-tools
+pkgver=1.60
+pkgrel=1
+pkgdesc="Configuration tools for Linux networking"
+url="http://www.tazenda.demon.co.uk/phil/net-tools"
+depends=('glibc')
+source=(http://www.tazenda.demon.co.uk/phil/$pkgname/$pkgname-$pkgver.tar.bz2 \
+  net-tools.patch gcc340.patch net-tools-1.60-2.6-compilefix.patch)
+md5sums=('888774accab40217dde927e21979c165' '7ef8d0c6818faa0fdeea94970a20e3fb'\
+         'b52d899cba9956bb0055150506f41ac1' '51de6eabe2d6d6dc860f72c41cee636b')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  patch -Np1 -i ../net-tools.patch
+  patch -Np1 -i ../gcc340.patch
+  patch -Np1 -i ../net-tools-1.60-2.6-compilefix.patch
+  yes "" | make || return 1
+  make BASEDIR=$startdir/pkg update
+}
