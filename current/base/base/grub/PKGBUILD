@@ -1,4 +1,4 @@
-# $Id: PKGBUILD,v 1.2 2005/01/13 19:28:03 blokkie Exp $
+# $Id: PKGBUILD,v 1.3 2005/01/13 19:29:49 blokkie Exp $
 # Arch  Maintainer: judd <jvinet@zeroflux.org>
 # Maintainer: blokkie <t.fernagut@burningfrog.be>
 pkgname=grub
@@ -10,7 +10,7 @@ depends=('ncurses')
 source=(ftp://alpha.gnu.org/gnu/grub/grub-$pkgver.tar.gz \
   menu.lst install-grub)
 backup=('boot/grub/menu.lst')
-md5sums=('4ca8e4363d5f1980f2c63b7f5cdbe0d1' 'a4a73dc5475b02e610f29a6a4fe7596b'\
+md5sums=('4ca8e4363d5f1980f2c63b7f5cdbe0d1' '4b4b9a5cec809ae2a001ff1b6bfbbb7b'\
          '3b108306c5e76968de9dc01216ba1ef7')
 
 build() {
