@@ -1,9 +1,9 @@
-# $Id: PKGBUILD,v 1.1 2004/11/10 20:11:35 blokkie Exp $
+# $Id: PKGBUILD,v 1.2 2004/11/10 20:14:10 blokkie Exp $
 # Arch Maintainer: dorphell <dorphell@archlinux.org>
 # Committer: dorphell <dorphell@gmx.net>
 # Maintainer: blokkie <t.fernagut@burningfrog.be>
 pkgname=codecs
-pkgver=20040916
+pkgver=20041107
 pkgrel=1
 pkgdesc="Non-linux native codec pack. (Win32, Real9, QuickTime)"
 depends=('glibc')
