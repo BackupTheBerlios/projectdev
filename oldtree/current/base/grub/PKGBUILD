@@ -1,15 +1,16 @@
-# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:41 dpb Exp $
-# Maintainer: judd <jvinet@zeroflux.org>
+# $Id: PKGBUILD,v 1.2 2004/11/04 19:02:23 blokkie Exp $
+# Arch  Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
 pkgname=grub
 pkgver=0.95
-pkgrel=2
+pkgrel=3
 pkgdesc="A GNU multiboot boot loader"
 url="http://www.gnu.org/software/grub/"
 depends=('ncurses')
 source=(ftp://alpha.gnu.org/gnu/grub/grub-$pkgver.tar.gz \
   menu.lst install-grub)
 backup=('boot/grub/menu.lst')
-md5sums=('4ca8e4363d5f1980f2c63b7f5cdbe0d1' '3f0e8e1615769b3368b5ae2dbfbb986b'\
+md5sums=('4ca8e4363d5f1980f2c63b7f5cdbe0d1' 'ecf5063c9911ed27e3c209453ac1e83c'\
          '3b108306c5e76968de9dc01216ba1ef7')
 
 build() {
