@@ -1,5 +1,6 @@
-# $Id: PKGBUILD,v 1.1 2004/11/10 20:48:10 blokkie Exp $
-# Maintainer: dorphell <dorphell@archlinux.org>
+# $Id: PKGBUILD,v 1.2 2004/11/10 20:49:05 blokkie Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
 pkgname=sdl
 pkgver=1.2.7
 pkgrel=2
