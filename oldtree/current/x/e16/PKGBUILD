@@ -1,5 +1,7 @@
-# $Id: PKGBUILD,v 1.1 2004/11/10 22:20:14 blokkie Exp $
-# Maintainer: Judd Vinet <jvinet@zeroflux.org>
+# $Id: PKGBUILD,v 1.2 2004/11/10 22:20:54 blokkie Exp $
+# Arch Maintainer: Judd Vinet <jvinet@zeroflux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+
 pkgname=enlightenment
 pkgver=0.16.7.1
 pkgrel=2
