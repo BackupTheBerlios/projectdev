@@ -1,0 +1,5 @@
+#
+# BASE: Project dEv core repository
+#
+[base]
+Server = ftp://ftp.berlios.de/pub/projectdev/packages/base

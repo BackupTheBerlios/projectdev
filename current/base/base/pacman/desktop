@@ -1,0 +1,5 @@
+#
+# DESKTOP: Project dEv desktop repository
+#
+[desktop]
+Server = ftp://ftp.berlios.de/pub/projectdev/packages/desktop

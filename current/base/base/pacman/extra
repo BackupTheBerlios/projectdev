@@ -1,5 +1,5 @@
 #
-# The Extra Repository
+# EXTRA: Project dEv extra repository
 #
-#[extra]
-#Server = ftp://saule.mintis.lt/pub/linux/extra/os/i686
+[extra]
+Server = ftp://ftp.berlios.de/pub/projectdev/packages/extra

@@ -1,0 +1,5 @@
+#
+# CVS: Project dEv repository for cvs programs
+#
+[cvs]
+Server = ftp://ftp.berlios.de/pub/projectdev/packages/cvs

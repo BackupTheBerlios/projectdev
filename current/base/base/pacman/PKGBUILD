@@ -1,6 +1,7 @@
-# $Id: PKGBUILD,v 1.1 2004/12/03 16:32:58 rensel Exp $
+# $Id: PKGBUILD,v 1.2 2004/12/11 14:07:04 rensel Exp $
 # Arch Maintainer: judd <jvinet@zeroflux.org>
 # Maintainer: Daniel Bainton <dpb@backarrow.org>
+
 pkgname=pacman
 pkgver=2.9.2
 pkgrel=2
@@ -12,11 +13,11 @@ makedepends=('libtar')
 install=pacman.install
 source=(ftp://ftp.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz \
   http://www.archlinux.org/pacman/sortmirrors.pl devcheck \
-  current release extra unstable pacman.conf)
+  base cvs desktop extra pacman.conf)
 md5sums=('f73ed0d84573dfc8fdab541ce55447bd' '005d82a4832b5273450e556f30010414'\
-         'ce1c016a4f2744bad016bfb34c5b41d2' '318b31c1611f4a89172e6bf84691b7c2'\
-         '729f595e06cda73d1c0218ca0bad7c7a' 'a6d98e7679f4d2de6aedc9862cc940ca'\
-         '16e9a835e75abc8d8a65987881e16ab2' '920390567fe7789f2072a19e9d563bce')
+         'ce1c016a4f2744bad016bfb34c5b41d2' 'aeeef3ae747e62dd9802e95a3e3156d9'\
+         '4769e7c65e4bc17315c0887333582a3e' '7b384b98e38990988c60969c6ddceb4e'\
+         '3f5dbf649720906bb8dc4a0f0a211f77' '0457e8960ebdaaa9083a1832d758df28')
 
 build() {
   cd $startdir/src/$pkgname-$pkgver
@@ -26,7 +27,7 @@ build() {
   install -D -m755 ../sortmirrors.pl $startdir/pkg/usr/bin/sortmirrors.pl
   install -D -m755 ../devcheck $startdir/pkg/usr/bin/devcheck
   install -D -m644 ../pacman.conf $startdir/pkg/etc/pacman.conf
-  for fn in current release extra unstable; do
+  for fn in base cvs desktop extra; do
     install -D -m644 ../$fn $startdir/pkg/etc/pacman.d/$fn
   done
   sed -i "s|i686|$CARCH|g" $startdir/pkg/etc/pacman.d/*
