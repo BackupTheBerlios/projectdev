@@ -1,0 +1,20 @@
+# Maintainer: Amar Hadzihasanovic <rensel[at]email.it>
+
+pkgname=eet-cvs
+pkgver=20041128
+pkgrel=1
+pkgdesc="The Eet Image File Format Library"
+groups=('efl')
+url="http://www.enlightenment.org"
+depends=('libjpeg' 'zlib')
+makedepends=('cvs')
+provides=('eet')
+source=()
+
+build() {
+  cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/enlightenment co -D "2004-11-28" e17/libs/eet
+  cd $startdir/src/e17/libs/eet
+  ./autogen.sh --prefix=/opt/efl
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}

@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /opt/mozilla-thunderbird/bin/thunderbird ${1+"$@"}

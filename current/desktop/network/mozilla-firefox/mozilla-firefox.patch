@@ -1,0 +1,36 @@
+diff -ur mozilla/allmakefiles.sh mozilla-new/allmakefiles.sh
+--- mozilla/allmakefiles.sh	2004-06-06 21:48:40.000000000 -0700
++++ mozilla-new/allmakefiles.sh	2004-06-16 13:09:26.000000000 -0700
+@@ -900,6 +900,9 @@
+ toolkit/components/autocomplete/public/Makefile
+ toolkit/components/autocomplete/src/Makefile
+ toolkit/components/Makefile
++toolkit/components/extensions/Makefile
++toolkit/components/extensions/src/Makefile
++toolkit/components/extensions/public/Makefile
+ toolkit/components/build/Makefile
+ toolkit/components/console/Makefile
+ toolkit/components/filepicker/Makefile
+diff -ur mozilla/rdf/chrome/src/nsChromeRegistry.cpp mozilla-new/rdf/chrome/src/nsChromeRegistry.cpp
+--- mozilla/rdf/chrome/src/nsChromeRegistry.cpp	2004-04-24 10:15:39.000000000 -0700
++++ mozilla-new/rdf/chrome/src/nsChromeRegistry.cpp	2004-06-16 13:09:26.000000000 -0700
+@@ -2689,7 +2689,7 @@
+   return UninstallProvider(NS_LITERAL_CSTRING("locale"), aLocaleName, aUseProfile);
+ }
+ 
+-NS_IMETHODIMP nsChromeRegistry::UninstallPackage(const PRUnichar* aPackageName, PRBool aUseProfile)
++NS_IMETHODIMP nsChromeRegistry::UninstallPackage(const nsACString& aPackageName, PRBool aUseProfile)
+ {
+   NS_ERROR("XXX Write me!\n");
+   return NS_ERROR_FAILURE;
+diff -ur mozilla/xpfe/components/Makefile.in mozilla-new/xpfe/components/Makefile.in
+--- mozilla/xpfe/components/Makefile.in	2004-05-16 11:16:47.000000000 -0700
++++ mozilla-new/xpfe/components/Makefile.in	2004-06-16 13:09:26.000000000 -0700
+@@ -82,7 +82,6 @@
+ 		history \
+ 		urlbarhistory \
+ 		sidebar \
+-		extensions \
+ 		$(NULL)
+ endif
+ 

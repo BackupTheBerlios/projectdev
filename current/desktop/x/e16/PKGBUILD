@@ -1,0 +1,22 @@
+# Arch Maintainer: Judd Vinet <jvinet@zeroflux.org>
+# Maintainer: Amar Hadzihasanovic <rensel[at]email.it>
+
+pkgname=e16
+pkgver=0.16.7.1
+pkgrel=3
+pkgdesc="A fast, flexible, and very extensible Window Manager"
+url="http://www.enlightenment.org"
+depends=('x-server' 'esd' 'imlib2-cvs' 'perl')
+source=(http://dl.sourceforge.net/sourceforge/enlightenment/enlightenment-$pkgver.tar.gz \
+        e16.desktop)
+md5sums=('1439839c3023914a62f8254cc31085fc' '0aa47865d74d9104a624ab7e817546b1')
+
+build() {
+  cd $startdir/src/enlightenment-$pkgver
+  ./configure --prefix=/opt/e16 --enable-fsstd --enable-sound --sysconfdir=/etc
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  chown -R root.root $startdir/pkg/opt/e16/share
+  rm -rf $startdir/pkg/etc/X11/dm
+  install -D -m644 ../e16.desktop $startdir/pkg/etc/X11/sessions/e16.desktop
+}

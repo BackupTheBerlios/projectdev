@@ -1,0 +1,20 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:13:46 rensel Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=irssi
+pkgver=0.8.9
+pkgrel=5
+pkgdesc="Modular text mode IRC client with Perl scripting"
+url="http://irssi.org/"
+depends=('glib2' 'openssl' 'ncurses')
+source=(http://irssi.org/files/$pkgname-$pkgver.tar.bz2) 
+md5sums=('6610ee0e27922f447e40828cf7dee507')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr --enable-ipv6 --sysconfdir=/etc
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  rm $startdir/pkg/usr/lib/perl5/*/*/perllocal.pod
+  mv $startdir/pkg/usr/lib/perl5/?.?.? $startdir/pkg/usr/lib/perl5/current
+}

@@ -1,0 +1,47 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:17:45 rensel Exp $
+# Arch Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: Daniel Bainton <dpb@backarrow.org>
+pkgname=shadow
+pkgver=4.0.5
+pkgrel=1
+pkgdesc="Shadow password file utilities"
+url="http://shadow.pld.org.pl"
+backup=(etc/login.defs etc/pam.d/{chage,login,passwd,shadow,useradd} \
+  etc/default/useradd)
+depends=('pam')
+source=(ftp://ftp.pld.org.pl/software/$pkgname/$pkgname-$pkgver.tar.bz2 \
+  shadow.cron.daily adduser chage login passwd shadow useradd)
+md5sums=('cca17a4843a3b5b324a5398faf81c3b4' '1d64b4113e1d402746d9dd65f28a2c6f'\
+         '9b7c620c8686b772e189d951f4df95af' 'a31374fef2cba0ca34dfc7078e2969e4'\
+         'b9f64aed8919a86ad61720ddcf258aff' '0d0ff6ec09ef594c7c49ef2f642e3258'\
+         'a31374fef2cba0ca34dfc7078e2969e4' 'a31374fef2cba0ca34dfc7078e2969e4')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  cp src/useradd.c src/useradd.c.backup
+  sed 's/\(.*\) (nflg || \(.*\))\(.*\)/\1\2\3/' src/useradd.c > tmp~
+  mv tmp~ src/useradd.c
+  ./configure --prefix=/usr --mandir=/usr/man --with-libpam
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  install -D -m744 ../shadow.cron.daily $startdir/pkg/etc/cron.daily/shadow
+  install -D -m755 ../adduser $startdir/pkg/usr/sbin/adduser
+  sed 's|^#MD5_CRYPT_ENAB.*$|MD5_CRYPT_ENAB  yes|' etc/login.defs.linux >$startdir/pkg/etc/login.defs
+  for fn in chage login passwd shadow useradd; do
+    install -D -m644 ../$fn $startdir/pkg/etc/pam.d/$fn
+  done
+  ln -sf vipw $startdir/pkg/usr/sbin/vigr
+  ln -sf newgrp $startdir/pkg/usr/bin/sg
+  rm -f $startdir/pkg/bin/{vipw,vigr,sg,su}
+  rm -f $startdir/pkg/usr/man/man1/su.1
+  mkdir -p $startdir/pkg/etc/default
+  cat >$startdir/pkg/etc/default/useradd <<_EOF
+# useradd defaults file
+GROUP=100
+HOME=/home
+INACTIVE=-1
+EXPIRE=
+SHELL=/bin/bash
+SKEL=/etc/skel
+_EOF
+}

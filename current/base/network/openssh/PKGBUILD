@@ -1,0 +1,30 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:13:46 rensel Exp $
+# Arch Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=openssh
+pkgver=3.9p1
+pkgrel=1
+pkgdesc='A Secure SHell server/client'
+url="http://www.openssh.org/portable.html"
+backup=('etc/ssh/ssh_config' 'etc/ssh/sshd_config' 'etc/pam.d/sshd')
+depends=('openssl>=0.9.7d' 'zlib' 'pam')
+source=(ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/$pkgname-$pkgver.tar.gz sshd)
+md5sums=('8e1774d0b52aff08f817f3987442a16e' 'c017087203893769efc159f3615e2b57')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr --libexecdir=/usr/lib/ssh \
+    --sysconfdir=/etc/ssh --with-tcp-wrappers --with-privsep-user=nobody \
+    --with-md5-passwords --with-pam
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  mkdir -p $startdir/pkg/etc/rc.d
+  mkdir -p $startdir/pkg/var/empty
+  cp ../sshd $startdir/pkg/etc/rc.d
+  mkdir -p $startdir/pkg/etc/pam.d
+  cp $startdir/sshd.pam $startdir/pkg/etc/pam.d/sshd
+  sed -ie 's|^#ListenAddress 0.0.0.0|ListenAddress 0.0.0.0|g' \
+    $startdir/pkg/etc/ssh/sshd_config
+  # where did this file come from?
+  rm -f $startdir/pkg/etc/ssh/sshd_confige
+}

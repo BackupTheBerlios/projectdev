@@ -1,0 +1,17 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:06:16 rensel Exp $
+# Maintainer: Judd <judd@archlinux.org>
+pkgname=nano
+pkgver=1.2.4
+pkgrel=2
+pkgdesc="Pico editor clone with enhancements"
+url="http://www.nano-editor.org"
+depends=('glibc' 'ncurses')
+source=(http://www.nano-editor.org/dist/v1.2/nano-$pkgver.tar.gz)
+md5sums=('2c513310ec5e8b63abaecaf48670ac7a')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr --enable-color --enable-nanorc
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}

@@ -1,0 +1,26 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:24:57 rensel Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Committer: dorphell <dorphell@gmx.net>
+# Maintainer: blokkie <t.fernagutéburningfrog.be>
+pkgname=codecs
+pkgver=20041107
+pkgrel=1
+pkgdesc="Non-linux native codec pack. (Win32, Real9, QuickTime)"
+depends=('glibc')
+url="http://www1.mplayerhq.hu/MPlayer/releases/codecs/"
+source=(http://www1.mplayerhq.hu/MPlayer/releases/codecs/all-$pkgver.tar.bz2)
+md5sums=('d4dbb7dfd333c03f5499f937b6cd484f')
+
+
+#
+# NOTE: This will not work if built with pkg stripping enabled!!!
+#	MPlayer will crash or simply not find the codec.
+#	Build with `makepkg --nostrip`
+#
+
+build() {
+  mkdir -p $startdir/pkg/usr/lib/win32
+  mv $startdir/src/*/* $startdir/pkg/usr/lib/win32
+  chown -R root.root $startdir/pkg/usr/lib/win32
+  chmod 755 $startdir/pkg/usr/lib/win32/*
+}

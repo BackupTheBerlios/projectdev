@@ -1,0 +1,22 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:24:00 rensel Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Contributor: John Proctor <jproctor@prium.net>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+
+pkgname=libogg
+pkgver=1.1.2
+pkgrel=1
+pkgdesc="Ogg bitstream and framing library"
+pkgurl="http://www.xiph.org/ogg/vorbis/download"
+depends=('glibc')
+source=(http://downloads.xiph.org/releases/ogg/$pkgname-$pkgver.tar.gz)
+md5sums=('4d82996517bf33bb912c97e9d0b635c4')
+
+build() {
+  rm -rf ${startdir}/pkg/*
+  cd $startdir/src/${pkgname}-${pkgver}
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}
+

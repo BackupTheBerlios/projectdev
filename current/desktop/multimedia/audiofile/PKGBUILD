@@ -1,0 +1,18 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:24:57 rensel Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+
+pkgname=audiofile
+pkgver=0.2.6
+pkgrel=1
+pkgdesc="Silicon Graphics Audio File Library"
+depends=('glibc')
+source=(http://www.68k.org/~michael/audiofile/audiofile-$pkgver.tar.gz)
+md5sums=('9c1049876cd51c0f1b12c2886cce4d42')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make prefix=$startdir/pkg/usr install
+}

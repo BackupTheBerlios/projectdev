@@ -1,0 +1,39 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:17:45 rensel Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+# Committer: Judd Vinet <jvinet@zeroflux.org>
+pkgname=bzip2
+pkgver=1.0.2
+pkgrel=3
+pkgdesc="A high-quality data compression program"
+url="http://sources.redhat.com/bzip2"
+depends=('glibc' 'bash')
+source=(ftp://sources.redhat.com/pub/bzip2/v102/bzip2-$pkgver.tar.gz)
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  mkdir -p $startdir/pkg/bin $startdir/pkg/usr/share/man/man1
+  mkdir -p $startdir/pkg/usr/include $startdir/pkg/usr/lib
+  mkdir -p $startdir/pkg/lib
+  make -f Makefile-libbz2_so || return 1
+  make bzip2recover libbz2.a || return 1
+  ln -s libbz2.so.$pkgver libbz2.so
+  cp bzip2-shared $startdir/pkg/bin/bzip2
+  cp bzip2recover $startdir/pkg/bin
+  cp bzip2.1 $startdir/pkg/usr/share/man/man1
+  mkdir -p $startdir/pkg/usr/include
+  cp bzlib.h $startdir/pkg/usr/include
+  cp -a libbz2.so* $startdir/pkg/lib
+  rm -f $startdir/pkg/usr/lib/libbz2.a
+  cp libbz2.a $startdir/pkg/usr/lib
+  cd $startdir/pkg/usr/lib
+  ln -sf ../../lib/libbz2.so
+  cd $startdir/pkg/bin
+  ln -sf bzip2 bunzip2
+  ln -sf bzip2 bzcat
+  mv $startdir/pkg/usr/share/man $startdir/pkg/usr
+  rm -rf $startdir/pkg/usr/share
+  cd $startdir/pkg/usr/man/man1
+  ln -sf bzip2.1 bunzip2.1
+  ln -sf bzip2.1 bzcat.1
+  ln -sf bzip2.1 bzip2recover.1
+}

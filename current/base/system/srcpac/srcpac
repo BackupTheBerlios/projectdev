@@ -1,0 +1,470 @@
+#!/bin/bash
+# 
+#   srcpac 0.2.1dev
+#  
+#   Based on srcpac 0.2.1 by Jason Chu <jason@archlinux.org>
+#   Modified for Project dEv by Amar Hadzihasanovic <rensel[at]email.it>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+# 
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#  
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+#   USA.
+#
+
+ver=0.2.1dev
+
+[ "$DEVCHECK" = "" ] && DEVCHECK="/var/projectdev"
+[ -f /etc/srcpac.conf ] && source /etc/srcpac.conf
+
+usage()
+{
+	echo "usage:  srcpac {-h --help}"
+	echo "        srcpac {-V --version}"
+	echo "        srcpac {-A --add}     [options] <file>"
+	echo "        srcpac {-R --remove}  [options] <package>"
+	echo "        srcpac {-U --upgrade} [options] <file>"
+	echo "        srcpac {-F --freshen} [options] <file>"
+	echo "        srcpac {-Q --query}   [options] [package]"
+	echo "        srcpac {-S --sync}    [options] [package]"
+	echo
+	echo "use 'srcpac --help' with other options for more syntax"
+}
+
+version()
+{
+        echo 
+	echo "        srcpac v$ver"
+	echo "        Based on srcpac 0.2.1 by Jason Chu <jason@archlinux.org>"
+	echo "        Modified for Project dEv by Amar Hadzihasanovic <rensel[at]email.it>"
+	echo
+	echo "        This program may be freely redistributed under"
+	echo "        the terms of the GNU General Public License"
+	pacman -V
+
+	exit 0
+}
+
+strip_url()
+{
+	echo $1 | sed 's|^.*://.*/||g'
+}
+
+do_confs()
+{
+	eval num_conf=\$\{\#conf_$1[@]\}
+	if [ $num_conf -gt 0 ]; then
+		sedvar=""
+		eval "for (( j = 0 ; j < $num_conf ; j++ )); do
+			sedvar=\"\${sedvar}s\${conf_$i[\$j]};\"
+		done"
+		eval sed -i \"$sedvar\" $2/PKGBUILD
+	fi
+}
+
+build_packages()
+{
+	while [ $# -ne 0 ]; do
+		i=$1
+		candidates=`find $DEVCHECK -type d -name $i`
+		if [ "$candidates" = "" ]; then
+			echo "Error: Could not find \"$i\" under $DEVCHECK"
+
+			exit 1
+		fi
+		success=0
+		for pkgdir in $candidates; do
+			if [ -f $pkgdir/PKGBUILD ]; then
+				# Look for config options and apply them
+				do_confs $i $pkgdir
+
+				cd $pkgdir
+				makepkg -cbrfw /var/cache/pacman/pkg
+				if [ $? -eq 0 ]; then
+					success=1
+					break
+				fi
+			fi
+		done
+		if [ $success -eq 0 ]; then
+			echo "Error: Failed to build \"$i\""
+
+			exit 1
+		fi
+		shift
+	done
+}
+
+build_and_install_packages()
+{
+	while [ $# -ne 0 ]; do
+		i=$1
+		iorg=$i
+		i=${i%-*-*}
+		candidates=`find $DEVCHECK -type d -name $i`
+		if [ "$candidates" = "" ]; then
+			echo "Error: Could not find \"$i\" under $DEVCHECK"
+
+			exit 1
+		fi
+		success=0
+		for pkgdir in $candidates; do
+			if [ -f $pkgdir/PKGBUILD ]; then
+				# Look for config options and apply them
+				do_confs $i $pkgdir
+
+				cd $pkgdir
+				makepkg -ibrcfw /var/cache/pacman/pkg
+				if [ $? -eq 0 ]; then
+					success=1
+					break
+				fi
+			fi
+		done
+		if [ $success -eq 0 ]; then
+			echo "Error: Failed to build \"$i\""
+
+			exit 1
+		fi
+
+		if [ ! -d /var/lib/srcpac ]; then
+			mkdir /var/lib/srcpac
+		fi
+
+		touch /var/lib/srcpac/$i
+		shift
+	done
+}
+
+
+# Options
+MAJOR=""
+INFO=0
+FORCE=0
+ROOT=0
+NEWROOT=""
+NODEPS=0
+BUILD=0
+REFRESH=0
+SYSUPGRADE=0
+DOWNLOAD=0
+ONLYCONF=0
+
+ARGLIST=$@
+ARGSANS=""
+
+declare -a args
+
+while [ "$#" -ne "0" ]; do
+	case $1 in
+		--help)
+				usage
+				exit 0
+				;;
+		--version) version ;;
+		--add)
+			MAJOR="add"
+			ARGSANS="$ARGSANS $1"
+			;;
+		--remove)
+			MAJOR="remove"
+			ARGSANS="$ARGSANS $1"
+			;;
+		--upgrade)
+			MAJOR="upgrade"
+			ARGSANS="$ARGSANS $1"
+			;;
+		--freshen)
+			MAJOR="freshen"
+			ARGSANS="$ARGSANS $1"
+			;;
+		--query)
+			MAJOR="query"
+			ARGSANS="$ARGSANS $1"
+			;;
+		--sync)
+			MAJOR="sync"
+			ARGSANS="$ARGSANS $1"
+			;;
+		--info)
+			INFO=1
+			ARGSANS="$ARGSANS $1"
+			;;
+		--force)
+			FORCE=1
+			ARGSANS="$ARGSANS $1"
+			;;
+		--root)
+			ROOT=1
+			NEWROOT="$2"
+			ARGSANS="$ARGSANS $1 $2"
+			shift
+			;;
+		--nodeps)
+			NODEPS=1
+			ARGSANS="$ARGSANS $1"
+			;;
+		--build)
+			BUILD=1
+			ARGSANS="$ARGSANS $1"
+			;;
+		--refresh)
+			REFRESH=1
+			ARGSANS="$ARGSANS $1"
+			;;
+		--sysupgrade)
+			SYSUPGRADE=1
+			ARGSANS="$ARGSANS $1"
+			;;
+		--downloadonly)
+			DOWNLOAD=1
+			ARGSANS="$ARGSANS $1"
+			;;
+		--onlyconf)
+			ONLYCONF=1
+			ARGSANS="$ARGSANS $1"
+			;;
+		--*)
+#			usage
+#			exit 1
+			ARGSANS="$ARGSANS $1"
+			;;
+		-*)
+			ARGSANS="$ARGSANS $1"
+			if [ `echo $1 | grep r` ]; then
+				OPTIONAL=$2
+			fi
+			while getopts ":VARUFQSidfbyur:wo" opt $1 $OPTIONAL; do
+				case $opt in
+					V) version ;;
+					A) MAJOR="add" ;;
+					R) MAJOR="remove" ;;
+					U) MAJOR="upgrade" ;;
+					F) MAJOR="freshen" ;;
+					Q) MAJOR="query" ;;
+					S) MAJOR="sync" ;;
+					i) INFO=1 ;;
+					f) FORCE=1 ;;
+					r)
+						ROOT=1
+						NEWROOT="$OPTARG"
+						;;
+					d) NODEPS=1 ;;
+					b) BUILD=1 ;;
+					y) REFRESH=1 ;;
+					u) SYSUPGRADE=1 ;;
+					w) DOWNLOAD=1 ;;
+					o) ONLYCONF=1 ;;
+				esac
+			done
+			;;
+		*)
+			args[${#args[@]}]=$1
+			;;
+	esac
+	shift
+done
+
+if [ "$MAJOR" = "" ]; then
+	usage
+
+	exit 0
+fi
+
+if [ "$DEVCHECK" = "" ]; then
+	echo "Error: The DEVCHECK environment variable is not defined."
+
+	exit 1
+fi
+
+if [ "$MAJOR" = "add" -o "$MAJOR" = "remove" -o "$MAJOR" = "freshen" -o "$MAJOR" = "upgrade" ]; then
+	pacman $ARGLIST
+
+	if [ -d /var/lib/srcpac -a "$MAJOR" = "remove" ]; then
+		for i in ${args[@]}; do
+			if [ -f /var/lib/srcpac/$i ]; then
+				echo -n "removing source reference $i... "
+				rm /var/lib/srcpac/$i
+				echo "done"
+			fi
+		done
+	fi
+fi
+
+if [ "$MAJOR" = "query" ]; then
+	if [ $INFO -eq 1 -a -d /var/lib/srcpac ]; then
+		for arg in ${args[@]}; do
+			pacman $ARGSANS $arg | head -n -1
+
+			if [ $? -ne 0 ]; then
+				exit $?
+			fi
+
+			echo -n "Source         : "
+			if [ -f /var/lib/srcpac/$arg ]; then
+				echo "Yes"
+			else
+				echo "No"
+			fi
+			echo
+		done
+	else
+		pacman $ARGLIST
+	fi
+fi
+
+if [ "$MAJOR" = "sync" ]; then
+	if [ $BUILD -eq 0 -a $ONLYCONF -ne 1 ]; then
+		if [ $SYSUPGRADE -eq 1 -a -d /var/lib/srcpac ]; then
+			# TODO: Needs support for "x is up to date.  Upgrade anyway?"
+			if [ $REFRESH -eq 1 ]; then
+				devcheck
+				pacman -Sy
+			fi
+
+			output=`yes "" | pacman -Spu`
+
+			if [ $? -ne 0 ]; then
+				echo output
+				exit $?
+			fi
+
+			declare -a packages
+			for i in $output; do
+				if [ `echo $i | grep ^\\\\\\(ftp\\\\\\|http\\\\\\)` ]; then
+					i=${i%.pkg.tar.gz}
+					packages[${#packages[@]}]=`strip_url $i`
+				fi
+			done
+
+			declare -a sourcepac
+			declare -a regepac
+			for i in ${packages[@]}; do
+				j=${i%-*-*}
+				if [ -f /var/lib/srcpac/$j ]; then
+					sourcepac[${#sourcepac[@]}]=$i
+				else
+					regpac[${#regpac[@]}]=$j
+				fi
+			done
+
+			pacargs="-S"
+			[ $NODEPS -eq 1 ] && pacargs="${pacargs}d"
+			[ $ROOT -eq 1 ] && pacargs="${pacargs} -r $NEWROOT"
+			pacman $pacargs ${regpac[*]}
+			if [ ${#sourcepac[@]} -eq 0 ]; then
+				exit 0
+			fi
+			echo
+			echo "Source Targets: ${sourcepac[*]}"
+			echo
+			echo -n "Proceed with upgrade? [Y/n] "
+			read
+			if [ "$REPLY" != "y" -a "$REPLY" != "Y" ]; then
+				exit 0
+			fi
+
+			if [ $ROOT -eq 0 ]; then
+				build_and_install_packages ${sourcepac[@]}
+			else
+				echo "This feature isn't done yet"
+			fi
+		else
+			pacman $ARGLIST
+		fi
+	else
+		# Insert magic here
+
+		if [ $REFRESH -eq 1 ]; then
+			devcheck
+			pacman -Sy
+
+			if [ ${#args[@]} -eq 0 -a $SYSUPGRADE -eq 0 ]; then
+				exit 0
+			fi
+		fi
+
+		if [ $DOWNLOAD -eq 1 ]; then
+			build_packages ${args[@]}
+
+			exit 0
+		fi
+
+		if [ $SYSUPGRADE -eq 1 ]; then
+			# TODO: Needs support for "x is up to date.  Upgrade anyway?"
+			output=`yes "" | pacman -Spu`
+		else
+			# TODO: Needs support for "x is up to date.  Upgrade anyway?"
+			output=`yes "" | pacman -Sp ${args[*]}`
+		fi
+
+		if [ $? -ne 0 ]; then
+			echo $output
+			exit $?
+		fi
+
+		declare -a packages
+		for i in $output; do
+			if [ `echo $i | grep ^\\\\\\(ftp\\\\\\|http\\\\\\)` ]; then
+				i=${i%.pkg.tar.gz}
+				packages[${#packages[@]}]=`strip_url $i`
+			fi
+		done
+
+		if [ ${#packages[@]} -eq 0 ]; then
+			exit 0
+		fi
+
+		if [ $ONLYCONF -eq 1 ]; then
+			for i in ${packages[@]}; do
+				i=${i%-*-*}
+				candidates=`find $DEVCHECK -type d -name $i`
+				if [ "$candidates" = "" ]; then
+					echo "Error: Could not find \"$i\" under $DEVCHECK"
+
+					exit 1
+				fi
+				success=0
+				for pkgdir in $candidates; do
+					if [ -f $pkgdir/PKGBUILD ]; then
+						# Look for config options and apply them
+						do_confs $i $pkgdir
+						less $pkgdir/PKGBUILD
+						success=1
+						break
+					fi
+				done
+				if [ $success -eq 0 ]; then
+					echo "Error: Failed to find \"$i\""
+
+					exit 1
+				fi
+			done
+			exit 0
+		fi
+
+		echo
+		echo "Source Targets: ${packages[*]}"
+		echo
+		echo -n "Proceed with upgrade? [Y/n] "
+		read
+		if [ "$REPLY" != "y" -a "$REPLY" != "Y" -a "$REPLY" != "" ]; then
+			exit 0
+		fi
+
+		if [ $ROOT -eq 0 ]; then
+			build_and_install_packages ${packages[@]}
+		else
+			echo "This feature isn't done yet"
+		fi
+	fi
+fi

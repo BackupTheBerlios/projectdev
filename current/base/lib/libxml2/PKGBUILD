@@ -1,0 +1,23 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:10:03 rensel Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Contributor: John Proctor <jproctor@prium.net>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=libxml2
+pkgver=2.6.15
+pkgrel=1
+pkgdesc="XML parsing library, version 2"
+depends=('zlib' 'bash')
+makedepends=('python')
+source=(ftp://xmlsoft.org/$pkgname-$pkgver.tar.gz)
+url="http://www.xmlsoft.org/"
+md5sums=('5b4a3adb1c7fd953b33cd3b2964596ed')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr --with-threads
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  cd  $startdir/pkg/usr/include/libxml2/libxml/
+  ln -s xmlautomata.h xmlautomate.h
+  
+}

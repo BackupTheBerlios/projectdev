@@ -1,0 +1,26 @@
+#!/bin/sh
+
+MOZ_FIREFOX_EX=/opt/mozilla-firefox/bin/firefox
+OPEN_IN=new-tab
+OPTS=
+
+first=-
+while [ "$first" = "-" ]; do
+	first=`echo $1 | cut -b1`
+	if [ "$first" = "-" ]; then
+		OPTS="$OPTS $1"
+		shift
+	fi
+done
+
+if [ "$2" = "tab" ]; then OPEN_IN=new-tab; fi
+if [ "$2" = "window" ]; then OPEN_IN=new-window; fi
+
+$MOZ_FIREFOX_EX -a firefox -remote "ping()" > /dev/null 2>&1
+
+if [ $? -eq 0 -a "$1" != "" ]; then
+	exec $MOZ_FIREFOX_EX $OPTS -a firefox -remote "openURL($1,$OPEN_IN)" 
+else
+	if [ "$2" = "tab" ]; then $0 $OPTS $1; exit 0; fi
+	exec $MOZ_FIREFOX_EX $OPTS "$@"
+fi

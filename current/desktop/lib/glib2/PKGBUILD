@@ -1,0 +1,18 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:24:00 rensel Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: blokkie <t.fernagut@burnigfrog.be>
+pkgname=glib2
+pkgver=2.4.7
+pkgrel=1
+pkgdesc="Common C routines used by GTK+ 2.4 and other libs"
+depends=('glibc' 'pkgconfig')
+source=(ftp://ftp.gnome.org/pub/gnome/sources/glib/2.4/glib-$pkgver.tar.bz2)
+url="http://www.gtk.org/"
+md5sums=('eff6fec89455addf8b0dee5a19e343be')
+
+build() {
+  cd $startdir/src/glib-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}

@@ -1,0 +1,50 @@
+--- SDL-1.2.7/src/cpuinfo/SDL_cpuinfo.c	2004-02-10 16:31:35.000000000 +0100
++++ SDL-1.2.7-gcc34/src/cpuinfo/SDL_cpuinfo.c	2004-07-31 13:36:47.000000000 +0200
+@@ -105,7 +105,8 @@
+ 	int features = 0;
+ #if defined(__GNUC__) && defined(i386)
+ 	__asm__ (
+-"        movl    %%ebx,%%edi\n"
++"        pushl   %%ebx                                                 \n"
++"        movl    %%ebx,%%edi                                           \n"
+ "        xorl    %%eax,%%eax         # Set up for CPUID instruction    \n"
+ "        cpuid                       # Get and save vendor ID          \n"
+ "        cmpl    $1,%%eax            # Make sure 1 is valid input for CPUID\n"
+@@ -115,10 +116,11 @@
+ "        cpuid                       # Get family/model/stepping/features\n"
+ "        movl    %%edx,%0                                              \n"
+ "1:                                                                    \n"
+-"        movl    %%edi,%%ebx\n"
++"        movl    %%edi,%%ebx                                           \n"
++"        popl    %%ebx                                                 \n"
+ 	: "=m" (features)
+ 	:
+-	: "%eax", "%ebx", "%ecx", "%edx", "%edi"
++	: "%eax", "%ecx", "%edx", "%edi"
+ 	);
+ #elif defined(_MSC_VER)
+ 	__asm {
+@@ -141,7 +143,8 @@
+ 	int features = 0;
+ #if defined(__GNUC__) && defined(i386)
+ 	__asm__ (
+-"        movl    %%ebx,%%edi\n"
++"        pushl   %%ebx                                                 \n"
++"        movl    %%ebx,%%edi                                           \n"
+ "        movl    $0x80000000,%%eax   # Query for extended functions    \n"
+ "        cpuid                       # Get extended function limit     \n"
+ "        cmpl    $0x80000001,%%eax                                     \n"
+@@ -150,10 +152,11 @@
+ "        cpuid                       # and get the information         \n"
+ "        movl    %%edx,%0                                              \n"
+ "1:                                                                    \n"
+-"        movl    %%edi,%%ebx\n"
++"        movl    %%edi,%%ebx                                           \n"
++"        popl    %%ebx                                                 \n"
+ 	: "=m" (features)
+ 	:
+-	: "%eax", "%ebx", "%ecx", "%edx", "%edi"
++	: "%eax", "%ecx", "%edx", "%edi"
+ 	);
+ #elif defined(_MSC_VER)
+ 	__asm {

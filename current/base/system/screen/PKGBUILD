@@ -1,0 +1,19 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:17:45 rensel Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: Daniel Bainton <dpb@backarrow.org>
+pkgname=screen
+pkgver=4.0.2
+pkgrel=1
+pkgdesc="Full-screen window manager that multiplexes a physical terminal"
+depends=('pam')
+source=(ftp://ftp.uni-erlangen.de/pub/utilities/screen/screen-$pkgver.tar.gz)
+md5sums=('ed68ea9b43d9fba0972cb017a24940a1')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr --enable-pam
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  mkdir -p $startdir/pkg/etc/pam.d 
+  cp $startdir/screen.pam $startdir/pkg/etc/pam.d/screen
+}

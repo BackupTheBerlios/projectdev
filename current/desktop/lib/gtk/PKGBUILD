@@ -1,0 +1,20 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:24:00 rensel Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Arch Committer: Judd Vinet <jvinet@zeroflux.org>
+# Maintainer: Daniel Bainton <dpb@backarrow.org>
+pkgname=gtk
+pkgver=1.2.10
+pkgrel=2
+pkgdesc="The GTK+ toolkit"
+depends=('x-server' 'freetype2' 'glib')
+source=(ftp://ftp.gtk.org/pub/gtk/v1.2/$pkgname+-$pkgver.tar.gz)
+md5sums=('4d5cb2fc7fb7830e4af9747a36bfce20')
+
+build() {
+  cd $startdir/src/$pkgname+-$pkgver
+  ./configure --prefix=/usr --sysconfdir=/etc --with-xinput=xfree
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  cd $startdir/pkg/usr/include
+  ln -s gtk-1.2/gtk gtk
+}

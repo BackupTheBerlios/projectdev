@@ -1,0 +1,27 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:17:45 rensel Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=man-pages
+pkgver=1.69
+pkgrel=1
+pkgdesc="Linux man pages"
+url="http://www.win.tue.nl/~aeb/linux/man"
+depends=()
+source=(ftp://ftp.kernel.org/pub/linux/docs/manpages/$pkgname-$pkgver.tar.gz)
+md5sums=('6e89aabacdc847173fe2fa708a239c3a')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  make prefix=$startdir/pkg install
+
+  # these are included in coreutils
+  rm -f $startdir/pkg/usr/share/man/man1/{chgrp,chmod,chown,cp,dir,dd}.1
+  rm -f $startdir/pkg/usr/share/man/man1/{df,dircolors,du,install,ln,ls}.1
+  rm -f $startdir/pkg/usr/share/man/man1/{mkdir,mkfifo,mknod,mv,rm,rmdir}.1
+  rm -f $startdir/pkg/usr/share/man/man1/{touch,vdir}.1
+
+  # this is included in shadow
+  rm -f $startdir/pkg/usr/share/man/man5/passwd.5
+  rm -f $startdir/pkg/usr/share/man/man3/getspnam.3
+  # this is included in diffutils
+  rm -f $startdir/pkg/usr/share/man/man1/diff.1
+}

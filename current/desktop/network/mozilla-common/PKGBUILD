@@ -1,0 +1,17 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:27:14 rensel Exp $
+# Arch Maintainer: dale <dale@archlinux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=mozilla-common
+pkgver=1.0
+pkgrel=1
+pkgdesc="Common Initialization Profiles for Mozilla Style Browsers"
+depends=()
+url="http://www.mozilla.org/"
+install=
+source=('mozilla-plugins.sh')
+md5sums=('88da649d60e89a88da26ba029ca4dd08')
+
+build() {
+  mkdir -p $startdir/pkg/etc/profile.d
+  install -m755 $startdir/src/mozilla-plugins.sh $startdir/pkg/etc/profile.d/
+}

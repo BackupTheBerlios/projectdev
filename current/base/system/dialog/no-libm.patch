@@ -1,0 +1,94 @@
+diff -Naur dialog-1.0-20040731-orig/configure dialog-1.0-20040731/configure
+--- dialog-1.0-20040731-orig/configure	2004-07-21 15:51:25.000000000 -0700
++++ dialog-1.0-20040731/configure	2004-08-19 10:35:35.000000000 -0700
+@@ -5345,56 +5345,6 @@
+ 	fi
+ fi
+ 
+-echo "$as_me:5348: checking if -lm needed for math functions" >&5
+-echo $ECHO_N "checking if -lm needed for math functions... $ECHO_C" >&6
+-if test "${cf_cv_need_libm+set}" = set; then
+-  echo $ECHO_N "(cached) $ECHO_C" >&6
+-else
+-
+-	cat >conftest.$ac_ext <<_ACEOF
+-#line 5355 "configure"
+-#include "confdefs.h"
+-
+-	#include <stdio.h>
+-	#include <math.h>
+-
+-int
+-main ()
+-{
+-double x = rand(); printf("result = %g\n", sqrt(x))
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-rm -f conftest.$ac_objext conftest$ac_exeext
+-if { (eval echo "$as_me:5370: \"$ac_link\"") >&5
+-  (eval $ac_link) 2>&5
+-  ac_status=$?
+-  echo "$as_me:5373: \$? = $ac_status" >&5
+-  (exit $ac_status); } &&
+-         { ac_try='test -s conftest$ac_exeext'
+-  { (eval echo "$as_me:5376: \"$ac_try\"") >&5
+-  (eval $ac_try) 2>&5
+-  ac_status=$?
+-  echo "$as_me:5379: \$? = $ac_status" >&5
+-  (exit $ac_status); }; }; then
+-  cf_cv_need_libm=no
+-else
+-  echo "$as_me: failed program was:" >&5
+-cat conftest.$ac_ext >&5
+-cf_cv_need_libm=yes
+-fi
+-rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+-fi
+-echo "$as_me:5389: result: $cf_cv_need_libm" >&5
+-echo "${ECHO_T}$cf_cv_need_libm" >&6
+-if test "$cf_cv_need_libm" = yes
+-then
+-
+-	LIBS="$LIBS -lm"
+-
+-fi
+-
+ echo "$as_me:5398: checking if you want to link with dbmalloc for testing" >&5
+ echo $ECHO_N "checking if you want to link with dbmalloc for testing... $ECHO_C" >&6
+ 
+diff -Naur dialog-1.0-20040731-orig/util.c dialog-1.0-20040731/util.c
+--- dialog-1.0-20040731-orig/util.c	2004-06-06 07:14:45.000000000 -0700
++++ dialog-1.0-20040731/util.c	2004-08-19 10:36:35.000000000 -0700
+@@ -120,6 +120,21 @@
+ /* *INDENT-ON* */
+ 
+ /*
++ * Taken from http://www.azillionmonkeys.com/qed/sqroot.html
++ */
++static unsigned mborg_isqrt3(unsigned long val)
++{
++	unsigned long temp, g=0, b = 0x8000, bshft = 15;
++	do {
++		if (val >= (temp = (((g<<1)+b)<<bshft--))) {
++			g += b;
++			val -= temp;
++		}
++	} while (b >>= 1);
++	return g;
++}
++
++/*
+  * Display background title if it exists ...
+  */
+ void
+@@ -790,7 +805,7 @@
+ 	wide = MAX(title_length, mincols);
+ 	if (strchr(prompt, '\n') == 0) {
+ 	    double val = dialog_state.aspect_ratio * strlen(prompt);
+-	    int tmp = sqrt(val);
++	    int tmp = mborg_isqrt3(val);
+ 	    wide = MAX(wide, tmp);
+ 	    wide = MAX(wide, longest_word(prompt));
+ 	    justify_text((WINDOW *) 0, prompt, high, wide, height, width);

@@ -1,0 +1,16 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:17:45 rensel Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=diffutils
+pkgver=2.8.1
+pkgrel=2
+pkgdesc="Utility programs used for creating patch files"
+url="http://www.gnu.org/software/diffutils"
+depends=('glibc' 'bash')
+source=(ftp://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.gz)
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make prefix=$startdir/pkg/usr install
+}

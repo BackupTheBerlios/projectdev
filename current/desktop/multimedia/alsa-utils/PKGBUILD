@@ -1,0 +1,18 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:10:39 rensel Exp $
+# Arch Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=alsa-utils
+pkgver=1.0.6
+pkgrel=1
+pkgdesc="An alternative implementation of Linux sound support"
+url="http://www.alsa-project.org"
+depends=('alsa-lib' 'dialog' 'pciutils')
+source=(ftp://ftp.alsa-project.org/pub/utils/$pkgname-$pkgver.tar.bz2)
+md5sums=('20018c870375bb0d3f1afa4414cf62bc')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}

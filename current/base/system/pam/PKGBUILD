@@ -1,0 +1,28 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:17:45 rensel Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=pam
+pkgver=0.77
+pkgrel=6
+pkgdesc="PAM (Pluggable Authentication Modules) library"
+url="http://www.kernel.org/pub/linux/libs/pam/"
+depends=('glibc' 'filesystem')
+backup=(etc/security/{access.conf,group.conf,limits.conf,pam_env.conf,time.conf,pam_unix2.conf} etc/pam.d/other)
+source=(http://www.kernel.org/pub/linux/libs/pam/pre/library/Linux-PAM-$pkgver.tar.bz2 \
+  ftp://ftp.suse.com/pub/people/kukuk/pam/pam_unix2/pam_unix2-1.21.tar.bz2
+  other pam.patch)
+md5sums=('1163834de9a0eebaca5d074dcc83b6a9' '1f4365a335f7bc57c563fceec4f1ec5e'\
+         '6e6c8719e5989d976a14610f340bd33a' 'a61e5b794ec89d0962acee53aa7d2e0a')
+
+build() {
+  cd $startdir/src/Linux-PAM-$pkgver
+  patch -Np1 -i ../pam.patch
+  ./configure --sysconfdir=/etc --enable-fakeroot=$startdir/pkg
+  make || return 1
+  make INSTALL=/bin/install install
+  install -D -m644 ../other $startdir/pkg/etc/pam.d/other
+  # build pam_unix2 module
+  cd $startdir/src/pam_unix2-1.21
+  ./configure
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}

@@ -1,0 +1,16 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:17:46 rensel Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Committer: Judd Vinet <jvinet@zeroflux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=zip
+pkgver=2.3
+pkgrel=1
+pkgdesc="Creates PKZIP-compatible .zip files"
+depends=('glibc')
+source=(ftp://ftp.uu.net/pub/archiving/zip/src/zip23.tar.gz)
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  make -f unix/Makefile LOCAL_ZIP="$CFLAGS" prefix=/usr generic_gcc || return 1
+  make -f unix/Makefile prefix=$startdir/pkg/usr install
+}

@@ -1,0 +1,21 @@
+# Maintainer: Amar Hadzihasanovic <rensel[at]email.it>
+
+pkgname=edb-cvs
+pkgver=20041128
+pkgrel=1
+pkgdesc="An Enlightened Configuration Database Library"
+groups=('efl')
+url="http://www.enlightenment.org"
+depends=('gtk')
+makedepends=('cvs')
+conflicts=('edb')
+provides=('edb')
+source=()
+
+build() {
+  cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/enlightenment co -D "2004-11-28" e17/libs/edb
+  cd $startdir/src/e17/libs/edb
+  ./autogen.sh --prefix=/opt/efl
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}

@@ -1,0 +1,18 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:24:00 rensel Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+# Committer: Judd Vinet <jvinet@zeroflux.org>
+pkgname=libungif
+pkgver=4.1.3
+pkgrel=1
+pkgdesc="A library for reading and writing gif images without LZW compression"
+depends=('glibc')
+source=(http://dl.sourceforge.net/sourceforge/libungif/$pkgname-$pkgver.tar.gz)
+md5sums=('cb11e300347ad29e502abc6f56fd23df')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make prefix=$startdir/pkg/usr install
+}

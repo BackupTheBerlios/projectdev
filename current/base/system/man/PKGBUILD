@@ -1,0 +1,27 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:17:45 rensel Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=man
+pkgver=1.5o
+pkgrel=2
+pkgdesc="A utility for reading man pages"
+url="ftp://ftp.win.tue.nl/pub/linux-local/utils/man/"
+depends=('groff' 'less' 'gzip' 'mawk' 'coreutils' 'bash')
+source=(ftp://ftp.win.tue.nl/pub/linux-local/utils/$pkgname/$pkgname-1.5o1.tar.gz whatis.cron.daily man.patch)
+md5sums=('ff60906ee864be0fbf96cb023d113104' 'e7772db8e676e7db975caa43f58babe1'\
+         '2411a276711bded2c93fbb8d9575d8d2')
+
+build() {
+  cd $startdir/src/$pkgname-1.5o1
+  patch -Np1 -i ../man.patch || return 1
+  ./configure -d
+  make || return 1
+  install -D -m744 ../whatis.cron.daily $startdir/pkg/etc/cron.daily/whatis
+  mkdir -p $startdir/pkg/usr/bin
+  mkdir -p $startdir/pkg/usr/sbin
+  cd src
+  make PREFIX=$startdir/pkg install
+  cd ../man2html
+  make PREFIX=$startdir/pkg install
+  cd ../man
+  make PREFIX=$startdir/pkg installsubdirs
+}

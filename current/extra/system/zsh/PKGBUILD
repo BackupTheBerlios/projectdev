@@ -1,0 +1,23 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:29:49 rensel Exp $
+# Arch Maintainer: aurelien <aurelien@archlinux.org>
+# Contributor: Jochem Kossen <j.kossen@home.nl>
+# Maintainer: Timo van Beek <surrounder.zapto.org>
+
+pkgname=zsh
+pkgver=4.2.1
+pkgrel=1
+pkgdesc="A very advanced and programmable command interpreter (shell) for UNIX"
+url="http://www.zsh.org/"
+depends=('readline')
+source=(ftp://ftp.zsh.org/pub/$pkgname-$pkgver.tar.bz2)
+md5sums=('b59ef34b8de288d5fd16f842451125c8')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr \
+    --enable-maildir-support \
+    --with-curses-terminfo \
+    --enable-zsh-secure-free
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}

@@ -1,0 +1,70 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:07:42 rensel Exp $
+# Arch Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=kernel26
+pkgver=2.6.9
+pkgrel=3
+pkgdesc="The Linux Kernel and modules (IDE support)"
+url="http://www.kernel.org"
+backup=('boot/kconfig26')
+depends=('module-init-tools')
+install=kernel26.install
+source=(ftp://ftp.de.kernel.org/pub/linux/kernel/v2.6/linux-$pkgver.tar.bz2 \
+  config cdburning.patch logo_linux_clut224.ppm \
+  http://ck.kolivas.org/patches/2.6/2.6.9/2.6.9-ck2/patches/vm-pages_scanned-active_list.patch \
+  http://dev.gentoo.org/~spock/projects/gensplash/current/fbsplash-0.9-r8-2.6.9.patch)
+md5sums=('e921200f074ca97184e150ef5a4af825' 'c6cc10b3c9e06757e1c012ae148d33d3'\
+         '66b87662e6dd54b6324f874739fa1b99' 'a646f1ab69d8f0e5b0231445c64e1a12'\
+         'a335804f3fb7de9ef690167d5d5cd2a4' 'c94df3e2b081db992773f962ce7ddeb4')
+
+
+build() {
+  cd $startdir/src/linux-$pkgver
+  patch -Np1 -i ../fbsplash-0.9-r8-2.6.9.patch || return 1
+  patch -Np1 -i ../cdburning.patch || return 1
+  #patch -Np1 -i ../acpi-20041015-26-latest-release.diff || return 1
+  # A nasty bug that caused kswapd to get stuck consuming heaps of cpu
+  # which was in mainline 2.6.9, fixed by this patch
+  patch -Np1 -i ../vm-pages_scanned-active_list.patch || return 1
+  # Project-dEv logo!
+  cp ../logo_linux_clut224.ppm drivers/video/logo/
+  # get rid of the 'i' in i686
+  carch=`echo $CARCH | sed 's|i||'`
+  cat ../config | sed "s|#CARCH#|$carch|g" >./.config
+  # build the full kernel version to use in pathnames
+  . ./.config
+  _kernver="${pkgver}${CONFIG_LOCALVERSION}"
+  # load configuration
+  yes "" | make config
+  # build!
+  make clean bzImage modules || return 1
+  mkdir -p $startdir/pkg/{lib/modules,boot}
+  make INSTALL_MOD_PATH=$startdir/pkg modules_install || return 1
+  cp System.map $startdir/pkg/boot/System.map26
+  cp arch/i386/boot/bzImage $startdir/pkg/boot/vmlinuz26
+  install -D -m644 Makefile \
+    $startdir/pkg/usr/src/linux-${_kernver}/Makefile
+  install -D -m644 .config \
+    $startdir/pkg/usr/src/linux-${_kernver}/.config
+  install -D -m644 .config $startdir/pkg/boot/kconfig26
+  mkdir -p $startdir/pkg/usr/src/linux-${_kernver}/include
+  mkdir -p $startdir/pkg/usr/src/linux-${_kernver}/arch/i386/kernel
+  for i in acpi asm-generic asm-i386 config linux math-emu net pcmcia scsi video; do
+    cp -a include/$i $startdir/pkg/usr/src/linux-${_kernver}/include/
+  done
+  # copy files necessary for later builds, like nvidia and vmware
+  cp -a scripts $startdir/pkg/usr/src/linux-${_kernver}
+  mkdir -p $startdir/pkg/usr/src/linux-${_kernver}/.tmp_versions
+  cp arch/i386/Makefile $startdir/pkg/usr/src/linux-${_kernver}/arch/i386/
+  cp arch/i386/kernel/asm-offsets.s \
+    $startdir/pkg/usr/src/linux-${_kernver}/arch/i386/kernel/
+  # copy in Kconfig files
+  for i in `find . -name "Kconfig*"`; do 
+    mkdir -p $startdir/pkg/usr/src/linux-${_kernver}/`echo $i | sed 's|/Kconfig.*||'`
+    cp $i $startdir/pkg/usr/src/linux-${_kernver}/$i
+  done
+  cd $startdir/pkg/usr/src/linux-${_kernver}/include && ln -s asm-i386 asm
+  chown -R root.root $startdir/pkg/usr/src/linux-${_kernver}
+  cd $startdir/pkg/lib/modules/${_kernver} && \
+    (rm -f source build; ln -sf /usr/src/linux-${_kernver} build)
+}

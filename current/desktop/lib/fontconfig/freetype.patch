@@ -1,0 +1,30 @@
+diff -Naur fontconfig-2.2.1-orig/fontconfig/fcfreetype.h fontconfig-2.2.1/fontconfig/fcfreetype.h
+--- fontconfig-2.2.1-orig/fontconfig/fcfreetype.h	2003-03-28 09:08:35.000000000 -0800
++++ fontconfig-2.2.1/fontconfig/fcfreetype.h	2004-02-07 12:33:12.000000000 -0800
+@@ -24,6 +24,7 @@
+ 
+ #ifndef _FCFREETYPE_H_
+ #define _FCFREETYPE_H_
++#include <ft2build.h>
+ #include <freetype/freetype.h>
+ 
+ FT_UInt
+diff -Naur fontconfig-2.2.1-orig/src/fcfreetype.c fontconfig-2.2.1/src/fcfreetype.c
+--- fontconfig-2.2.1-orig/src/fcfreetype.c	2003-04-30 08:17:58.000000000 -0700
++++ fontconfig-2.2.1/src/fcfreetype.c	2004-02-07 12:32:59.000000000 -0800
+@@ -48,6 +48,7 @@
+ #include <stdio.h>
+ #include <string.h>
+ #include "fcint.h"
++#include <ft2build.h>
+ #include <freetype/freetype.h>
+ #include <freetype/internal/ftobjs.h>
+ #include <freetype/tttables.h>
+@@ -57,7 +58,6 @@
+ 
+ #if (FREETYPE_MINOR > 1 || (FREETYPE_MINOR == 1 && FREETYPE_PATCH >= 4))
+ #include <freetype/ftbdf.h>
+-#include <freetype/ftmodule.h>
+ #define USE_FTBDF
+ #define HAS_BDF_PROPERTY(f) ((f) && (f)->driver && \
+ 			     (f)->driver->root.clazz->get_interface)

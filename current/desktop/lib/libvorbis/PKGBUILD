@@ -1,0 +1,23 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:24:00 rensel Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Contributor: John Proctor <jproctor@prium.net>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+
+pkgname=libvorbis
+pkgver=1.1.0
+pkgrel=1
+pkgdesc="Vorbis codec library"
+pkgurl="http://www.xiph.org/ogg/vorbis/download"
+depends=('glibc' 'libogg')
+source=(http://downloads.xiph.org/releases/vorbis/$pkgname-$pkgver.tar.gz)
+md5sums=('bb764aeabde613d1a424a29b1f15e7e6')
+
+build() {
+  cd $startdir/src/${pkgname}-${pkgver}
+  # gcc bug
+  CFLAGS="-march=i586 -pipe"
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}
+

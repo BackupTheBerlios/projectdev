@@ -1,0 +1,21 @@
+# Arch Maintainer: Jason Chu <jason@archlinux.org>
+# Maintainer: Amar Hadzihasanovic <rensel[at]email.it>
+
+pkgname=srcpac
+pkgver=0.2.1dev
+pkgrel=1
+pkgdesc="The pacman from-source wrapper"
+url="https://xentac.net"
+license="GPL"
+depends=('bash' 'pacman')
+makedepends=()
+source=('srcpac' 'srcpac.conf')
+md5sums=('90d6ed1b5c8a6e00ad446f712fbf3d18' '96ad9834b32478d1032e1bef050b271d')
+
+build() {
+  cd $startdir/src
+  mkdir -p $startdir/pkg/usr/bin
+  mkdir -p $startdir/pkg/etc
+  install -m 755 srcpac $startdir/pkg/usr/bin
+  install -m 644 srcpac.conf $startdir/pkg/etc
+}

@@ -1,0 +1,20 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:17:45 rensel Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=dialog
+pkgver=1.0
+pkgrel=1
+pkgdesc="A tool to display dialog boxes from shell scripts"
+depends=('ncurses')
+url="http://hightek.org/dialog/"
+source=(ftp://ftp.us.debian.org/debian/pool/main/d/dialog/${pkgname}_$pkgver-20040920.orig.tar.gz)
+md5sums=('dd5ee00f9d4e02bbe27ffc5ab7afc7ae' 'b5d342dcb3bcc9ff82d54a998f2f0252')
+
+build() 
+{
+  cd $startdir/src/$pkgname-$pkgver-20040920
+#  patch -Np1 -i ../no-libm.patch || return 1
+  ./configure --prefix=/usr --with-ncurses
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}

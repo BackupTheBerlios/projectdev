@@ -1,0 +1,18 @@
+--- gfx/public/nsRegion.h	2003-03-24 21:57:42.000000000 -0500
++++ gfx/public/nsRegion.h.new	2004-06-10 21:07:36.000000000 -0400
+@@ -189,6 +189,7 @@
+   PRBool IsComplex () const { return mRectCount > 1; }
+   PRBool IsEqual (const nsRegion& aRegion) const;
+   PRUint32 GetNumRects () const { return mRectCount; }
++  nsRegion (const nsRegion& aRegion);       // Prevent copying of regions
+ 
+ 
+ private:
+@@ -234,7 +235,6 @@
+   void MoveInto (nsRegion& aDestRegion)
+   {    MoveInto (aDestRegion, mRectListHead.next);  }
+ 
+-  nsRegion (const nsRegion& aRegion);       // Prevent copying of regions
+   nsRegion& operator = (const nsRegion& aRegion);
+ };
+ 

@@ -1,0 +1,36 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:27:14 rensel Exp $
+# Maintainer: Dale Blount <dale@archlinux.org>
+# Contributor: Anders Bostrom <anders.bostrom@home.se>
+pkgname=mozilla-thunderbird
+pkgver=0.8
+pkgrel=1
+pkgdesc="Standalone Mail/News reader from mozilla.org"
+url="http://www.mozilla.org/projects/thunderbird"
+depends=('gtk' 'libidl2' 'openssl' 'expat' 'zlib')
+makedepends=('zip')
+source=(ftp://ftp.mozilla.org/pub/mozilla.org/thunderbird/releases/$pkgver/thunderbird-source-$pkgver.tar.bz2 \
+        mozilla-thunderbird.run \
+	mozilla-thunderbird-nonroot.tar.gz
+	mozconfig)
+md5sums=('76de1827d66ac482cfc4dd32e7b1e257' 'b3ad6817a02e5c62f743ca4c6670954f'\
+         '904bcfd107d5ead431e976d7ec925140' '7aef0e705ff3cb2f188e71a3559c85f9')
+
+
+
+build() {
+	cd $startdir/src/mozilla
+	sed "s@#CFLAGS#@$CFLAGS@g" $startdir/src/mozconfig >.mozconfig
+	export MOZ_THUNDERBIRD=1
+	
+	# fix typo (mozilla bug 258177)
+	sed -i "s@destdir@DESTDIR@" $startdir/src/mozilla/mail/app/Makefile.in || return 1
+
+	make -f client.mk build || return 1
+
+	make DESTDIR=$startdir/pkg install || return 1
+	install -D -m755 $startdir/mozilla-thunderbird.run $startdir/pkg/usr/bin/mozilla-thunderbird
+
+        # initialize some data so that thunderbird will run as a non-root user
+        cd $startdir/pkg/opt/$pkgname/lib/thunderbird-$pkgver/
+        tar zxf $startdir/src/$pkgname-nonroot.tar.gz || return 1
+}

@@ -1,0 +1,22 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:24:00 rensel Exp $
+# Arch Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: blkokie <t.fernagut@burningfrog.be>
+pkgname=freetype2
+pkgver=2.1.7
+pkgrel=3
+pkgdesc="TrueType font rendering library"
+url="http://freetype.sourceforge.net"
+depends=('glibc' 'zlib')
+source=(ftp://gd.tuwien.ac.at/publishing/freetype/freetype2/freetype-$pkgver.tar.bz2 \
+  bytecode.patch)
+md5sums=('d71723948d7c0e44c401b5733c50857e' '99ef2d11ed112baf218605a96c791858')
+
+build() {
+  cd $startdir/src/freetype-$pkgver
+  # enable the bytecode interpreter
+  patch -Np1 -i ../bytecode.patch
+  export CFLAGS=""
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}

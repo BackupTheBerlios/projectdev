@@ -1,0 +1,23 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:10:03 rensel Exp $
+# Arch Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=openssl
+pkgver=0.9.7e
+pkgrel=1
+pkgdesc="The Open Source toolkit for Secure Sockets Layer and Transport Layer Security"
+depends=('glibc')
+source=(http://www.openssl.org/source/$pkgname-$pkgver.tar.gz)
+md5sums=('a8777164bca38d84e5eb2b1535223474')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./config --prefix=/usr --openssldir=/etc/ssl shared
+  make || return 1
+  make INSTALL_PREFIX=$startdir/pkg MANDIR=/usr/man install
+
+  cd $startdir/pkg/usr/man
+  rm -rf man3 man5 man7
+  cd man1
+  rename '' openssl_ *
+  mv openssl_openssl.1 openssl.1
+}

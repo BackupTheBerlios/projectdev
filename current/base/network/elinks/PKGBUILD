@@ -1,0 +1,22 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:13:46 rensel Exp $
+# Arch Maintainer: damir <damir@archlinux.org>
+# Maintainer: Daniel Bainton <dpb@backarrow.org>
+
+pkgname=elinks
+pkgver=0.10pre3
+pkgrel=1
+pkgdesc="An advanced and well-established feature-rich text mode web browser."
+url="http://elinks.or.cz"
+depends=('bzip2' 'expat' 'openssl' 'zlib' 'lua')
+source=($url/download/$pkgname-$pkgver.tar.bz2)
+md5sums=('d3c23cd7d8727c27b34b3b2a61c43d33')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr --sysconfdir=/etc \
+    --disable-smb --without-x --enable-local-cgi \
+    --enable-leds
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  rm -f $startdir/pkg/usr/share/locale/locale.alias
+}

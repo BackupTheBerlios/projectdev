@@ -1,0 +1,19 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:24:00 rensel Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: Daniel Bainton <dpb@backarrow.org>
+pkgname=glib
+pkgver=1.2.10
+pkgrel=1
+pkgdesc="Common C routines used by Gtk+ and other libs"
+url="http://www.gtk.org/"
+depends=('glibc')
+source=(ftp://ftp.gtk.org/pub/gtk/v1.2/$pkgname-$pkgver.tar.gz gcc340.patch)
+md5sums=('6fe30dad87c77b91b632def29dd69ef9' '877b3330e822a4be69a0f8a8c268cfd7')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  patch -Np1 -i ../gcc340.patch
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}

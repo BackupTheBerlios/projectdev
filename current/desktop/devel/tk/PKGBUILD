@@ -1,0 +1,27 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:21:09 rensel Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Committer: Judd Vinet <jvinet@zeroflux.org>
+# Maintainter: blokkie <t.fernagut@burningfrog.be>
+pkgname=tk
+pkgver=8.4.7
+pkgrel=1
+pkgdesc="A windowing toolkit for use with tcl"
+depends=('tcl' 'x-server')
+source=(http://telia.dl.sourceforge.net/sourceforge/tcl/tk$pkgver-src.tar.gz \
+  http://telia.dl.sourceforge.net/sourceforge/tcl/tcl$pkgver-src.tar.gz)
+md5sums=('7431982205f5d8ff2f462610b5de1c5d' '07e256e21bd0d05887770318b540c36f')
+
+build() {
+  cd $startdir/src/tk$pkgver/unix
+  ./configure --prefix=/usr
+  make \
+    TCL_GENERIC_DIR=$startdir/src/tcl$pkgver/generic \
+    TCLDIR=$startdir/src/tcl$pkgver \
+    TOOL_DIR=$startdir/src/tcl$pkgver/tools || return 1
+  make \
+    TCL_GENERIC_DIR=$startdir/src/tcl$pkgver/generic \
+    TCLDIR=$startdir/src/tcl$pkgver \
+    TOOL_DIR=$startdir/src/tcl$pkgver/tools \
+    INSTALL_ROOT=$startdir/pkg install
+  mv $startdir/pkg/usr/bin/wish8.4 $startdir/pkg/usr/bin/wish
+}

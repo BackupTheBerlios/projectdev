@@ -1,0 +1,27 @@
+# Maintainer: Daniel Bainton <dpb@backarrow.org>
+
+pkgname=splashutils
+pkgver=0.9pre10
+pkgrel=2
+pkgdesc="Userspace utilities to control fbsplash"
+url="http://dev.gentoo.org/~spock/projects/gensplash/"
+depends=('libjpeg' 'libpng' 'perl')
+makedepends=()
+install=splashutils.install
+source=(http://dev.gentoo.org/~spock/projects/gensplash/archive/$pkgname-0.9-pre10.tar.bz2 \
+	http://utenti.lycos.it/rensel/projectdev/fbsplash-theme-devsplash.tar.bz2 \
+	splash_install )
+md5sums=('20ab27ea8e02dc2efb6789cf53663ec8' '49c8d71e94eae8b7fb620c5a85cd74b1' \
+	 'f1d903ccb110bf0786bf15cfa4aa91ae')
+
+build() {
+  mkdir -p $startdir/pkg
+  cd $startdir/src/$pkgname-0.9-pre10
+  sed -i 's%/usr/bin/install%/bin/install%' Makefile
+  ln -s /usr/src/linux-`uname -r` linux
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  install -D -m755 ../splash_install $startdir/pkg/usr/bin/splash_install
+  mkdir -p $startdir/pkg/etc/splash
+  cp -r $startdir/src/devsplash $startdir/pkg/etc/splash
+}

@@ -1,0 +1,18 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:13:46 rensel Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=cvs
+pkgver=1.11.17
+pkgrel=3
+pkgdesc="Concurrent Versions System - a source control system"
+depends=('glibc')
+source=(http://cougaar.org/frs/download.php/122/$pkgname-$pkgver.tar.bz2)
+url="http://www.cvshome.org/"
+md5sums=('17cd48888d5571d215a44a7e8d46759c')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make prefix=$startdir/pkg/usr install
+}

@@ -1,0 +1,26 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:24:00 rensel Exp $
+# Arch Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=fontconfig
+pkgver=2.2.3
+pkgrel=1
+pkgdesc="A library for configuring and customizing font access"
+url="http://www.freedesktop.org/software/fontconfig"
+depends=('expat' 'freetype2' 'zlib')
+backup=('etc/fonts/local.conf' 'etc/fonts/fonts.conf')
+install=fontconfig.install
+source=(http://freedesktop.org/~fontconfig/release/fontconfig-$pkgver.tar.gz fonts.conf local.conf freetype.patch)
+md5sums=('2466a797d645cda5eb466080fdaec416' 'e02d9c8be296ea0a80eb9689eae2aeaa'\
+         '1bcd7335c3fe14a1a0f9f664fcf9c259' 'd278954a801bac5e4eee0537ad26966a')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+#  patch -Np1 -i ../freetype.patch
+  ./configure --prefix=/usr --sysconfdir=/etc
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  install -D -m644 ../fonts.conf $startdir/pkg/etc/fonts/fonts.conf
+  install -D -m644 ../local.conf $startdir/pkg/etc/fonts/local.conf
+  mkdir -p $startdir/pkg/usr/X11R6/bin
+  ln -sf /usr/bin/fc-cache $startdir/pkg/usr/X11R6/bin/fc-cache
+}

@@ -1,0 +1,20 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:24:00 rensel Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: Daniel Bainton <dpb@backarrow.org>
+pkgname=libtiff
+pkgver=3.7.0
+pkgrel=2
+pkgdesc="Library for manipulation of TIFF images"
+depends=('libjpeg' 'zlib')
+url="http://www.libtiff.org/"
+source=(ftp://ftp.remotesensing.org/pub/libtiff/tiff-$pkgver.tar.gz \
+  libtiff-3.7.0-soname_fix.patch)
+md5sums=('305af467c94d988c17ca6528d8936f27' '487e54353ac57f534e4e881e65d2b566')
+
+build() {
+  cd $startdir/src/tiff-$pkgver
+  patch -Np1 -i ../libtiff-3.7.0-soname_fix.patch || return 1
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}

@@ -1,0 +1,22 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:24:00 rensel Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Committer: Judd Vinet <jvinet@zeroflux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=xine-lib
+pkgver=1rc6a
+pkgrel=1
+pkgdesc="A free video player for Unix"
+depends=( 'esd' 'libpng' 'libvorbis' 'sdl' 'libmng' 'codecs' 'libtheora')
+source=(http://dl.sourceforge.net/sourceforge/xine/$pkgname-1-rc6a.tar.gz)
+url="http://xinehq.de/"
+md5sums=('32b231beb9b2194606a18ed7bcf2bcb3')
+
+build() {
+  cd $startdir/src/$pkgname-1-rc6a
+  sed -i 's|xv_lib="libXv.a"|xv_lib="libXv.so"|' configure
+  sed -i 's|xvmc_lib="libXvMC.a"|xvmc_lib="libXvMC.so"|' configure
+  ./configure --prefix=/usr --with-w32-path=/usr/lib/win32 \
+  --enable-alsa --disable-faad
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}

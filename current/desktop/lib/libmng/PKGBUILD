@@ -1,0 +1,20 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:24:00 rensel Exp $
+# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
+# Arch Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: blokkie <blokkie@burningfrog.be>
+pkgname=libmng
+pkgver=1.0.8
+pkgrel=1
+pkgdesc="A collection of routines used to create and manipulate MNG format graphics files"
+url="http://www.libmng.com/"
+depends=('zlib' 'libjpeg')
+source=(http://dl.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.gz)
+md5sums=('d688ca879c934e9cde8b323cf3025f89')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  sh autogen.sh
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}

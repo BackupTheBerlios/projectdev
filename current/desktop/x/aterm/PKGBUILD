@@ -1,0 +1,25 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:28:46 rensel Exp $
+# Maintainer: dale <dale@archlinux.org>
+# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
+# Maintainer: Timo van Beek <surrounder@hotpop.com>
+
+pkgname=aterm
+pkgver=0.4.2
+pkgrel=1
+pkgdesc="An xterm replacement with transparency support"
+depends=('xfree86')
+url=http://aterm.sourceforge.net/
+source=(http://umn.dl.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.bz2 \
+        linuxkeys.patch)
+md5sums=('5c29d0cde4225bdbd63ccb6a4dd94c56' \
+	'720b3a6efdeff75b9629ca266033bc13')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  patch -Np1 -i ../linuxkeys.patch
+  ./configure --prefix=/usr --enable-transparency=yes \
+    --enable-background-image --enable-fading --enable-menubar \
+    --enable-graphics
+  make || return 1
+  make prefix=$startdir/pkg/usr install
+}

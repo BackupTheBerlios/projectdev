@@ -1,0 +1,20 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 17:24:00 rensel Exp $
+# Arch Maintainer: arjan <arjan@archlinux.org>
+# Maintainer Timo van Beek <surrounder@hotpop.com>
+# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
+
+pkgname=libmikmod
+pkgver=3.1.11
+pkgrel=1
+pkgdesc="A portable sound library"
+depends=('glibc')
+source=(http://mikmod.raphnet.net/files/$pkgname-$pkgver.tar.gz)
+url="http://mikmod.raphnet.net/"
+md5sums=('705106da305e8de191549f1e7393185c')
+
+build() {
+	cd $startdir/src/$pkgname-$pkgver
+	./configure --prefix=/usr
+	make || return 1
+	make prefix=$startdir/pkg/usr install
+}

@@ -1,0 +1,21 @@
+diff -Naur man-1.5n-orig/src/makewhatis.sh man-1.5n/src/makewhatis.sh
+--- man-1.5n-orig/src/makewhatis.sh	2003-08-03 12:39:39.000000000 -0700
++++ man-1.5n/src/makewhatis.sh	2004-07-23 13:23:49.000000000 -0700
+@@ -57,13 +57,16 @@
+ done
+ DEFCATPATH=$dc
+ 
++DEFMANPATH=/usr/man
++DEFCATPATH=/usr/man/preformat:/usr/man
++
+ # In case /usr is read-only, make /usr/foo/whatis (etc) a symlink to
+ # something like /var/cache/man/foo-whatis.
+ # Some distributions make a single big /var/cache/man/whatis file,
+ # but that leads to problems and bugs.
+ 
+ # AWK=/usr/bin/gawk
+-AWK=%awk%
++AWK=/bin/awk
+ 
+ # Find a place for our temporary files. If security is not a concern, use
+ #	TMPFILE=/tmp/whatis$$; TMPFILEDIR=none
