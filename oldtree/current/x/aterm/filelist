@@ -1,8 +1,0 @@
-.FILELIST
-.PKGINFO
-usr/
-usr/bin/
-usr/bin/aterm
-usr/man/
-usr/man/man1/
-usr/man/man1/aterm.1.gz
