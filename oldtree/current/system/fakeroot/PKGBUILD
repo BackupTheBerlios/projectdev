@@ -1,0 +1,19 @@
+# $Id: PKGBUILD,v 1.1 2004/11/23 10:43:58 dpb Exp $
+# Arch Maintainer: judd <jvinet@zeroflux.org>
+# Arch Contributor: Jochem Kossen <j.kossen@home.nl>
+# Maintainer: Daniel Bainton <dpb@backarrow.org>
+pkgname=fakeroot
+pkgver=1.1.5
+pkgrel=1
+pkgdesc="Gives a fake root environment, useful for building packages as a non-privileged user"
+url="http://packages.debian.org/fakeroot"
+depends=('gcc')
+source=(http://ftp.debian.org/debian/pool/main/f/$pkgname/$pkgname\_$pkgver.tar.gz)
+md5sums=('626572f783ff34474794ac78caeac326')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr --libdir=/usr/lib/libfakeroot
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}
