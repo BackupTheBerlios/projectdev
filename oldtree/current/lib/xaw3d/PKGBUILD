@@ -1,0 +1,40 @@
+# $Id: PKGBUILD,v 1.1 2004/11/17 15:56:18 surrounder Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Committer: Judd Vinet <jvinet@zeroflux.org>
+# Maintainer: Timo van Beek <surrounder@hotpop.com>
+
+pkgname=xaw3d
+pkgver=1.5
+pkgrel=1
+pkgdesc="Athena widgets (libXaw) drop-in replacement"
+depends=('xfree86')
+source=(ftp://ftp.x.org/contrib/widgets/Xaw3d/R6.3/Xaw3d-$pkgver.tar.gz)
+
+build() {
+  cd $startdir/src/xc/lib/Xaw3d
+  
+  PATH=$PATH:/usr/X11R6/bin
+  cleanup=0
+  if [ ! -d /usr/X11R6/include/X11/Xaw3d ]; then
+    mkdir -p /usr/X11R6/include/X11/Xaw3d
+    cp *.h /usr/X11R6/include/X11/Xaw3d
+    cleanup=1
+  fi
+  
+  xmkmf
+  cat >tmp.ex <<_EOF
+d
+d
+d
+d
+w
+q
+_EOF
+  cat tmp.ex | ex +32 XawI18n.h
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+
+  if [ "$cleanup" = "1" ]; then
+    rm -rf /usr/X11R6/include/X11/Xaw3d
+  fi
+}
