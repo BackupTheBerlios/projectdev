@@ -1,12 +1,12 @@
-# $Id: PKGBUILD,v 1.1 2004/11/04 22:27:38 dpb Exp $
+# $Id: PKGBUILD,v 1.2 2004/11/10 17:00:44 blokkie Exp $
 # Arch Maintainer: dorphell <dorphell@archlinux.org>
 # Arch Committer: Judd Vinet <jvinet@zeroflux.org>
 # Maintainer: Daniel Bainton <dpb@backarrow.org>
 pkgname=gtk
 pkgver=1.2.10
-pkgrel=1
+pkgrel=2
 pkgdesc="The GTK+ toolkit"
-depends=('xfree86' 'freetype2' 'glib')
+depends=('xorg' 'freetype2' 'glib')
 source=(ftp://ftp.gtk.org/pub/gtk/v1.2/$pkgname+-$pkgver.tar.gz)
 md5sums=('4d5cb2fc7fb7830e4af9747a36bfce20')
 
