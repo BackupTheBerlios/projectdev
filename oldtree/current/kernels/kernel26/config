@@ -72,7 +72,7 @@ CONFIG_X86_PC=y
 # CONFIG_M586 is not set
 # CONFIG_M586TSC is not set
 # CONFIG_M586MMX is not set
-CONFIG_M#CARCH#=y
+#CONFIG_M#CARCH#=y
 # CONFIG_MPENTIUMII is not set
 # CONFIG_MPENTIUMIII is not set
 # CONFIG_MPENTIUMM is not set
