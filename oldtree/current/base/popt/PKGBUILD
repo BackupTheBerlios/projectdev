@@ -1,0 +1,19 @@
+# $Id: PKGBUILD,v 1.1 2004/11/03 13:33:37 dpb Exp $
+# Maintainer: dorphell <dorphell@archlinux.org>
+# Committer: Judd Vinet <jvinet@zeroflux.org>
+# Contributor: John Proctor <jproctor@prium.net>
+
+pkgname=popt
+pkgver=1.7
+pkgrel=2
+pkgdesc="A commandline option parser"
+depends=('glibc' 'gettext')
+source=(ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.1.x/$pkgname-$pkgver.tar.gz)
+
+build() {
+  cd $startdir/src/${pkgname}-${pkgver}
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  rm -rf ${startdir}/pkg/ro
+}
