@@ -1,0 +1,31 @@
+# $Id: PKGBUILD,v 1.1 2004/11/16 19:45:28 surrounder Exp $
+# Arch Maintainer : Tobias Powalowski <tpowa@archlinux.org>
+# Maintainer : Timo van Beek <surrounder@hotpop.com>
+
+pkgname=nvidia
+pkgver=1.0.6111
+pkgbinary=NVIDIA-Linux-x86-1.0-6111
+pkgrel=1
+pkgdesc="Drivers for XFree86/X.Org"
+url="http://www.nvidia.com"
+depends=('bash' 'gcc' 'binutils' 'glibc' 'make')
+source=(ftp://download.nvidia.com/XFree86/Linux-x86/1.0-6111/$pkgbinary-pkg0.run 2.6.9.patch)
+install="nvidia.install"
+build() {  
+  cd $startdir/src/
+  #needed for normal pkgbuild
+  #install -D -m 755 $pkgbinary-pkg0.run $startdir/pkg/opt/nvidia/$pkgbinary-pkg0.run
+  #now for 2.6.9 new install method until fixed nvidia drivers will be available
+  chmod +x $pkgbinary-pkg0.run
+  ./$pkgbinary-pkg0.run --extract-only
+  cd $pkgbinary-pkg0
+  #installing patches for kernel 2.6.9
+  patch -Np0 -i ../2.6.9.patch
+  cd ..
+  #clean src
+  rm *
+  mkdir -p $startdir/pkg/opt/nvidia
+  mv * $startdir/pkg/opt/nvidia 
+ }
+
+md5sums=('b2b725a8f8de279264b71f08ee30f20f' '5cba596a75bf495a6f2f3a71f807de73')

@@ -1,0 +1,45 @@
+#driver=NVIDIA-Linux-x86-1.0-6111-pkg0.run
+driver=NVIDIA-Linux-x86-1.0-6111-pkg0/./nvidia-installer
+post_install() {
+cat << EOF
+IMPORTANT
+==> In order to use the software you have to agree to NVIDIA's license located in 
+==> /usr/share/doc/NVIDIA_GLX-1.0/LICENSE else please remove this package
+ 
+==> You have to be in console mode to finish installation!
+==> Else it won't install! You have to rerun 'pacman -S nvidia'
+
+Installation starts now ...
+EOF
+
+/opt/nvidia/./$driver -a -q --no-network --ui=none -n > /dev/null 2>&1
+modprobe nvidia
+rm -r /opt/nvidia
+
+cat << EOF
+If you need more information about setting up nvidia drivers have a look at:
+"http://wiki.archlinux.org/index.php/How to install NVIDIA Driver"
+EOF
+}
+
+post_upgrade() {
+ post_install $1
+}
+
+pre_remove() {
+cat << EOF
+==> Deinstallation starts now!
+EOF
+
+rmmod nvidia
+nvidia-installer -a -q --no-network --ui=none --uninstall >> dev/null
+
+cat << EOF
+==> Don't forget to update your /etc/X11/XF86Config or /etc/X11/xorg.conf and rc.conf!
+EOF
+}
+
+op=$1
+shift
+
+$op $*

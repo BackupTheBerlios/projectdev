@@ -1,0 +1,416 @@
+diff -u -r NVIDIA-Linux-x86-1.0-6111-pkg1.old/usr/src/nv/Makefile.kbuild usr/src/nv/Makefile.kbuild
+--- NVIDIA-Linux-x86-1.0-6111-pkg1.old/usr/src/nv/Makefile.kbuild	2004-07-27 17:33:20.000000000 +0200
++++ usr/src/nv/Makefile.kbuild	2004-10-21 15:42:24.000000000 +0200
+@@ -133,7 +133,7 @@
+ endif
+ 
+ #
+-# NVIDIA specific CFLAGS and #define's. The remap_page_range check has become
++# NVIDIA specific CFLAGS and #define's. The remap_range check has become
+ # necessary with the introduction of the five argument version to Linux 2.4
+ # distribution kernels; this conflicting change cannot be detected at compile
+ # time.
+@@ -159,17 +159,19 @@
+ CFLAGS += -DNV_BUILD_NV_PAT_SUPPORT
+ endif
+ 
+-ifeq ($(PATCHLEVEL), 4)
+-  REMAP_PAGE_RANGE := $(shell $(CONFTEST) remap_page_range)
++  REMAP_RANGE := $(shell $(CONFTEST) remap_range)
+ 
+-  ifeq ($(REMAP_PAGE_RANGE), 5)
++  ifeq ($(REMAP_RANGE), PFN)
++    EXTRA_CFLAGS += -DREMAP_PFN_RANGE
++  endif
++  
++  ifeq ($(REMAP_RANGE), 5)
+     EXTRA_CFLAGS += -DREMAP_PAGE_RANGE_5
+   endif
+ 
+-  ifeq ($(REMAP_PAGE_RANGE), 4)
++  ifeq ($(REMAP_RANGE), 4)
+     EXTRA_CFLAGS += -DREMAP_PAGE_RANGE_4
+   endif
+-endif
+ 
+ ifeq ($(PATCHLEVEL), 4)
+   ifeq ($(shell $(CONFTEST) change_page_attr), 1)
+@@ -185,6 +187,12 @@
+   endif
+ endif
+ 
++ifeq ($(shell $(CONFTEST) check_pci_class), get)
++  EXTRA_CFLAGS += -DHAVE_PCI_GET_CLASS
++else
++  EXTRA_CFLAGS += -DHAVE_PCI_FIND_CLASS
++endif
++
+ #
+ # Miscellaneous NVIDIA kernel module build support targets. They are needed
+ # to satisfy KBUILD requirements and to support NVIDIA specifics.
+Only in usr/src/nv: Makefile.kbuild~
+diff -u -r NVIDIA-Linux-x86-1.0-6111-pkg1.old/usr/src/nv/Makefile.nvidia usr/src/nv/Makefile.nvidia
+--- NVIDIA-Linux-x86-1.0-6111-pkg1.old/usr/src/nv/Makefile.nvidia	2004-07-27 17:33:20.000000000 +0200
++++ usr/src/nv/Makefile.nvidia	2004-10-21 15:42:24.000000000 +0200
+@@ -60,12 +60,15 @@
+ INSTALL=$(shell which install)
+ INCLUDES += -I$(KERNEL_HEADERS)
+ 
+-REMAP_PAGE_RANGE := $(shell $(CONFTEST) remap_page_range)
++REMAP_RANGE := $(shell $(CONFTEST) remap_range)
+ 
+-ifeq ($(REMAP_PAGE_RANGE), 5)
++ifeq ($(REMAP_RANGE), PFN)
++  DEFINES += -DREMAP_PFN_RANGE
++endif
++ifeq ($(REMAP_RANGE), 5)
+   DEFINES += -DREMAP_PAGE_RANGE_5
+ endif
+-ifeq ($(REMAP_PAGE_RANGE), 4)
++ifeq ($(REMAP_RANGE), 4)
+   DEFINES += -DREMAP_PAGE_RANGE_4
+ endif
+ 
+@@ -73,6 +76,12 @@
+   DEFINES += -DNV_CHANGE_PAGE_ATTR_PRESENT
+ endif
+ 
++ifeq ($(shell $(CONFTEST) check_pci_class), get)
++  DEFINES += -DHAVE_PCI_GET_CLASS
++else
++  DEFINES += -DHAVE_PCI_FIND_CLASS
++endif
++
+ DEFINES+=$(EXTRA_DEFINES)
+ 
+ # allow build parameters to be passed in through the environment
+diff -u -r NVIDIA-Linux-x86-1.0-6111-pkg1.old/usr/src/nv/conftest.sh usr/src/nv/conftest.sh
+--- NVIDIA-Linux-x86-1.0-6111-pkg1.old/usr/src/nv/conftest.sh	2004-07-27 17:33:20.000000000 +0200
++++ usr/src/nv/conftest.sh	2004-10-21 15:42:24.000000000 +0200
+@@ -23,11 +23,51 @@
+ fi
+ 
+ case "$4" in
+-    remap_page_range)
++    check_pci_class)
++        #
++        # Determine if the current kernel uses pci_find_class or pci_get_class
++        #
++
++        echo "#include <linux/pci.h>
++        int do_test_pci_class(void) {
++          struct pci_dev *get_dev;
++          get_dev = pci_get_class(0,NULL);
++        }" > conftest$$.c
++
++        $CC $CFLAGS -c conftest$$.c > /dev/null 2>&1
++        rm -f conftest$$.c
++
++        if [ -f conftest$$.o ]; then
++          echo "get"
++          rm -f conftest$$.o
++          exit 0
++        else
++          echo "find"
++          exit 0
++        fi
++    ;;
++
++    remap_range)
+         #
+         # Determine the number of arguments expected by remap_page_range.
++        # Extended to determine if should use remap_pfn_range() aswell
+         #
+ 
++	echo "#include <linux/mm.h>
++        int do_test_remap_page_range(void) {
++          pgprot_t pgprot;
++          remap_pfn_range(NULL, 0L, 0L, 0L, pgprot);
++        }" > conftest$$.c
++
++        $CC $CFLAGS -c conftest$$.c > /dev/null 2>&1
++        rm -f conftest$$.c
++
++        if [ -f conftest$$.o ]; then
++          echo "PFN"
++          rm -f conftest$$.o;
++          exit 0
++        fi
++
+         echo "#include <linux/mm.h>
+         int do_test_remap_page_range(void) {
+            pgprot_t pgprot;
+diff -u -r NVIDIA-Linux-x86-1.0-6111-pkg1.old/usr/src/nv/nv-linux.h usr/src/nv/nv-linux.h
+--- NVIDIA-Linux-x86-1.0-6111-pkg1.old/usr/src/nv/nv-linux.h	2004-07-27 17:33:20.000000000 +0200
++++ usr/src/nv/nv-linux.h	2004-10-21 15:42:24.000000000 +0200
+@@ -567,13 +567,15 @@
+  * relevant releases to date use it. This version was backported to 2.4 
+  * without means to identify the change, hence this hack.
+  */
+-#if defined(KERNEL_2_6) || defined(REMAP_PAGE_RANGE_5)
+-#define NV_REMAP_PAGE_RANGE(x...)    remap_page_range(vma, x)
++#if defined(REMAP_PFN_RANGE)
++#define NV_REMAP_RANGE(from, offset, x...)    remap_pfn_range(vma, from, ((offset)) >> PAGE_SHIFT, x)
++#elif defined(KERNEL_2_6) || defined(REMAP_PAGE_RANGE_5)
++#define NV_REMAP_RANGE(x...)                  remap_page_range(vma, x)
+ #elif defined(REMAP_PAGE_RANGE_4)
+-#define NV_REMAP_PAGE_RANGE(x...)    remap_page_range(x)
++#define NV_REMAP_RANGE(x...)                  remap_page_range(x)
+ #else
+ #warning "conftest.sh failed, assuming old Linux 2.4 remap_page_range(4)!"
+-#define NV_REMAP_PAGE_RANGE(x...)    remap_page_range(x)
++#define NV_REMAP_RANGE(x...)                  remap_page_range(x)
+ #endif
+ 
+ #if defined(pmd_offset_map)
+diff -u -r NVIDIA-Linux-x86-1.0-6111-pkg1.old/usr/src/nv/nv.c usr/src/nv/nv.c
+--- NVIDIA-Linux-x86-1.0-6111-pkg1.old/usr/src/nv/nv.c	2004-07-27 17:33:20.000000000 +0200
++++ usr/src/nv/nv.c	2004-10-21 15:43:33.000000000 +0200
+@@ -19,6 +19,10 @@
+ MODULE_ALIAS_CHARDEV_MAJOR(NV_MAJOR_DEVICE_NUMBER);
+ #endif
+ 
++#ifndef __VMALLOC_RESERVE
++unsigned int __VMALLOC_RESERVE;
++#endif
++
+ /*
+  * our global state; one per device
+  */
+@@ -639,7 +643,11 @@
+     u8     cap_ptr;
+     int    func, slot;
+ 
++#ifdef HAVE_PCI_GET_CLASS
++    dev = pci_get_class(class << 8, NULL);
++#else
+     dev = pci_find_class(class << 8, NULL);
++#endif
+     do {
+         for (func = 0; func < 8; func++) {
+             slot = PCI_SLOT(dev->devfn);
+@@ -650,7 +658,11 @@
+             if (cap_ptr)
+                 return fn;
+         }
++#ifdef HAVE_PCI_GET_CLASS
++        dev = pci_get_class(class << 8, dev);
++#else
+         dev = pci_find_class(class << 8, dev);
++#endif
+     } while (dev);
+ 
+     return NULL;
+@@ -1225,6 +1237,7 @@
+         {
+             nv_state_t *nv = NV_STATE_PTR(&nv_linux_devices[i]);
+             release_mem_region(nv->bar.regs.address, nv->bar.regs.size);
++            pci_disable_device(nv_linux_devices[i].dev);
+         }
+     }
+ 
+@@ -1762,7 +1775,7 @@
+             pages = nv->regs->size / PAGE_SIZE;
+ 
+         vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
+-        if (NV_REMAP_PAGE_RANGE(vma->vm_start,
++        if (NV_REMAP_RANGE(vma->vm_start,
+                              NV_VMA_OFFSET(vma),
+                              vma->vm_end - vma->vm_start,
+                              vma->vm_page_prot))
+@@ -1781,7 +1794,7 @@
+             pages = nv->fb->size / PAGE_SIZE;
+ 
+         vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
+-        if (NV_REMAP_PAGE_RANGE(vma->vm_start,
++        if (NV_REMAP_RANGE(vma->vm_start,
+                              NV_VMA_OFFSET(vma),
+                              vma->vm_end - vma->vm_start,
+                              vma->vm_page_prot))
+@@ -1899,7 +1912,7 @@
+         while (pages--)
+         {
+             page = (unsigned long) at->page_table[i++].phys_addr;
+-            if (NV_REMAP_PAGE_RANGE(start, page, PAGE_SIZE, vma->vm_page_prot))
++            if (NV_REMAP_RANGE(start, page, PAGE_SIZE, vma->vm_page_prot))
+                 return -EAGAIN;
+             start += PAGE_SIZE;
+             pos += PAGE_SIZE;
+@@ -3483,12 +3496,20 @@
+     struct pci_dev *dev = NULL;
+     int count = 0;
+ 
++#ifdef HAVE_PCI_GET_CLASS
++    dev = pci_get_class(PCI_CLASS_DISPLAY_VGA << 8, dev);
++#else
+     dev = pci_find_class(PCI_CLASS_DISPLAY_VGA << 8, dev);
++#endif
+     while (dev)
+     {
+         if ((dev->vendor == 0x10de) && (dev->device >= 0x20))
+             count++;
++#ifdef HAVE_PCI_GET_CLASS
++        dev = pci_get_class(PCI_CLASS_DISPLAY_VGA << 8, dev);
++#else
+         dev = pci_find_class(PCI_CLASS_DISPLAY_VGA << 8, dev);
++#endif
+     }
+     return count;
+ }
+@@ -3516,6 +3537,28 @@
+         return -1;
+     }
+ 
++    // enable io, mem, and bus-mastering in pci config space
++    if (pci_enable_device(dev) != 0)
++    {
++        nv_printf(NV_DBG_ERRORS,
++            "NVRM: pci_enable_device failed, aborting\n");
++        return -1;
++    }
++
++    // request ownership of our bars
++    // keeps other drivers from banging our registers.
++    // only do this for registers, as vesafb requests our framebuffer and will
++    // keep us from working properly
++    if (!request_mem_region(dev->resource[0].start,
++                            dev->resource[0].end - dev->resource[0].start + 1,
++                            "nvidia"))
++    {
++        nv_printf(NV_DBG_ERRORS,
++            "NVRM: pci_request_regions failed, aborting\n");
++        goto err_disable_dev;
++    }
++    pci_set_master(dev);
++
+     /* initialize bus-dependent config state */
+     nvl = &nv_linux_devices[num_nv_devices];
+     nv  = NV_STATE_PTR(nvl);
+@@ -3545,7 +3588,7 @@
+         nv_printf(NV_DBG_ERRORS, "NVRM: Please check your BIOS settings.         \n");
+         nv_printf(NV_DBG_ERRORS, "NVRM: [Plug & Play OS   ] should be set to NO  \n");
+         nv_printf(NV_DBG_ERRORS, "NVRM: [Assign IRQ to VGA] should be set to YES \n");
+-        return -1;
++        goto err_zero_dev;
+     }
+ 
+     /* sanity check the IO apertures */
+@@ -3569,39 +3612,9 @@
+                 nv->bar.fb.address, nv->bar.fb.size);
+         }
+ 
+-        /* Clear out the data */
+-        os_mem_set(nvl, 0, sizeof(nv_linux_state_t));
+-
+-        return -1;
++        goto err_zero_dev;
+     }
+ 
+-    // request ownership of our bars
+-    // keeps other drivers from banging our registers.
+-    // only do this for registers, as vesafb requests our framebuffer and will
+-    // keep us from working properly
+-    if (!request_mem_region(nv->bar.regs.address, nv->bar.regs.size, "nvidia"))
+-    {
+-        nv_printf(NV_DBG_ERRORS,
+-            "NVRM: pci_request_regions failed, aborting\n");
+-
+-        /* Clear out the data */
+-        os_mem_set(nvl, 0, sizeof(nv_linux_state_t));
+-
+-        return -1;
+-    }
+-
+-    // enable io, mem, and bus-mastering in pci config space
+-    if (pci_enable_device(dev) != 0)
+-    {
+-        nv_printf(NV_DBG_ERRORS,
+-            "NVRM: pci_enable_device failed, aborting\n");
+-
+-        pci_release_regions(dev);
+-        os_mem_set(nvl, 0, sizeof(nv_linux_state_t));
+-
+-        return -1;
+-    }
+-    pci_set_master(nvl->dev);
+ 
+ #if defined(NV_BUILD_NV_PAT_SUPPORT)
+     if (nvos_find_pci_express_capability(nvl->dev))
+@@ -3618,13 +3631,7 @@
+     if (nv->bar.regs.map == NULL)
+     {
+         nv_printf(NV_DBG_ERRORS, "NVRM: failed to map registers!!\n");
+-
+-        pci_release_regions(dev);
+-
+-        /* Clear out the data */
+-        os_mem_set(nvl, 0, sizeof(nv_linux_state_t));
+-
+-        return -1;
++        goto err_zero_dev;
+     }
+     nv->flags |= NV_FLAG_MAP_REGS_EARLY;
+ #endif
+@@ -3641,6 +3648,15 @@
+     num_nv_devices++;
+ 
+     return 0;
++
++err_zero_dev:
++    os_mem_set(nvl, 0, sizeof(nv_linux_state_t));
++    release_mem_region(dev->resource[0].start,
++                       dev->resource[0].end - dev->resource[0].start + 1);
++
++err_disable_dev:
++    pci_disable_device(dev);
++    return -1;
+ }
+ 
+ int NV_API_CALL nv_no_incoherent_mappings
+@@ -3692,9 +3708,16 @@
+         return -1;
+     }
+ 
++    // Fix up problems with PM_SAVE_STATE being removed from 2.6.9
++    #ifdef PM_SAVE_STATE
++      #define PM_TMP PM_SAVE_STATE
++    #else
++      #define PM_TMP PM_SUSPEND
++    #endif
++    
+     switch (state)
+     {
+-        case PM_SAVE_STATE:
++        case PM_TMP:
+             nv_printf(NV_DBG_INFO, "NVRM: ACPI: received standby event\n");
+             status = rm_power_management(nv, 0, NV_PM_ACPI_STANDBY);
+             break;
+Only in usr/src/nv: nv.c~
+diff -u -r NVIDIA-Linux-x86-1.0-6111-pkg1.old/usr/src/nv/os-agp.c usr/src/nv/os-agp.c
+--- NVIDIA-Linux-x86-1.0-6111-pkg1.old/usr/src/nv/os-agp.c	2004-07-27 17:33:20.000000000 +0200
++++ usr/src/nv/os-agp.c	2004-10-21 15:42:24.000000000 +0200
+@@ -331,10 +331,10 @@
+     agp_addr = agpinfo.aper_base + (agp_data->offset << PAGE_SHIFT);
+ 
+ #if defined(NVCPU_IA64)
+-    err = NV_REMAP_PAGE_RANGE(vma->vm_start, (size_t) agp_addr, 
++    err = NV_REMAP_RANGE(vma->vm_start, (size_t) agp_addr, 
+                        agp_data->num_pages << PAGE_SHIFT, vma->vm_page_prot);
+ #else
+-    err = NV_REMAP_PAGE_RANGE(vma->vm_start, (size_t) agp_addr, 
++    err = NV_REMAP_RANGE(vma->vm_start, (size_t) agp_addr, 
+                        agp_data->num_pages << PAGE_SHIFT, PAGE_SHARED);
+ #endif
+         
+diff -u -r NVIDIA-Linux-x86-1.0-6111-pkg1.old/usr/src/nv/os-interface.c usr/src/nv/os-interface.c
+--- NVIDIA-Linux-x86-1.0-6111-pkg1.old/usr/src/nv/os-interface.c	2004-07-27 17:33:20.000000000 +0200
++++ usr/src/nv/os-interface.c	2004-10-21 15:42:24.000000000 +0200
+@@ -1087,7 +1087,7 @@
+ 
+     vma = (struct vm_area_struct *) *priv;
+ 
+-    if (NV_REMAP_PAGE_RANGE(vma->vm_start,
++    if (NV_REMAP_RANGE(vma->vm_start,
+                 start & PAGE_MASK, size_bytes, PAGE_SHARED))
+         return NULL;
+ 
