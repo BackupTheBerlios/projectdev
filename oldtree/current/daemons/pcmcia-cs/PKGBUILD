@@ -1,9 +1,9 @@
-# $Id: PKGBUILD,v 1.1 2004/11/17 18:26:17 blokkie Exp $
+# $Id: PKGBUILD,v 1.2 2004/11/17 18:27:05 blokkie Exp $
 # Arch Maintainer: dorphell <dorphell@archlinux.org>
 # Maintainer: blokkie <t.fernagut@burningfrog.be>
 pkgname=pcmcia-cs
 pkgver=3.2.7
-pkgrel=2
+pkgrel=1
 pkgdesc="A complete PCMCIA support package"
 url="http://pcmcia-cs.sourceforge.net"
 depends=('glibc')
