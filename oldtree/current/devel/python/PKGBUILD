@@ -1,0 +1,20 @@
+# $Id: PKGBUILD,v 1.1 2004/11/16 10:44:58 blokkie Exp $
+# Maintainer: dorphell <dorphell@archlinux.org>
+pkgname=python
+pkgver=2.3.4
+pkgrel=2
+pkgdesc="A high-level scripting language"
+url="http://www.python.org"
+depends=('db' 'bzip2' 'gdbm' 'openssl')
+makedepends=('tk')
+source=(ftp://ftp.python.org/pub/python/$pkgver/Python-$pkgver.tgz)
+md5sums=('b6cf0b19226861a38689d2fabd0931b3')
+
+build() {
+  cd $startdir/src/Python-$pkgver
+  ./configure --prefix=/usr --with-threads
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  rm $startdir/pkg/usr/bin/python2.3
+  (cd $startdir/pkg/usr/bin && ln -s python python2.3)
+}
