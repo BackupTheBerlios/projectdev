@@ -1,16 +1,16 @@
-# $Id: PKGBUILD,v 1.8 2004/11/16 14:36:15 blokkie Exp $
+# $Id: PKGBUILD,v 1.9 2004/11/22 17:45:22 blokkie Exp $
 # Arch Maintainer: judd <jvinet@zeroflux.org>
 # Maintainer: blokkie <t.fernagut@burningfrog.be>
 pkgname=kernel26
 pkgver=2.6.9
-pkgrel=2
+pkgrel=3
 pkgdesc="The Linux Kernel and modules (IDE support)"
 url="http://www.kernel.org"
 backup=('boot/kconfig26')
 depends=('module-init-tools')
 install=kernel26.install
 source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$pkgver.tar.bz2 \
-  config cdburning.patch logo_linux_clut224.ppm \
+  config cdburning.patch projectdev_logo.ppm \
   http://ck.kolivas.org/patches/2.6/2.6.9/2.6.9-ck2/patches/vm-pages_scanned-active_list.patch \
   http://dev.gentoo.org/~spock/projects/gensplash/current/fbsplash-0.9-r8-2.6.9.patch)
 md5sums=('e921200f074ca97184e150ef5a4af825' 'c6cc10b3c9e06757e1c012ae148d33d3'\
@@ -25,8 +25,8 @@ build() {
   # A nasty bug that caused kswapd to get stuck consuming heaps of cpu
   # which was in mainline 2.6.9, fixed by this patch
   patch -Np1 -i ../vm-pages_scanned-active_list.patch || return 1
-  # Arch logo!
-  cp ../logo_linux_clut224.ppm drivers/video/logo/
+  # Project-dEv logo!
+  cp ../projectdev_logo.ppm drivers/video/logo/
   # get rid of the 'i' in i686
   carch=`echo $CARCH | sed 's|i||'`
   cat ../config | sed "s|#CARCH#|$carch|g" >./.config
