@@ -1,4 +1,4 @@
-# $Id: PKGBUILD,v 1.6 2004/11/16 11:42:49 dpb Exp $
+# $Id: PKGBUILD,v 1.7 2004/11/16 11:59:08 dpb Exp $
 # Arch Maintainer: judd <jvinet@zeroflux.org>
 # Maintainer: blokkie <t.fernagut@burningfrog.be>
 pkgname=kernel26
@@ -13,12 +13,9 @@ source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$pkgver.tar.bz2 \
   config cdburning.patch logo_linux_clut224.ppm \
   http://ck.kolivas.org/patches/2.6/2.6.9/2.6.9-ck2/patches/vm-pages_scanned-active_list.patch \
   http://dev.gentoo.org/~spock/projects/gensplash/current/fbsplash-0.9-r8-2.6.9.patch)
-
-md5sums=('e921200f074ca97184e150ef5a4af825' '08fb644cb1b4ff597cd984c6f717425d'\
+md5sums=('e921200f074ca97184e150ef5a4af825' 'c6cc10b3c9e06757e1c012ae148d33d3'\
          '66b87662e6dd54b6324f874739fa1b99' '5a62bcc7e96601052c7405459b483826'\
-         'a335804f3fb7de9ef690167d5d5cd2a4' '73141763e84cde8710d12dc14a630da4')
-
-
+         'a335804f3fb7de9ef690167d5d5cd2a4' 'c94df3e2b081db992773f962ce7ddeb4')
 
 build() {
   cd $startdir/src/linux-$pkgver
