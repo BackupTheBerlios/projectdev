@@ -7,7 +7,7 @@ pkgrel=3
 pkgdesc="A fast, flexible, and very extensible Window Manager"
 url="http://www.enlightenment.org"
 depends=('x-server' 'esd' 'imlib2-cvs' 'perl')
-source=(http://telia.dl.sourceforge.net/sourceforge/$pkgname/enlightenment-$pkgver.tar.gz \
+source=(http://dl.sourceforge.net/sourceforge/enlightenment/enlightenment-$pkgver.tar.gz \
         e16.desktop)
 md5sums=('1439839c3023914a62f8254cc31085fc' '0aa47865d74d9104a624ab7e817546b1')
 
