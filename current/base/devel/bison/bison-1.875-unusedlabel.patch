@@ -1,0 +1,62 @@
+2003-01-21  Paul Eggert  <eggert@twinsun.com>
+
+	* data/yacc.c (YYERROR): Move code from yyerrlab1 to here, so that
+	we don't need to worry about yyerrlab1 being reported as an
+	"unused label" by non-GCC C compilers.  The downside is that if
+	locations are used then a couple of statements are duplicated each
+	time YYERROR is invoked, but the upside is that the warnings
+	should vanish.
+	(yyerrlab1): Move code to YERROR.
+	(yyerrlab2): Remove.  Change uses back to yyerrlab1.
+	This reverts some of the 2002-12-27 change.
+
+--- bison-1.875/data/yacc.c.unusedlabel
++++ bison-1.875/data/yacc.c
+@@ -465,7 +465,15 @@
+ 
+ #define YYACCEPT	goto yyacceptlab
+ #define YYABORT		goto yyabortlab
+-#define YYERROR		goto yyerrlab1
++#define YYERROR		]b4_location_if([do				\
++			  {				\
++			    yylerrsp = yylsp;		\
++			    *++yylerrsp = yyloc;	\
++			    goto yyerrlab1;		\
++			  }				\
++			while (0)],
++			[goto yyerrlab1])[
++
+ 
+ /* Like YYERROR except do call yyerror.  This remains here temporarily
+    to ease the transition to the new meaning of YYERROR, for GCC.
+@@ -1103,29 +1111,13 @@
+ 
+   /* Else will try to reuse lookahead token after shifting the error
+      token.  */
+-  goto yyerrlab2;
++  goto yyerrlab1;
+ 
+ 
+ /*----------------------------------------------------.
+ | yyerrlab1 -- error raised explicitly by an action.  |
+ `----------------------------------------------------*/
+ yyerrlab1:
+-
+-  /* Suppress GCC warning that yyerrlab1 is unused when no action
+-     invokes YYERROR.  */
+-#if defined (__GNUC_MINOR__) && 2093 <= (__GNUC__ * 1000 + __GNUC_MINOR__)
+-  __attribute__ ((__unused__))
+-#endif
+-
+-]b4_location_if([  yylerrsp = yylsp;
+-  *++yylerrsp = yyloc;])[
+-  goto yyerrlab2;
+-
+-
+-/*---------------------------------------------------------------.
+-| yyerrlab2 -- pop states until the error token can be shifted.  |
+-`---------------------------------------------------------------*/
+-yyerrlab2:
+   yyerrstatus = 3;	/* Each real token shifted decrements this.  */
+ 
+   for (;;)

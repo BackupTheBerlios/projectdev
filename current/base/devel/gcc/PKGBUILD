@@ -1,0 +1,47 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 16:45:17 rensel Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=gcc
+pkgver=3.4.2
+pkgrel=1
+pkgdesc="The GNU Compiler Collection"
+url="http://gcc.gnu.org"
+depends=('glibc' 'binutils')
+conflicts=('gcc-compat')
+source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-$pkgver/$pkgname-$pkgver.tar.bz2 \
+  ftp://gcc.gnu.org/pub/gcc/releases/gcc-3.3.3/gcc-3.3.3.tar.gz)
+md5sums=('2fada3a3effd2fd791df09df1f1534b3' '9615e03f5f4f00bf550ef8d340b5f4d2')
+
+build() {
+  # build backward-compatible libstdc++ library
+  #  (unfortunately, it seems we have to build the whole thing
+  #   to get the libstdc++ libraries)
+  cd $startdir/src/gcc-3.3.3
+  mkdir ../gcc-build
+  cd ../gcc-build
+  ../gcc-3.3.3/configure --prefix=/usr --enable-shared \
+     --enable-languages=c,c++,objc --enable-threads=posix --enable-__cxa_atexit
+  make bootstrap || return 1
+  make DESTDIR=$startdir/pkg install || return 1
+  # remove everything but the libstdc++ libs
+  rm -rf $startdir/pkg/lib $startdir/pkg/usr/{bin,include,man,share}
+  cd $startdir/pkg/usr/lib
+  rm -rf gcc-lib libgcc* libobjc* libsupc* libiberty*
+  rm -f libstdc++.{so,a,la}
+  rm -rf $startdir/src/gcc-build
+
+  # now build the new (current) version
+  cd $startdir/src/gcc-$pkgver
+  mkdir ../gcc-build
+  cd ../gcc-build
+  ../gcc-$pkgver/configure --prefix=/usr --enable-shared \
+     --enable-languages=c,c++,objc --enable-threads=posix --enable-__cxa_atexit
+  make bootstrap || return 1
+  make DESTDIR=$startdir/pkg install || return 1
+  rm -rf $startdir/pkg/usr/bin/c++filt $startdir/pkg/usr/lib/libiberty.a
+  mkdir -p $startdir/pkg/lib
+  (cd $startdir/pkg/lib; ln -s ../usr/bin/cpp)
+  (cd $startdir/pkg/usr/bin; ln -sf gcc cc; ln -sf g++ c++)
+  # get rid of the references to my build dir
+  sed -i "s|-L$startdir/src[^ ]* ||g" $startdir/pkg/usr/lib/{libstdc++.la,libsupc++.la}
+  chmod 644 $startdir/pkg/usr/lib/*.la
+}

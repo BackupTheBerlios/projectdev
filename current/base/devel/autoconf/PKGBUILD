@@ -1,0 +1,17 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 16:45:17 rensel Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=autoconf
+pkgver=2.59
+pkgrel=1
+pkgdesc="A GNU tool for automatically configuring source code"
+url="http://www.gnu.org/software/autoconf"
+depends=('mawk' 'm4' 'diffutils' 'bash')
+source=(ftp://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$pkgver.tar.gz)
+md5sums=('d4d45eaa1769d45e59dcb131a4af17a0')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make prefix=$startdir/pkg/usr install
+}
