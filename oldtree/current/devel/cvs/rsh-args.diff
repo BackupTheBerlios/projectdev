@@ -1,0 +1,21 @@
+diff -Naur orig/cvs-1.11.17/src/client.c cvs-1.11.17/src/client.c
+--- orig/cvs-1.11.17/src/client.c	2004-04-26 09:57:53.000000000 -0500
++++ cvs-1.11.17/src/client.c	2004-09-06 02:21:48.000000000 -0500
+@@ -4810,11 +4810,14 @@
+     sprintf (command, "%s server", cvs_server);
+ 
+     {
+-        const char *argv[10];
++        const char *argv[30];
+ 	const char **p = argv;
+ 
+-	*p++ = cvs_rsh;
+-
++	/* Check for flags in CVS_RSH */
++	*p++ = strtok(cvs_rsh, " ");
++	while (*p = strtok(0, " ")) {
++	    *p++;
++	}
+ 	/* If the login names differ between client and server
+ 	 * pass it on to rsh.
+ 	 */
