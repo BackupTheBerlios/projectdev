@@ -1,4 +1,4 @@
-# $Id: PKGBUILD,v 1.4 2004/11/13 12:42:39 rensel Exp $
+# $Id: PKGBUILD,v 1.5 2004/12/02 18:22:45 blokkie Exp $
 # Based on the Arch Linux filesystem 0.7-3 by Judd Vinet
 # Edited for Project dEv: Daniel Bainton <dpb [at] backarrow.org>
 
@@ -50,8 +50,7 @@ build() {
 
   echo ". \$HOME/.bashrc" >$startdir/pkg/root/.bash_profile
   echo "alias ls='ls --color=auto'" >$startdir/pkg/root/.bashrc
-  echo "PS1='[\u@\h \W]\\$ '" >>$startdir/pkg/root/.bashrc
-
+  echo "PS1='_-\[\e[32;1m\][\[\e[32;1m\]\u@\h \[\e[37m\] \w\[\e[32;1m\] ]\[\e[0m\]-_ '" >>$startdir/pkg/root/.bashrc
   mkdir -p $startdir/pkg/etc/skel
   cp $startdir/pkg/root/{.bashrc,.bash_profile} $startdir/pkg/etc/skel
   cp $startdir/src/xinitrc $startdir/pkg/etc/skel/.xinitrc
