@@ -1,5 +1,6 @@
-# $Id: PKGBUILD,v 1.4 2004/11/10 19:41:10 blokkie Exp $
-# Maintainer: judd <jvinet@zeroflux.org>
+# $Id: PKGBUILD,v 1.5 2004/11/10 19:42:11 blokkie Exp $
+# Arch Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: blokkei <t.fernagut@burningfrog.be>
 pkgname=automake
 pkgver=1.9.2
 pkgrel=1
