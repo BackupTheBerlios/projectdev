@@ -1,0 +1,19 @@
+# $Id: PKGBUILD,v 1.1 2004/11/04 19:59:35 blokkie Exp $
+# Arch Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+# Committer: Judd Vinet <jvinet@zeroflux.org>
+pkgname=freetype1
+pkgver=1.3.1
+pkgrel=1
+pkgdesc="TrueType font rendering library"
+depends=('glibc')
+source=(ftp://ftp.freetype.org/freetype/freetype1/freetype-$pkgver.tar.gz freetype-$pkgver.patch.bz2)
+
+build() {
+  bzip2 -d freetype-$pkgver.patch.bz2
+  cd $startdir/src/freetype-$pkgver
+  patch -Np1 -i ../freetype-$pkgver.patch
+  ./configure --prefix=/usr
+  make || return 1
+  make libdir=$startdir/pkg/usr/lib includedir=$startdir/pkg/usr/include install
+}
