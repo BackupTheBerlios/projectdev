@@ -1,4 +1,4 @@
-# $Id: PKGBUILD,v 1.4 2005/01/07 11:44:13 dpb Exp $
+# $Id: PKGBUILD,v 1.5 2005/01/07 12:11:06 dpb Exp $
 # Arch Maintainer: judd <jvinet@zeroflux.org>
 # Maintainer: Daniel Bainton <dpb@backarrow.org>
 
@@ -13,15 +13,16 @@ makedepends=('libtar')
 install=pacman.install
 source=(ftp://ftp.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz \
   http://www.archlinux.org/pacman/sortmirrors.pl devcheck \
-  base cvs desktop extra pacman.conf devcheck.conf)
+  base cvs desktop extra pacman.conf devcheck.conf makepkg.patch)
 md5sums=('571fd0297ddb05280fe7c46edbd7c234' '005d82a4832b5273450e556f30010414'\
          '767f254525c6083c1faf11827870c790' 'aeeef3ae747e62dd9802e95a3e3156d9'\
          '4769e7c65e4bc17315c0887333582a3e' '7b384b98e38990988c60969c6ddceb4e'\
          '3f5dbf649720906bb8dc4a0f0a211f77' '0457e8960ebdaaa9083a1832d758df28'\
-         'aaeb28fc510d3dc800a11c2f654c5314')
+         'aaeb28fc510d3dc800a11c2f654c5314' '0003b24ba655759dc84a986232ae84ac')
 
 build() {
   cd $startdir/src/$pkgname-$pkgver
+  patch -Np1 -i ../../makepkg.patch scripts/makepkg
   ./configure --prefix=/usr
   make || return 1
   make DESTDIR=$startdir/pkg install

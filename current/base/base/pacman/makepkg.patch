@@ -1,0 +1,46 @@
+21c21
+< #
+---
+> #  
+28,29c28,29
+< # source Arch's abs.conf if it's present
+< [ -f /etc/abs/abs.conf ] && source /etc/abs/abs.conf
+---
+> # source pdev's devcheck.conf if it's present
+> [ -f /etc/devcheck.conf ] && source /etc/devcheck.conf
+127,129c127,129
+< 			# we look for each package name in $ABSROOT and build it.
+< 			if [ "$ABSROOT" = "" ]; then
+< 				error "The ABSROOT environment variable is not defined."
+---
+> 			# we look for each package name in $DEVROOT and build it.
+> 			if [ "$DEVROOT" = "" ]; then
+> 				error "The DEVROOT environment variable is not defined."
+135c135
+< 				candidates=`find $ABSROOT -type d -name "$dep"`
+---
+> 				candidates=`find $DEVROOT -type d -name "$dep"`
+137c137
+< 					error "Could not find \"$dep\" under $ABSROOT"
+---
+> 					error "Could not find \"$dep\" under $DEVROOT"
+189c189
+< 	echo "  -n, --nostrip    Do not strip binaries/libraries"
+---
+> 	echo "  -n, --strip      Strip binaries/libraries"
+212c212
+< NOSTRIP=0
+---
+> STRIP=0
+229c229
+< 		--nostrip)    NOSTRIP=1 ;;
+---
+> 		--strip)      STRIP=1 ;;
+259c259
+< 					n) NOSTRIP=1 ;;
+---
+> 					n) STRIP=1 ;;
+601c601
+< if [ "$NOSTRIP" = "0" ]; then
+---
+> if [ "$STRIP" = "0" ]; then
