@@ -1,4 +1,4 @@
-# $Id: PKGBUILD,v 1.1 2004/11/02 12:21:14 dpb Exp $
+### $Id: PKGBUILD,v 1.2 2004/11/02 17:36:01 dieterke Exp $
 # Based on the Arch Linux initscripts 0.7-7 by Judd Vinet
 # Edited for Project dEv: Daniel Bainton <dpb [at] backarrow.org>
 pkgname=initscripts
