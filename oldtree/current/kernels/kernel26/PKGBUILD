@@ -1,5 +1,6 @@
-# $Id: PKGBUILD,v 1.1 2004/11/04 13:45:29 blokkie Exp $
-# Maintainer: judd <jvinet@zeroflux.org>
+# $Id: PKGBUILD,v 1.2 2004/11/04 14:03:40 blokkie Exp $
+# Arch Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
 pkgname=kernel26
 pkgver=2.6.9
 pkgrel=1
