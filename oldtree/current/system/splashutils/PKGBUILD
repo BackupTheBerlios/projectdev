@@ -5,7 +5,8 @@ pkgrel=1
 pkgdesc="userspace utilities to control fbsplash"
 url="http://dev.gentoo.org/~spock/projects/gensplash/"
 depends=('libjpeg' 'libpng' 'perl')
-source=(http://dev.gentoo.org/~spock/projects/gensplash/archive/$pkgname-0.9-pre10.tar.bz2)
+source=(http://dev.gentoo.org/~spock/projects/gensplash/archive/$pkgname-0.9-pre10.tar.bz2 \
+	splash_install)
 md5sums=('20ab27ea8e02dc2efb6789cf53663ec8')
 
 build() {
@@ -15,4 +16,5 @@ build() {
   ln -s /usr/src/linux-`uname -r` linux
   make || return 1
   make DESTDIR=$startdir/pkg install
+  install -D -m755 ../splash_install $startdir/pkg/usr/bin/splash_install
 }
