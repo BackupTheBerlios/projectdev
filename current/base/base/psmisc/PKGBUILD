@@ -1,0 +1,20 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 16:36:14 rensel Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=psmisc
+pkgver=21.4
+pkgrel=1
+pkgdesc="Miscellaneous procfs tools"
+url="http://psmisc.sourceforge.net"
+depends=('glibc' 'ncurses')
+source=(http://download.sourceforge.net/$pkgname/$pkgname-$pkgver.tar.gz)
+md5sums=('8449269fdc8ae5d7d494df745e1180d3')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+# we use sysvinit's pidof program
+  rm -f $startdir/pkg/usr/man/man1/pidof.1
+  rm -f $startdir/pkg/usr/bin/pidof
+}

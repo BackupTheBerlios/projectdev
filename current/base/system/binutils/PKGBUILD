@@ -1,0 +1,17 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 16:24:02 rensel Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=binutils
+pkgver=2.15
+pkgrel=1
+pkgdesc="A set of programs to assemble and manipulate binary and object files"
+url="http://sources.redhat.com/binutils"
+depends=('glibc')
+source=(ftp://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$pkgver.tar.bz2)
+md5sums=('624e6b74983ac6b2960edaf2d522ca58')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr --enable-shared
+  make tooldir=$startdir/pkg/usr || return 1
+  make prefix=$startdir/pkg/usr tooldir=$startdir/pkg/usr install
+}

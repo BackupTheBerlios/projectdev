@@ -1,0 +1,25 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 16:34:58 rensel Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=pcmcia-cs
+pkgver=3.2.7
+pkgrel=1
+pkgdesc="A complete PCMCIA support package"
+url="http://pcmcia-cs.sourceforge.net"
+depends=('glibc')
+backup=(etc/pcmcia/{config.opts,ftl.opts,ide.opts,ieee1394.opts,memory.opts} \
+        etc/pcmcia/{network.opts,parport.opts,scsi.opts,serial.opts} \
+        etc/pcmcia/wireless.opts etc/conf.d/pcmcia)
+source=(http://telia.dl.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.gz pcmcia pcmcia.conf.d)
+md5sums=('e8498bdbe8ec2dde41fbddcf65cd900a' '69ea6c5c3a024f6f44050aa7a71cfeaa'\
+         'a462df28c6251b03916ca2729082647a')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  yes "" | ./Configure
+  make all || return 1
+  make PREFIX=$startdir/pkg install
+  rm -f $startdir/pkg/etc/rc.d/rc.pcmcia
+  install -m755 -D ../pcmcia $startdir/pkg/etc/rc.d/pcmcia
+  install -m644 -D ../pcmcia.conf.d $startdir/pkg/etc/conf.d/pcmcia
+}

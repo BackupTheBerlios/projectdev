@@ -1,0 +1,24 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 16:26:02 rensel Exp $
+# ArchMaintainer: judd <jvinet@zeroflux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=findutils
+pkgver=4.2.8
+pkgrel=2
+pkgdesc="GNU utilities to locate files"
+depends=('glibc' 'bash')
+url="http://www.gnu.org/software/findutils"
+source=(ftp://alpha.gnu.org/pub/gnu/findutils/findutils-$pkgver.tar.gz)
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make prefix=$startdir/pkg/usr install
+  rm -rf $startdir/pkg/usr/libexec
+
+  # remove locate utils (we use slocate instead)
+  rm -f $startdir/pkg/usr/bin/{locate,updatedb}
+  rm -f $startdir/pkg/usr/man/man1/{updatedb.1,locate.1}
+  rm -f $startdir/pkg/usr/man/man5/locatedb.5
+  rmdir $startdir/pkg/usr/var
+}

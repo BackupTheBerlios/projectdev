@@ -1,0 +1,22 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 16:28:45 rensel Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=less
+pkgver=382
+pkgrel=2
+pkgdesc="A terminal based program for viewing text files"
+url="http://www.greenwoodsoftware.com/less"
+depends=('ncurses' 'bash' 'file')
+source=(http://www.greenwoodsoftware.com/$pkgname/$pkgname-$pkgver.tar.gz \
+        zless)
+md5sums=('103fe4aef6297b93f0f73f38cc3b1bd7' '6a4a1b6624470e7eff689101ffeebf95')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make prefix=$startdir/pkg/usr install
+  cd $startdir/pkg/usr/bin/
+  mkdir -p ../../bin
+  mv $pkgname ../../bin/
+  install -D -m755 $startdir/src/zless $startdir/pkg/bin/zless
+}

@@ -1,0 +1,64 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 16:25:22 rensel Exp $
+# Based on the Arch Linux filesystem 0.7-3 by Judd Vinet
+# Edited for Project dEv: Daniel Bainton <dpb [at] backarrow.org>
+
+pkgname=filesystem
+pkgver=0.1
+pkgrel=4
+pkgdesc="Base filesystem"
+url="http://www.projectdev.org"
+install=filesystem.install
+depends=('bash')
+backup=(etc/fstab etc/group etc/hosts etc/ld.so.conf etc/passwd \
+        etc/shadow etc/resolv.conf etc/motd etc/nsswitch.conf etc/shells \
+        etc/host.conf etc/skel/.bashrc etc/skel/.bash_profile \
+        etc/skel/.xinitrc root/.bashrc root/.bash_profile)
+source=(group issue nsswitch.conf securetty host.conf ld.so.conf \
+        passwd shadow fstab hosts motd resolv.conf shells dev-release \
+        xinitrc)
+
+md5sums=('d18e87fb8764a89d1817b45ab49cdef4' '1a5a6be7f8fcc55f249bb31df6f78665'\
+         '775464ba7588b4976e0c2a02b83123f4' '655071da46d2ac03e0fb8a071bf193ea'\
+         'f28150d4c0b22a017be51b9f7f9977ed' 'c9133a049c9058a16d7782e40f5960d1'\
+         '66092badcb03e407809a3e12a2392fb0' 'c163cae617cbae36d1eb5546bdb59bcb'\
+         '382eadb1197f570c005b25aece97e3a5' '81b3cb42a6ddabc2ed2310511ee9c859'\
+         '8933c45205cc0617a4b7f2f057dd3d39' '6f48288b6fcaf0065fcb7b0e525413e0'\
+         '22518e922891f9359f971f4f5b4e793c' '5803e3762338f0c42d2a46a071a19f26'\
+         '7915ea577e5e1d0e2a8b20c80055205b')
+
+
+
+
+build() {
+  cd $startdir/pkg
+  mkdir -p bin boot dev etc home lib mnt proc root sbin tmp usr var opt sys
+  mkdir -p usr/{bin,include,lib,sbin,share/misc,src,man}
+  mkdir -p usr/man/man{1,2,3,4,5,6,7,8}
+  # fhs compliancy
+  mkdir -p usr/local/{bin,games,include,lib,man,sbin,share,src}
+  mkdir -p var/{cache/man,lib/pacman,projectdev,local,lock,opt,run,spool/mail,tmp}
+  mkdir -p var/log/old
+  mkdir -p etc/profile.d
+  mkdir -p home/ftp lib/modules
+  (cd $startdir/pkg/usr; ln -s ../var var)
+  (cd $startdir/pkg/var; ln -s spool/mail mail)
+
+  chown ftp.ftp home/ftp
+  chmod 1777 var/spool/mail tmp var/tmp
+  chmod 0750 root
+
+  cd $startdir/src
+  cp fstab group host.conf hosts issue ld.so.conf motd nsswitch.conf \
+    passwd resolv.conf securetty shadow shells dev-release $startdir/pkg/etc/
+  chmod 640 $startdir/pkg/etc/shadow
+
+  echo ". \$HOME/.bashrc" >$startdir/pkg/root/.bash_profile
+  echo "alias ls='ls --color=auto'" >$startdir/pkg/root/.bashrc
+  echo "PS1='_-\[\e[32;1m\][\[\e[32;1m\]\u@\h \[\e[37m\] \w\[\e[32;1m\] ]\[\e[0m\]-_ '" >>$startdir/pkg/root/.bashrc
+  mkdir -p $startdir/pkg/etc/skel
+  cp $startdir/pkg/root/{.bashrc,.bash_profile} $startdir/pkg/etc/skel
+  cp $startdir/src/xinitrc $startdir/pkg/etc/skel/.xinitrc
+  chmod 755 $startdir/pkg/etc/skel/.xinitrc
+
+  cat issue | sed "s/#VERSION#/$pkgver/" >$startdir/pkg/etc/issue
+}

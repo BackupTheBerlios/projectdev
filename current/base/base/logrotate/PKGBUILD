@@ -1,0 +1,19 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 16:30:23 rensel Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+# Committer: Judd Vinet <jvinet@zeroflux.org>
+pkgname=logrotate
+pkgver=3.6.5
+pkgrel=3
+pkgdesc="Rotates system logs automatically"
+depends=('popt' 'dcron' 'mailx')
+source=(ftp://ftp.archlinux.org/other/${pkgname}/${pkgname}-${pkgver}.tar.gz logrotate.conf logrotate.cron.daily)
+
+build() {
+  rm -rf ${startdir}/pkg/*
+  cd $startdir/src/${pkgname}-${pkgver}
+  make clean || return 1
+  make || return 1
+  make PREFIX=$startdir/pkg install
+  install -D -m644 ../logrotate.conf $startdir/pkg/etc/logrotate.conf
+  install -D -m744 ../logrotate.cron.daily $startdir/pkg/etc/cron.daily/logrotate
+}

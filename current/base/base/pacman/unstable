@@ -1,0 +1,5 @@
+#
+# The Unstable tree.  Contains unstable or development versions of packages.
+#
+#[unstable]
+#Server = ftp://saule.mintis.lt/pub/linux/unstable/os/i686

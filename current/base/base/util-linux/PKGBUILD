@@ -1,0 +1,31 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 16:39:44 rensel Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=util-linux
+pkgver=2.12
+pkgrel=3
+pkgdesc="Miscellaneous system utilities for Linux"
+depends=('bash' 'glibc' 'ncurses')
+source=(ftp://ftp.win.tue.nl/pub/home/aeb/linux-local/utils/util-linux/util-linux-2.12a.tar.gz \
+  losetup-combined.patch util-linux-2.12-kernel-2.6.patch)
+md5sums=('5fa39c3d8761b48732be137a06853c64' 'd45c5888429f47fabfbedff2a86640af'\
+         'd927611f34139a40f1fc9f4162c61f8a')
+
+# These patches allow cryptoloop on 2.6:
+#   http://www.stwing.org/~sluskyb/util-linux/losetup-combined.patch
+#   http://www.ece.cmu.edu/~rholzer/cryptoloop/util-linux-2.12-kernel-2.6.patch
+
+build() {
+  cd $startdir/src/$pkgname-2.12a
+  patch -Np1 -i ../util-linux-2.12-kernel-2.6.patch
+  patch -Np1 -i ../losetup-combined.patch
+  cp hwclock/hwclock.c hwclock/hwclock.c.backup
+  sed 's%etc/adjtime%var/lib/hwclock/adjtime%' \
+    hwclock/hwclock.c > tmp~
+  mv tmp~ hwclock/hwclock.c
+  mkdir -p $startdir/pkg/var/lib/hwclock
+  ./configure
+  make HAVE_SLN=yes ADD_RAW=yes || return 1
+  make HAVE_SLN=yes ADD_RAW=yes DESTDIR=$startdir/pkg install
+  rm -f $startdir/pkg/bin/kill
+  rm -f $startdir/pkg/usr/share/man/man1/kill.1
+}

@@ -1,0 +1,37 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 16:38:20 rensel Exp $
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+
+pkgname=udev
+pkgver=046
+pkgrel=2
+pkgdesc="The userspace dev tools (udev)"
+url="http://www.kernel.org/pub/linux/utils/kernel/hotplug/udev.html"
+depends=('coreutils')
+backup=(etc/udev/udev.conf etc/udev/permissions.d/udev.permissions \
+        etc/udev/rules.d/udev.rules etc/scsi_id.config)
+source=(http://www.kernel.org/pub/linux/utils/kernel/hotplug/$pkgname-$pkgver.tar.gz migrate-udev udev.rules udev.permissions)
+install=udev.install
+md5sums=('82660ff5d3b456179cf12d471d76d5e5' '49434a593918c822077bc3af765f1aff'\
+         '2fce912065a17fbf2679aae55e5e3e6f' '5bfd306807ac09256c090f501f5c17f7')
+
+
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  make || return 1
+  make INSTALL=/bin/install DESTDIR=$startdir/pkg install EXTRAS="extras/scsi_id"
+  rm -f $startdir/pkg/etc/udev/rules.d/50-udev.rules
+  rm -f $startdir/pkg/etc/udev/permissions.d/50-udev.permissions
+  install -D -m755 extras/start_udev $startdir/pkg/etc/start_udev
+  install -D -m755 extras/ide-devfs.sh $startdir/pkg/etc/udev/ide-devfs.sh
+  install -D -m755 extras/scsi-devfs.sh $startdir/pkg/etc/udev/scsi-devfs.sh
+  install -D -m755 ../migrate-udev $startdir/pkg/sbin/migrate-udev
+  install -D -m644 ../udev.rules $startdir/pkg/etc/udev/rules.d/udev.rules
+  install -D -m644 ../udev.permissions $startdir/pkg/etc/udev/permissions.d/udev.permissions
+
+  # The post install setup stuff, crazy udev developers
+  sed -i \
+    -e 's#udev_root="/udev/"#udev_root="/dev/"#' \
+    -e 's#udev_db="/udev/.udev.tdb"#udev_db="/dev/.udev.tdb"#' \
+    $startdir/pkg/etc/udev/udev.conf
+}

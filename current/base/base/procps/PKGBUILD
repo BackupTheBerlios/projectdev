@@ -1,0 +1,16 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 16:35:52 rensel Exp $
+# Maintainer: judd <jvinet@zeroflux.org>
+pkgname=procps
+pkgver=3.2.3
+pkgrel=1
+pkgdesc="Utilities for monitoring your system and processes on your system"
+url="http://procps.sf.net"
+depends=('ncurses')
+source=(http://procps.sourceforge.net/procps-$pkgver.tar.gz)
+md5sums=('5389800bf413e70365d982bac9438d31')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  make || return 1
+  make DESTDIR=$startdir/pkg ldconfig=/bin/true install
+}

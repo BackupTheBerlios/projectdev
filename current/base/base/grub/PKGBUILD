@@ -1,0 +1,26 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 16:27:18 rensel Exp $
+# Arch  Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=grub
+pkgver=0.95
+pkgrel=5
+pkgdesc="A GNU multiboot boot loader"
+url="http://www.gnu.org/software/grub/"
+depends=('ncurses')
+source=(ftp://alpha.gnu.org/gnu/grub/grub-$pkgver.tar.gz \
+  menu.lst install-grub)
+backup=('boot/grub/menu.lst')
+md5sums=('4ca8e4363d5f1980f2c63b7f5cdbe0d1' 'a4a73dc5475b02e610f29a6a4fe7596b'\
+         '3b108306c5e76968de9dc01216ba1ef7')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+# optimizations break the build -- disable them
+  CFLAGS= ./configure --prefix=/usr --bindir=/bin --sbindir=/sbin
+  CFLAGS= make || return 1
+  make prefix=$startdir/pkg/usr bindir=$startdir/pkg/bin \
+    sbindir=$startdir/pkg/sbin install
+  mkdir -p $startdir/pkg/boot/grub
+  cp ../menu.lst $startdir/pkg/boot/grub
+  install -m755 -D ../install-grub $startdir/pkg/sbin/install-grub
+}

@@ -1,0 +1,27 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 16:37:08 rensel Exp $
+# Arch Maintainer: Judd Vinet <jvinet@zeroflux.org>
+# Maintainer: Daniel Bainton <dpb@backarrow.org>
+pkgname=syslog-ng
+pkgver=1.6.5
+pkgrel=1
+pkgdesc="A portable syslogd replacement with enhanced, flexible configuration scheme."
+url="http://www.balabit.com/products/syslog_ng"
+makedepends=('flex' 'libol>=0.3.14')
+depends=('tcp_wrappers' 'logrotate')
+provides=('logger')
+backup=('etc/syslog-ng/syslog-ng.conf')
+source=(http://www.balabit.com/downloads/$pkgname/1.6/src/$pkgname-$pkgver.tar.gz \
+	syslog-ng.conf syslog-ng.logrotate syslog-ng)
+md5sums=('ce70b4230e73ad79191618530c8c3a72' '9380ddceb38794f8d66f42e9d025fb8c'\
+         '2f85df86d906ab4cdf59024a0a33d392' '7e14fecf3815e5fdc50f2817dc19720f')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr --sysconfdir=/etc \
+    --localstatedir=/var --enable-tcp-wrapper
+  make || return 1
+  make DESTDIR=$startdir/pkg install || return 1
+  install -D -m644 ../syslog-ng.conf $startdir/pkg/etc/syslog-ng/syslog-ng.conf
+  install -D -m644 ../syslog-ng.logrotate $startdir/pkg/etc/logrotate.d/syslog-ng
+  install -D -m755 ../syslog-ng $startdir/pkg/etc/rc.d/syslog-ng
+}

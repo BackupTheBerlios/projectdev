@@ -1,0 +1,18 @@
+# $Id: PKGBUILD,v 1.1 2004/12/03 16:29:36 rensel Exp $
+# Arch Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=libtool
+pkgver=1.5.10
+pkgrel=1
+pkgdesc="A generic library support script"
+url="http://www.gnu.org/software/libtool"
+depends=('bash')
+source=(ftp://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$pkgver.tar.gz)
+md5sums=('e2093a85f6d48f1562c36920087502d6')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+}

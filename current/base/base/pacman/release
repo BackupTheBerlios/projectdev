@@ -1,0 +1,9 @@
+#
+# The Release tree.  This tree is a snapshot view of the Current (core)
+# repository as it was when the last ISO was released.
+#
+# If you use the RELEASE tree, you should disable the CURRENT
+# tree to avoid conflicts
+#
+[release]
+Server = ftp://saule.mintis.lt/pub/linux/release/os/i686
