@@ -1,4 +1,4 @@
-# $Id: PKGBUILD,v 1.6 2004/11/04 15:41:37 dpb Exp $
+# $Id: PKGBUILD,v 1.7 2004/11/04 15:43:47 dpb Exp $
 # Maintainer: judd <jvinet@zeroflux.org>
 pkgname=pacman
 pkgver=2.9.2
@@ -10,15 +10,12 @@ backup=('etc/pacman.conf' 'etc/makepkg.conf' \
 makedepends=('libtar')
 install=pacman.install
 source=(ftp://ftp.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz \
-  http://www.archlinux.org/pacman/sortmirrors.pl \
-  supfile.current supfile.extra supfile.unstable devcheck \
+  http://www.archlinux.org/pacman/sortmirrors.pl devcheck \
   current release extra unstable)
 md5sums=('f73ed0d84573dfc8fdab541ce55447bd' '005d82a4832b5273450e556f30010414'\
-         '60a48a96b40cec638d52b09c0d014351' 'f83885f6c431e4e7f8b131fe444ac0d2'\
-         '9a44663da93a07c8df42741ea0e41930' '0025f9f786d50201951fc7444207a089'\
-         '0e858d0d4f366b055a21e9ad8a88be51' 'ce1c016a4f2744bad016bfb34c5b41d2'\
-         '318b31c1611f4a89172e6bf84691b7c2' '729f595e06cda73d1c0218ca0bad7c7a'\
-         'a6d98e7679f4d2de6aedc9862cc940ca' '16e9a835e75abc8d8a65987881e16ab2')
+         'ce1c016a4f2744bad016bfb34c5b41d2' '318b31c1611f4a89172e6bf84691b7c2'\
+         '729f595e06cda73d1c0218ca0bad7c7a' 'a6d98e7679f4d2de6aedc9862cc940ca'\
+         '16e9a835e75abc8d8a65987881e16ab2')
 
 build() {
   cd $startdir/src/$pkgname-$pkgver
