@@ -1,0 +1,22 @@
+# $Id: PKGBUILD,v 1.1 2004/11/17 18:30:12 blokkie Exp $
+# Contributer: Jason Chu <jchu@xentac.net>
+# Arch Maintainer: Jason Chu <jason@archlinux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=wireless_tools
+pkgver=26
+pkgrel=1
+pkgdesc="Wireless Tools"
+depends=('glibc')
+source=(http://pcmcia-cs.sourceforge.net/ftp/contrib/wireless_tools.$pkgver.tar.gz)
+md5sums=('a037f5c19ab8f3a89acb09e8cfd22d5b')
+url="http://pcmcia-cs.sourceforge.net/ftp/contrib/"
+
+build() {
+   cd $startdir/src/wireless_tools.$pkgver
+   make || return 1
+   mkdir -p $startdir/pkg/usr/sbin
+   mkdir -p $startdir/pkg/usr/lib
+   mkdir -p $startdir/pkg/usr/include
+   mkdir -p $startdir/pkg/usr/man/man8
+   make INSTALL_DIR=$startdir/pkg/usr/sbin/ INSTALL_LIB=$startdir/pkg/usr/lib/ INSTALL_INC=$startdir/pkg/usr/include/ INSTALL_MAN=$startdir/pkg/usr/man/ install
+}
