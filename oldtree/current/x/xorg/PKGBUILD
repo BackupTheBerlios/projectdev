@@ -1,0 +1,64 @@
+# $Id: PKGBUILD,v 1.1 2004/11/04 20:50:28 blokkie Exp $
+# Arch Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=xorg
+pkgver=11R6.8.1
+pkgrel=1
+pkgdesc="A fork of the XFree86 Project with a GPL-compatible license"
+url="http://www.x.org"
+depends=('glibc' 'freetype1' 'fontconfig' 'gcc' 'libpng')
+makedepends=('perl')
+conflicts=('ttf-bitstream-vera' 'xfree86')
+provides=('x-server' 'xfree86')
+replaces=('x')
+install=x.install
+source=(http://freedesktop.org/~xorg/X${pkgver}/src/X${pkgver}-src{1,2,3,4,5}.tar.gz \
+        http://www.joerg-pommnitz.de/TrueType/ttmkfdir.tar.gz xdm.pam \
+        libGL.la xorg.sh)
+md5sums=('e352319d423391ff2c03bb7f81fe8d2b' '6ba36becf1133c61a88c92e1d60c19ed'\
+         '8578e566e909e7c40300f44b6f0e88d3' '2316b7c7f6fd28f2d579d84205f5ea1b'\
+         'd96a6ea1fc46f5ba22ee801dc68967ca' 'dcf6aa4d28f5c52acf2bb57f49f53089'\
+         '419d6289ba6f851135f5c70c0e3cbec4' '6b4052cf6d50cbd2854ebd3409f02695'\
+         '8990eac16981daf7037abcc0eef31db7')
+
+build() {
+  cd $startdir/src
+  make FREETYPE_INCL=/usr/include/freetype || return 1
+  install -D ttmkfdir $startdir/pkg/usr/X11R6/bin/ttmkfdir
+
+  cd $startdir/src/xc
+  # build fixes
+  sed -i 's|$(HARDCOPYDIR)||g' doc/Imakefile || return 1
+  echo $'#define HasZlib YES\n' >config/cf/host.def
+  echo $'#define HasNCurses YES\n' >>config/cf/host.def
+  echo $'#define HasFontconfig YES\n' >>config/cf/host.def
+  echo $'#define HasFreetype2 YES\n' >>config/cf/host.def
+  echo $'#define HasExpat YES\n' >>config/cf/host.def
+  make World || return 1
+  make DESTDIR=$startdir/pkg install
+  rm -f programs/xkbcomp/rules/xfree86*
+  make DESTDIR=$startdir/pkg install.man
+  (cd $startdir/pkg/usr/include && ln -sf ../X11R6/include/X11 X11)
+  (cd $startdir/pkg/usr/include && ln -sf ../X11R6/include/GL GL)
+
+  # exorcise the SysV demons and set up environment stuff
+  rm -rf $startdir/pkg/etc/rc.d/rc?.d
+  rm -f $startdir/pkg/etc/profile.d/xprint.csh
+  mv $startdir/pkg/etc/init.d/xprint $startdir/pkg/etc/rc.d/xprint
+  rmdir $startdir/pkg/etc/init.d
+
+  # get the pkgconfig .pc files in the right place
+  mkdir -p $startdir/pkg/usr/lib/pkgconfig
+  mv $startdir/pkg/usr/X11R6/lib/pkgconfig/* $startdir/pkg/usr/lib/pkgconfig
+  # create a libXinerama.so
+  #cd $startdir/pkg/usr/X11R6/lib
+  #ld --whole-archive -share -o libXinerama.so.1 libXinerama.a
+  #ln -s libXinerama.so.1 libXinerama.so
+  install -d -m755 $startdir/pkg/etc/xdg
+  install -D -m644 $startdir/src/xdm.pam $startdir/pkg/etc/pam.d/xdm
+  install -D -m755 $startdir/src/xorg.sh $startdir/pkg/etc/profile.d/xorg.sh
+  install -D -m644 $startdir/src/libGL.la $startdir/pkg/usr/lib/libGL.la
+  # XKB compatibility for kde/gnome
+  cd $startdir/pkg/usr/X11R6/lib/X11/xkb/rules/
+  ln -s xorg.xml xfree86.xml
+}
