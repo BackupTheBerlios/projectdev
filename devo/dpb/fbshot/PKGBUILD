@@ -1,0 +1,18 @@
+# $Id: PKGBUILD,v 1.1 2005/01/19 11:44:24 dpb Exp $
+# Maintainer: Daniel Bainton <dpb@backarrow.org>
+pkgname=fbshot
+pkgver=0.3
+pkgrel=1
+pkgdesc="screenshot taker for the linux framebuffer"
+url="http://www.sfires.net/fbshot/"
+depends=('libpng')
+source=(http://www.sfires.net/stuff/fbshot/$pkgname-$pkgver.tar.gz)
+md5sums=('2cc6cc25cdc4cd447a8b0a9662907635')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  make || return 1
+  mkdir -p $startdir/pkg/usr/bin $startdir/pkg/usr/man/man1
+  install fbshot $startdir/pkg/usr/bin/fbshot
+  install fbshot.1.man $startdir/pkg/usr/man/man1/fbshot.1
+}
