@@ -1,0 +1,25 @@
+# $Id: PKGBUILD,v 1.1 2004/11/17 12:13:00 dpb Exp $
+# Arch Maintainer: eric <eric@archlinux.org>
+# Maintainer: Daniel Bainton <dpb@backarrow.org>
+
+pkgname=lua 
+pkgver=5.0.2
+pkgrel=1
+pkgdesc="A powerful light-weight programming language designed for extending applications." 
+url="http://www.lua.org/" 
+depends=(glibc) 
+source=($url/ftp/$pkgname-$pkgver.tar.gz) 
+md5sums=('e515b9a12d129eaa52f88b9686e0b6a1')
+
+build() { 
+  /bin/mkdir $startdir/pkg/usr
+  cd $startdir/src/$pkgname-$pkgver 
+  ./configure
+  /bin/sed -i -e "/#LOADLIB= -DUSE_DLOPEN=1/c LOADLIB= -DUSE_DLOPEN=1" config
+  /bin/sed -i -e "/#DLLIB= -ldl/c DLLIB= -ldl" config
+  /bin/sed -i -e "s|INSTALL_ROOT= /usr/local|INSTALL_ROOT= /usr|" config
+  /usr/bin/make || return 1 
+  /usr/bin/make so || return 1
+  /usr/bin/make INSTALL_ROOT=$startdir/pkg/usr install 
+  /usr/bin/make INSTALL_ROOT=$startdir/pkg/usr soinstall
+}
