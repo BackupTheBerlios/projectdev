@@ -1,7 +1,7 @@
-# $Id: PKGBUILD,v 1.1 2004/11/02 13:04:40 dpb Exp $
+# $Id: PKGBUILD,v 1.2 2004/11/10 19:18:39 blokkie Exp $
 # Maintainer: judd <jvinet@zeroflux.org>
 pkgname=automake
-pkgver=1.9.2
+pkgver=1.8.5
 pkgrel=1
 pkgdesc="A GNU tool for automatically creating Makefiles"
 url="http://www.gnu.org/software/automake"
