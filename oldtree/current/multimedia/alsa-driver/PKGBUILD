@@ -1,0 +1,24 @@
+# $Id: PKGBUILD,v 1.1 2004/11/16 19:05:55 blokkie Exp $
+# Arch Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+pkgname=alsa-driver
+pkgver=1.0.6a
+pkgrel=1
+pkgdesc="An alternative implementation of Linux sound support"
+url="http://www.alsa-project.org"
+depends=('glibc')
+source=(ftp://ftp.alsa-project.org/pub/driver/$pkgname-${pkgver}.tar.bz2)
+md5sums=('e5baf4561d250c2bdee62332b216c5fc')
+
+build() {
+  cd $startdir/src/$pkgname-${pkgver}
+  cd utils
+  sed -i 's|/usr/bin/awk|/bin/awk|g' convert_isapnp_ids
+  cd ..
+  ./configure --prefix=/usr 
+  # make GCC 3.4 play nice
+  sed -i 's|\-pipe|\-pipe -fno-unit-at-a-time|g' Makefile.conf
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  rm -rf $startdir/pkg/lib/modules/2.4*/modules.*
+}
