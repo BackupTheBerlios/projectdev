@@ -1,0 +1,33 @@
+# load defaults from src tarball
+. $topsrcdir/mail/config/mozconfig
+# add our own options
+ac_add_options --prefix=/opt/mozilla-thunderbird 
+ac_add_options --with-default-mozilla-five-home=/opt/mozilla-thunderbird
+ac_add_options --with-user-appdir=.mozilla-thunderbird
+ac_add_options --enable-crypto 
+ac_add_options --enable-optimize="#CFLAGS#" 
+ac_add_options --enable-official-branding
+ac_add_options --disable-debug
+ac_add_options --disable-tests
+ac_add_options --disable-logging
+ac_add_options --disable-installer
+ac_add_options --disable-mathml 
+ac_add_options --disable-activex 
+ac_add_options --disable-activex-scripting 
+ac_add_options --enable-strip
+ac_add_options --enable-xft
+ac_add_options --ensable-toolkit-gtk
+ac_add_options --disable-toolkit-xlib
+ac_add_options --disable-toolkit-qt
+ac_add_options --disable-necko-disk-cache
+ac_add_options --enable-single-profile
+ac_add_options --disable-profilesharing
+ac_add_options --enable-extensions=wallet,spellcheck
+ac_add_options --enable-necko-protocols=http,file,jar,viewsource,res,data
+ac_add_options --enable-image-decoders=png,gif,jpeg 
+ac_add_options --with-system-jpeg
+ac_add_options --with-system-zlib
+ac_add_options --with-system-png 
+ac_add_options --with-system-mng
+ac_add_options --with-pthreads
+ac_add_options --disable-pedantic
