@@ -1,0 +1,14 @@
+diff -Naur linux-2.6.8.1-orig/drivers/block/scsi_ioctl.c linux-2.6.8.1/drivers/block/scsi_ioctl.c
+--- linux-2.6.8.1-orig/drivers/block/scsi_ioctl.c	2004-08-14 03:56:23.000000000 -0700
++++ linux-2.6.8.1/drivers/block/scsi_ioctl.c	2004-08-21 09:38:53.000000000 -0700
+@@ -193,8 +193,8 @@
+ 		return -EINVAL;
+ 	if (copy_from_user(cmd, hdr->cmdp, hdr->cmd_len))
+ 		return -EFAULT;
+-	if (verify_command(file, cmd))
+-		return -EPERM;
++	/*if (verify_command(file, cmd))
++		return -EPERM;*/
+ 
+ 	/*
+ 	 * we'll do that later
