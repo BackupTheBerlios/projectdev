@@ -1,4 +1,4 @@
-# $Id: PKGBUILD,v 1.9 2004/11/22 17:45:22 blokkie Exp $
+# $Id: PKGBUILD,v 1.10 2004/11/22 17:51:22 blokkie Exp $
 # Arch Maintainer: judd <jvinet@zeroflux.org>
 # Maintainer: blokkie <t.fernagut@burningfrog.be>
 pkgname=kernel26
@@ -9,13 +9,16 @@ url="http://www.kernel.org"
 backup=('boot/kconfig26')
 depends=('module-init-tools')
 install=kernel26.install
-source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$pkgver.tar.bz2 \
+source=(ftp://ftp.de.kernel.org/pub/linux/kernel/v2.6/linux-$pkgver.tar.bz2 \
   config cdburning.patch projectdev_logo.ppm \
   http://ck.kolivas.org/patches/2.6/2.6.9/2.6.9-ck2/patches/vm-pages_scanned-active_list.patch \
   http://dev.gentoo.org/~spock/projects/gensplash/current/fbsplash-0.9-r8-2.6.9.patch)
+
 md5sums=('e921200f074ca97184e150ef5a4af825' 'c6cc10b3c9e06757e1c012ae148d33d3'\
-         '66b87662e6dd54b6324f874739fa1b99' '5a62bcc7e96601052c7405459b483826'\
+         '66b87662e6dd54b6324f874739fa1b99' 'f03091c6f6611759c8c86b0a74ddba2e'\
          'a335804f3fb7de9ef690167d5d5cd2a4' 'c94df3e2b081db992773f962ce7ddeb4')
+
+
 
 build() {
   cd $startdir/src/linux-$pkgver
