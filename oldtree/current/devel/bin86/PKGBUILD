@@ -1,0 +1,18 @@
+# $Id: PKGBUILD,v 1.1 2004/11/05 08:50:34 dpb Exp $
+# Arch Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: Daniel Bainton <dpb@backarrow.org>
+pkgname=bin86
+pkgver=0.16.16
+pkgrel=1
+pkgdesc="A complete 8086 assembler and loader"
+url="http://www.cix.co.uk/~mayday"
+depends=('glibc')
+source=(http://www.cix.co.uk/~mayday/dev86/$pkgname-$pkgver.tar.gz)
+md5sums=('48c56be9792b26702805cb59471c99e5')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  make PREFIX=/usr || return 1
+  mkdir -p $startdir/pkg/usr/bin $startdir/pkg/usr/man/man1
+  make PREFIX=$startdir/pkg/usr install
+}
