@@ -1,4 +1,4 @@
-# $Id: PKGBUILD,v 1.1 2004/11/17 12:13:00 dpb Exp $
+# $Id: PKGBUILD,v 1.2 2004/11/17 13:12:25 dpb Exp $
 # Arch Maintainer: eric <eric@archlinux.org>
 # Maintainer: Daniel Bainton <dpb@backarrow.org>
 
@@ -9,8 +9,7 @@ pkgdesc="A powerful light-weight programming language designed for extending app
 url="http://www.lua.org/" 
 depends=(glibc) 
 source=($url/ftp/$pkgname-$pkgver.tar.gz) 
-md5sums=('e515b9a12d129eaa52f88b9686e0b6a1')
-
+md5sums=('dea74646b7e5c621fef7174df83c34b1')
 build() { 
   /bin/mkdir $startdir/pkg/usr
   cd $startdir/src/$pkgname-$pkgver 
