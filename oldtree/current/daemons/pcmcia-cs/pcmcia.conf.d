@@ -1,0 +1,8 @@
+# PCMCIA
+#
+# Should be either i82365 or tcic
+PCIC=i82365
+PCIC_OPTS=
+CORE_OPTS=
+CARDMGR_OPTS=
+SCHEME=
