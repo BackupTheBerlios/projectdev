@@ -1,0 +1,31 @@
+# $Id: PKGBUILD,v 1.1 2004/11/02 12:21:14 dpb Exp $
+# Based on the Arch Linux initscripts 0.7-7 by Judd Vinet
+# Edited for Project dEv: Daniel Bainton <dpb [at] backarrow.org>
+pkgname=initscripts
+pkgver=0.1
+pkgrel=1
+pkgdesc="System initialization/bootup scripts"
+backup=(etc/inittab etc/rc.conf etc/rc.local)
+depends=('bash' 'mawk' 'grep' 'coreutils' 'sed')
+source=(functions inittab rc.conf rc.local rc.multi rc.shutdown \
+        rc.single rc.sysinit network minilogd.c netfs)
+md5sums=('a54daa1c9ded63b9e95b4a3b8676987b' '462acc0a5a403777d86f467285eea5d0'\
+         '607abc8f498109dc16c460cb40a2a0da' '10d015f35686314cd37f24683dfd1f79'\
+         '2660d8f21bf06737d3a3d6fea973cedf' '8371345c492f079fa93044b9b9155842'\
+         'c3c69787d35280a71e35c0079803c666' '31c9cd0080ab0ee9a7f9f2e7f902ed67'\
+         'be0bbe1c4d0af9f707b57b787cf031b0' '25056103268254a561065604bd432313'\
+         'ae84a7da3136c1bb32c6b7631425e91f')
+
+build() {
+  mkdir -p $startdir/pkg/etc/{rc.d,conf.d}
+  install -D -m644 functions $startdir/pkg/etc/rc.d/functions
+  install -D -m644 inittab $startdir/pkg/etc/inittab
+  install -D -m644 rc.conf $startdir/pkg/etc/rc.conf
+  for i in rc.local rc.multi rc.shutdown rc.single rc.sysinit; do
+    install -D -m755 $i $startdir/pkg/etc/$i
+  done
+  install -D -m755 network $startdir/pkg/etc/rc.d/network
+  install -D -m755 netfs $startdir/pkg/etc/rc.d/netfs
+  gcc -o minilogd minilogd.c || return 1
+  install -D -m755 minilogd $startdir/pkg/sbin/minilogd
+}
