@@ -1,5 +1,6 @@
-# $Id: PKGBUILD,v 1.1 2004/11/16 10:44:58 blokkie Exp $
-# Maintainer: dorphell <dorphell@archlinux.org>
+# $Id: PKGBUILD,v 1.2 2004/11/16 10:45:27 blokkie Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
 pkgname=python
 pkgver=2.3.4
 pkgrel=2
