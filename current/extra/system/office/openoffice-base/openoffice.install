@@ -1,0 +1,41 @@
+# arg 1:  the new package version
+post_install() {
+cat << EOF  
+ATTENTION:
+==> YOU HAVE TO INSTALL A LANGUAGE-PACK ELSE IT WILL NOT RUN!
+==> 'pacman -S openoffice-XX' (XX is your language)
+   
+==> IF YOU NEED SPELLCHECKING YOU HAVE TO INSTALL ADDITIONAL PACKAGES!
+==> 'pacman -S openoffice-spell-XX' (XX is your language)
+==> or use the included template for installation if your language is not covered
+    
+==> OpenOffice quickstarter is available for KDE
+==> 'pacman -S oooqs'
+
+IMPORTANT NOTE:
+==> If you experience OpenOffice is not starting check your DRI settings
+==> that you have proper permissions in /etc/X11/xorg.conf 
+==> it could look like this:
+  
+  Section "DRI" 
+  Group "users" 
+  Mode 0660     
+  EndSection 
+
+SETUP:
+==> Run '/opt/openoffice/setup' to setup OpenOffice for a regular user
+==> Run 'soffice' to start OpenOffice
+
+EOF
+}
+
+# arg 1:  the new package version
+# arg 2:  the old package version
+post_upgrade() {
+  post_install $1
+}
+
+op=$1
+shift
+
+$op $*

@@ -1,0 +1,55 @@
+# $Id: PKGBUILD,v 1.1 2005/01/17 01:53:20 blokkie Exp $
+# Maintainer: Tobias Powalowski <tpowa@archlinux.org>
+# Contributor: Sarah Hay <sarah@archlinux.org>
+
+pkgname=openoffice-base
+pkgver=1.1.4
+pkgrel=2
+pkgdesc="OpenOffice base files"
+url="http://www.openoffice.org"
+depends=('x-server' 'gcc')
+source=(ftp://sunsite.informatik.rwth-aachen.de/pub/mirror/OpenOffice/stable/$pkgver/OOo_${pkgver}_LinuxIntel_install.tar.gz 'dictionary.lst')
+install=openoffice.install
+build() {
+  cd $startdir/src/OOo_${pkgver}_LinuxIntel_install
+  mkdir -p $startdir/pkg/opt/openoffice
+  mkdir -p $startdir/pkg/usr/bin
+# now start install
+  sed -i 's|^oo_home=.*$|oo_home=openoffice|g' install
+  ./install --prefix=$startdir/pkg/opt
+# make symlink to /usr/bin  
+  cd $startdir/pkg/usr/bin
+  ln -s ../../opt/openoffice/program/soffice soffice
+# this is a workaround for a bug with kprinter >= kde 3.2.3 if you use it as print wrapper 
+# if you experience problems remove the following 2 lines and gcc from depends
+ cd $startdir/pkg/opt/openoffice/program
+ mv libgcc_s.so.1 libgcc_s.so.1.old; ln -s /usr/lib/libgcc_s.so.1 libgcc_s.so.1
+# and now to fix all the KDE/Gnome links...
+ cd $startdir/pkg/opt/openoffice/share/kde/net
+ sed -i 's|^Exec=.*openoffice/program/\(.*\)$|Exec="/opt/openoffice/program/\1|g' *.desktop
+ cd $startdir/pkg/opt/openoffice/share/gnome/net
+ sed -i 's|^Exec=.*openoffice/program/\(.*\)$|Exec=/opt/openoffice/program/\1|g' *.desktop
+ sed -i 's|^Icon=.*share/icons/\(.*\)$|Icon=/opt/openoffice/share/icons/\1|g' *.desktop
+#now install gnome desktop files
+ mkdir -p $startdir/pkg/usr/share/applications
+ cp $startdir/pkg/opt/openoffice/share/gnome/net/ooo645* $startdir/pkg/usr/share/applications
+# now get rid of localisation
+ cd $startdir/pkg/opt/openoffice/
+ rm -r help/en
+ rm program/instdb.ins
+ rm -r program/resource
+ rm -r share/{autocorr,autotext,registry/res,template,readme,wordbook}
+ rm -r user/{autotext,config}
+# now move the installed spellchecker to a safe place
+ cd share/dict/ooo/
+ mkdir old
+ mv *.txt old/
+ mv *.aff old/
+ mv *.idx old/
+ mv *.dat old/
+ mv *.lst old/
+ mv *.dic old/
+# now install new dictionary.lst which is prepared for the others spellcheck packages
+ install -m644 -D $startdir/src/dictionary.lst $startdir/pkg/opt/openoffice/share/dict/ooo/dictionary.lst
+}
+md5sums=('cf2d0beb6cae98acae81e4d690d63094' 'eb61399d5d1fe97b213347e5b5d346f8')
