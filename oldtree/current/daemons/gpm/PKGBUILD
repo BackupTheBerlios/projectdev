@@ -1,0 +1,22 @@
+# $Id: PKGBUILD,v 1.1 2004/11/17 14:49:30 surrounder Exp $
+# Maintainer: dorphell <dorphell@archlinux.org>
+# Committer: Judd Vinet <jvinet@zeroflux.org>
+# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
+# Maintainer: Timo van Beek <surrounder@hotpop.com>
+pkgname=gpm
+pkgver=1.20.1
+pkgrel=1
+pkgdesc="A mouse server for the console and xterm"
+depends=('ncurses')
+backup=(etc/conf.d/gpm)
+source=(ftp://arcana.linux.it/pub/$pkgname/$pkgname-$pkgver.tar.gz \
+        gpm.patch gpm gpm.conf.d)
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  patch -Np1 -i ../gpm.patch
+  ./configure --prefix=/usr --sysconfdir=/etc
+  make || return 1
+  make prefix=$startdir/pkg/usr install
+  install -D -m755 ../gpm $startdir/pkg/etc/rc.d/gpm
+  install -D -m644 ../gpm.conf.d $startdir/pkg/etc/conf.d/gpm
+}
