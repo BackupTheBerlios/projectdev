@@ -1,5 +1,6 @@
-# $Id: PKGBUILD,v 1.1 2004/11/04 11:27:52 blokkie Exp $
-# Maintainer: dorphell <dorphell@archlinux.org>
+# $Id: PKGBUILD,v 1.2 2004/11/04 13:56:52 blokkie Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
 pkgname=wget
 pkgver=1.9.1
 pkgrel=3
