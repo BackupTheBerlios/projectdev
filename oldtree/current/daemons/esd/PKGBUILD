@@ -1,0 +1,19 @@
+# Arch Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: Amar Hadzihasanovic <rensel[at]email.it>
+
+pkgname=esd
+pkgver=0.2.34
+pkgrel=1
+pkgdesc="Enlightened Sound Daemon"
+depends=('audiofile' 'alsa-lib')
+backup=('etc/esd.conf')
+source=(ftp://ftp.gnome.org/pub/GNOME/sources/esound/0.2/esound-$pkgver.tar.gz esd)
+md5sums=('9526d4ffbbbd9462768b38c082c726c7' 'a4c76e7c7f75b201ea7ab6fb15b47472')
+
+build() {
+  cd $startdir/src/esound-$pkgver
+  ./configure --prefix=/usr --sysconfdir=/etc --with-audiofile --enable-alsa
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  install -D -m755 ../esd $startdir/pkg/etc/rc.d/esd
+}
