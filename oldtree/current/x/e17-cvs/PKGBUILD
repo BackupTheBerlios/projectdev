@@ -1,0 +1,24 @@
+# Maintainer: Amar Hadzihasanovic <rensel[at]email.it>
+
+pkgname=e17-cvs
+pkgver=20041128
+pkgrel=1
+pkgdesc="The Enlightened Window Manager - Development Release"
+url="http://www.enlightenment.org"
+license="GPL"
+depends=('evas-cvs' 'ecore-cvs' 'edje-cvs' 'edb-cvs' 'eet-cvs')
+makedepends=('edje-cvs')
+provides=('e17')
+conflicts=('e17')
+source=(e17.desktop)
+md5sums=('4f81143c802e7c0ae7501abf024e423d')
+
+build() {
+  cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/enlightenment co -D "2004-11-28" e17/apps/e
+  cd $startdir/src/e17/apps/e
+  ./autogen.sh --prefix=/opt/e17
+  make || return 1
+  make DESTDIR=$startdir/pkg install
+  install -D -m644 $startdir/src/e17.desktop $startdir/pkg/etc/X11/sessions/e17.desktop
+  rm -rf $startdir/pkg/opt/e17/share/enlightenment/doc
+}

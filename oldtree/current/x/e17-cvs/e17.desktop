@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=E17
+Comment=Enlightened Window Manager - in Development
+Exec=/opt/e17/bin/enlightenment
+# no icon yet, only the top three are currently used
+Icon=
+Type=Application
