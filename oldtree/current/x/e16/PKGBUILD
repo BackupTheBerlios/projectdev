@@ -1,4 +1,4 @@
-# $Id: PKGBUILD,v 1.2 2004/11/10 22:20:54 blokkie Exp $
+# $Id: PKGBUILD,v 1.3 2004/11/10 22:21:40 blokkie Exp $
 # Arch Maintainer: Judd Vinet <jvinet@zeroflux.org>
 # Maintainer: blokkie <t.fernagut@burningfrog.be>
 
@@ -6,7 +6,7 @@ pkgname=enlightenment
 pkgver=0.16.7.1
 pkgrel=2
 pkgdesc="A fast, flexible, and very extensible Window Manager"
-depends=('x-server' 'esd-cvs' 'imlib2-cvs' 'perl')
+depends=('x-server' 'esd' 'imlib2-cvs' 'perl')
 source=(http://telia.dl.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.gz \
   http://telia.dl.sourceforge.net/sourceforge/$pkgname/enlightenment-theme-BlueSteel-0.16.tar.gz \
   http://telia.dl.sourceforge.net/sourceforge/$pkgname/enlightenment-theme-BrushedMetal-Tigert-0.16.tar.gz \
