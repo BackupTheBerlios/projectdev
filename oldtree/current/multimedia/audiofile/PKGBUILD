@@ -1,5 +1,7 @@
-# $Id: PKGBUILD,v 1.1 2004/11/10 21:17:38 blokkie Exp $
-# Maintainer: dorphell <dorphell@archlinux.org>
+# $Id: PKGBUILD,v 1.2 2004/11/10 21:18:16 blokkie Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+
 pkgname=audiofile
 pkgver=0.2.6
 pkgrel=1
