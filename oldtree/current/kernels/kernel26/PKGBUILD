@@ -1,4 +1,4 @@
-# $Id: PKGBUILD,v 1.4 2004/11/04 14:15:57 blokkie Exp $
+# $Id: PKGBUILD,v 1.5 2004/11/04 16:33:46 blokkie Exp $
 # Arch Maintainer: judd <jvinet@zeroflux.org>
 # Maintainer: blokkie <t.fernagut@burningfrog.be>
 pkgname=kernel26
@@ -11,16 +11,18 @@ depends=('module-init-tools')
 install=kernel26.install
 source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$pkgver.tar.bz2 \
   config cdburning.patch logo_linux_clut224.ppm \
-  http://ck.kolivas.org/patches/2.6/2.6.9/2.6.9-ck2/patches/vm-pages_scanned-active_list.patch \
-  http://ftp.kernel.org/pub/linux/kernel/people/lenb/acpi/patches/release/26-latest-release/acpi-20041015-26-latest-release.diff.bz2)
-md5sums=('e921200f074ca97184e150ef5a4af825' 'd924b5066270e7fd8b2532477644a454'\
+  http://ck.kolivas.org/patches/2.6/2.6.9/2.6.9-ck2/patches/vm-pages_scanned-active_list.patch )
+
+md5sums=('e921200f074ca97184e150ef5a4af825' '08fb644cb1b4ff597cd984c6f717425d'\
          '66b87662e6dd54b6324f874739fa1b99' '5a62bcc7e96601052c7405459b483826'\
          'a335804f3fb7de9ef690167d5d5cd2a4' '73141763e84cde8710d12dc14a630da4')
+
+
 
 build() {
   cd $startdir/src/linux-$pkgver
   patch -Np1 -i ../cdburning.patch || return 1
-  patch -Np1 -i ../acpi-20041015-26-latest-release.diff || return 1
+  #patch -Np1 -i ../acpi-20041015-26-latest-release.diff || return 1
   # A nasty bug that caused kswapd to get stuck consuming heaps of cpu
   # which was in mainline 2.6.9, fixed by this patch
   patch -Np1 -i ../vm-pages_scanned-active_list.patch || return 1
