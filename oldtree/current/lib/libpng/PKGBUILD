@@ -1,0 +1,24 @@
+# $Id: PKGBUILD,v 1.1 2004/11/04 19:36:55 blokkie Exp $
+# Arch Maintainer: dorphell <dorphell@archlinux.org>
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
+force=y
+pkgname=libpng
+pkgver=1.2.7
+pkgrel=1
+pkgdesc="A collection of routines used to create PNG format graphics files"
+url="http://www.libpng.org/pub/png/libpng.html"
+depends=('zlib' 'glibc')
+source=(http://dl.sourceforge.net/sourceforge/libpng/libpng-$pkgver.tar.bz2)
+md5sums=('21030102f99f81c37276403e5956d198')
+
+build() {
+  cd $startdir/src/$pkgname-$pkgver
+  sed -e "s:ZLIBLIB=.*:ZLIBLIB=/usr/lib:" \
+    -e "s:ZLIBINC=.*:ZLIBINC=/usr/include:" \
+    -e "s:-O3:${CFLAGS}:" \
+    -e "s:prefix=/usr/local:prefix=/usr:" \
+    -e "s:OBJSDLL = :OBJSDLL = -lz -lm :" scripts/makefile.linux > Makefile
+  make || return 1
+  mkdir -p $startdir/pkg/usr/{include,lib,man/man3}
+  make prefix=/usr DESTDIR=$startdir/pkg install
+}
