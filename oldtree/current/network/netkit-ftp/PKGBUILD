@@ -1,5 +1,5 @@
-# $Id: PKGBUILD,v 1.1 2004/11/04 13:50:33 blokkie Exp $
-# Maintainer: dorphell <dorphell@archlinux.org>
+# $Id: PKGBUILD,v 1.2 2004/11/04 13:52:15 blokkie Exp $
+# Maintainer: blokkie <t.fernagut@burningfrog.be>
 pkgname=netkit-ftp
 pkgver=0.17
 pkgrel=3
